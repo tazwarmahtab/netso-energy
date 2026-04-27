@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type CSSProperties,
 } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
@@ -234,6 +235,7 @@ const ScrollExpandMedia = ({
   const wordmarkY = mix(isMobileState ? 4 : 3, isMobileState ? -7 : -12, wordmarkProgress);
   const wordmarkGap = mix(10, isMobileState ? 76 : 108, wordmarkProgress);
   const wordmarkDrift = mix(0, isMobileState ? 190 : 280, wordmarkProgress);
+  const wordmarkAnchorX = isMobileState ? 788 : 760;
   const wordmarkWidth = isMobileState ? 'min(94vw, 860px)' : 'min(94vw, 1580px)';
   const wordmarkDropShadow = isMobileState
     ? 'drop-shadow(0 12px 26px rgba(0,0,0,0.34))'
@@ -273,6 +275,77 @@ const ScrollExpandMedia = ({
   const titleWords = title?.trim().split(/\s+/).filter(Boolean) ?? [];
   const firstWord = titleWords[0] ?? '';
   const restOfTitle = titleWords.slice(1).join(' ');
+  const renderWordmarkLayer = ({
+    opacity,
+    blendMode,
+    strokeOpacity,
+    fillOpacity,
+    extraFilter,
+  }: {
+    opacity: number;
+    blendMode?: CSSProperties["mixBlendMode"];
+    strokeOpacity?: number;
+    fillOpacity?: number;
+    extraFilter?: string;
+  }) => (
+    <svg
+      viewBox="0 0 1600 420"
+      preserveAspectRatio="xMidYMid meet"
+      className="h-auto overflow-visible text-white"
+      focusable="false"
+      style={{
+        width: wordmarkWidth,
+        filter: extraFilter ?? wordmarkDropShadow,
+        mixBlendMode: blendMode,
+        opacity,
+      }}
+    >
+      <g
+        transform={`translate(${wordmarkAnchorX} 210) scale(${wordmarkScale}) translate(-${wordmarkAnchorX} -210)`}
+      >
+        <text
+          x={wordmarkAnchorX - wordmarkGap - wordmarkDrift}
+          y="248"
+          textAnchor="end"
+          fill="currentColor"
+          fillOpacity={fillOpacity}
+          stroke="rgba(255,255,255,0.9)"
+          strokeOpacity={strokeOpacity}
+          strokeWidth={strokeOpacity ? 1.15 : 0}
+          paintOrder="stroke fill"
+          style={{
+            fontFamily: '"featureDeck", Georgia, serif',
+            fontSize: 212,
+            fontWeight: 700,
+            letterSpacing: '-0.08em',
+          }}
+        >
+          {firstWord}
+        </text>
+        {restOfTitle ? (
+          <text
+            x={wordmarkAnchorX + wordmarkGap + wordmarkDrift}
+            y="248"
+            textAnchor="start"
+            fill="currentColor"
+            fillOpacity={fillOpacity}
+            stroke="rgba(255,255,255,0.9)"
+            strokeOpacity={strokeOpacity}
+            strokeWidth={strokeOpacity ? 1.15 : 0}
+            paintOrder="stroke fill"
+            style={{
+              fontFamily: '"featureDeck", Georgia, serif',
+              fontSize: 212,
+              fontWeight: 700,
+              letterSpacing: '-0.08em',
+            }}
+          >
+            {restOfTitle}
+          </text>
+        ) : null}
+      </g>
+    </svg>
+  );
 
   return (
     <div
@@ -503,7 +576,7 @@ const ScrollExpandMedia = ({
 
               {title && titleVariant === 'zoom-wordmark' ? (
                 <motion.div
-                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-3 mix-blend-normal"
+                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-3"
                   initial={false}
                   animate={{ opacity: titleOpacity }}
                   transition={{ duration: 0.18 }}
@@ -513,51 +586,34 @@ const ScrollExpandMedia = ({
                   }}
                   aria-hidden="true"
                 >
-                  <svg
-                    viewBox="0 0 1600 420"
-                    preserveAspectRatio="xMidYMid meet"
-                    className="h-auto overflow-visible text-white"
-                    focusable="false"
-                    style={{
-                      width: wordmarkWidth,
-                      filter: wordmarkDropShadow,
-                    }}
-                  >
-                    <g
-                      transform={`translate(800 210) scale(${wordmarkScale}) translate(-800 -210)`}
-                    >
-                      <text
-                        x={800 - wordmarkGap - wordmarkDrift}
-                        y="248"
-                        textAnchor="end"
-                        fill="currentColor"
+                  <div className="relative flex items-center justify-center">
+                    {renderWordmarkLayer({
+                      opacity: 0.94,
+                      fillOpacity: 1,
+                      strokeOpacity: isMobileState ? 0.1 : 0.12,
+                      extraFilter: 'drop-shadow(0 18px 42px rgba(0,0,0,0.32))',
+                    })}
+                    {!isMobileState ? (
+                      <div
+                        className="pointer-events-none absolute inset-0 flex items-center justify-center"
                         style={{
-                          fontFamily: '"featureDeck", Georgia, serif',
-                          fontSize: 212,
-                          fontWeight: 700,
-                          letterSpacing: '-0.08em',
+                          opacity: 0.92,
+                          WebkitMaskImage:
+                            'radial-gradient(ellipse 34% 18% at 50% 58%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 38%, rgba(0,0,0,0.88) 54%, rgba(0,0,0,0.3) 72%, transparent 84%)',
+                          maskImage:
+                            'radial-gradient(ellipse 34% 18% at 50% 58%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 38%, rgba(0,0,0,0.88) 54%, rgba(0,0,0,0.3) 72%, transparent 84%)',
                         }}
                       >
-                        {firstWord}
-                      </text>
-                      {restOfTitle ? (
-                        <text
-                          x={800 + wordmarkGap + wordmarkDrift}
-                          y="248"
-                          textAnchor="start"
-                          fill="currentColor"
-                          style={{
-                            fontFamily: '"featureDeck", Georgia, serif',
-                            fontSize: 212,
-                            fontWeight: 700,
-                            letterSpacing: '-0.08em',
-                          }}
-                        >
-                          {restOfTitle}
-                        </text>
-                      ) : null}
-                    </g>
-                  </svg>
+                        {renderWordmarkLayer({
+                          opacity: 1,
+                          blendMode: 'difference',
+                          fillOpacity: 1,
+                          strokeOpacity: 0.04,
+                          extraFilter: 'drop-shadow(0 8px 28px rgba(0,0,0,0.14))',
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
                 </motion.div>
               ) : null}
 
