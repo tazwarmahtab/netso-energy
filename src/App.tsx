@@ -1,5 +1,4 @@
 import { Suspense, lazy, type ReactNode } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,8 +14,6 @@ const Products = lazy(() => import("./pages/Products.tsx"));
 const About = lazy(() => import("./pages/About.tsx"));
 const Feasibility = lazy(() => import("./pages/Feasibility.tsx"));
 
-const queryClient = new QueryClient();
-
 const RouteFallback = () => <div className="min-h-[40vh]" aria-hidden="true" />;
 
 const withSuspense = (element: ReactNode) => (
@@ -24,37 +21,35 @@ const withSuspense = (element: ReactNode) => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter
-        future={{
-          v7_relativeSplatPath: true,
-          v7_startTransition: true,
-        }}
-      >
-        <RouteSEO />
-        <Routes>
-          <Route element={<SiteLayout />}>
-            <Route path="/" element={<Index />} />
-            <Route
-              path="/how-it-works"
-              element={withSuspense(<HowItWorks />)}
-            />
-            <Route path="/projects" element={withSuspense(<Projects />)} />
-            <Route path="/products" element={withSuspense(<Products />)} />
-            <Route path="/about" element={withSuspense(<About />)} />
-            <Route
-              path="/feasibility"
-              element={withSuspense(<Feasibility />)}
-            />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <TooltipProvider>
+    <Toaster />
+    <Sonner />
+    <BrowserRouter
+      future={{
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
+      }}
+    >
+      <RouteSEO />
+      <Routes>
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<Index />} />
+          <Route
+            path="/how-it-works"
+            element={withSuspense(<HowItWorks />)}
+          />
+          <Route path="/projects" element={withSuspense(<Projects />)} />
+          <Route path="/products" element={withSuspense(<Products />)} />
+          <Route path="/about" element={withSuspense(<About />)} />
+          <Route
+            path="/feasibility"
+            element={withSuspense(<Feasibility />)}
+          />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </TooltipProvider>
 );
 
 export default App;

@@ -19,7 +19,7 @@ export function LanguageToggle({
     <div
       className={cn(
         isInline
-          ? "inline-grid grid-cols-2 items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1 text-[0.72rem] uppercase tracking-[0.18em]"
+          ? "inline-grid grid-cols-2 items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1 text-[0.75rem] uppercase tracking-[0.18em]"
           : "inline-flex items-center rounded-full border border-border/70 bg-background/85 p-1 text-sm",
         className,
       )}
@@ -38,7 +38,7 @@ export function LanguageToggle({
               ? "bg-primary text-primary-foreground"
               : "bg-foreground text-background"
             : isInline
-              ? "text-white/52 hover:text-white"
+              ? "text-white/72 hover:text-white"
               : "text-muted-foreground hover:text-foreground",
         )}
         aria-pressed={language === "en"}
@@ -58,7 +58,7 @@ export function LanguageToggle({
               ? "bg-primary text-primary-foreground"
               : "bg-foreground text-background"
             : isInline
-              ? "text-white/52 hover:text-white"
+              ? "text-white/72 hover:text-white"
               : "text-muted-foreground hover:text-foreground",
         )}
         aria-pressed={language === "bn"}

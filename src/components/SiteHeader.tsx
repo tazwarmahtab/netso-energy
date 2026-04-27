@@ -3,7 +3,6 @@ import { ArrowUpRight, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import logoImg from "@/assets/new/logo-optimized.png?url";
 import { EstimateLink, StartAssessmentLink } from "@/components/AssessmentCtas";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import {
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/sheet";
 import { trackEvent } from "@/lib/analytics";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { headerLogoAvif, headerLogoPng, mobileHeaderLogoAvif } from "@/lib/homepage-media";
 import { useLanguage } from "@/lib/i18n";
 import { useSiteCopy } from "@/lib/site-copy";
 import { buildWhatsAppStartUrl } from "@/lib/whatsapp";
@@ -103,8 +103,13 @@ export const SiteHeader = () => {
               aria-label={`${copy.common.brand} home`}
             >
               <img
-                src={logoImg}
+                src={headerLogoAvif}
                 alt=""
+                decoding="async"
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = headerLogoPng;
+                }}
                 className={cn(
                   "scale-[1.8] object-contain transition-[width,height] duration-500",
                   isCompact ? "size-[3.35rem]" : "size-[4rem]",
@@ -296,8 +301,13 @@ export const SiteHeader = () => {
             aria-label={`${copy.common.brand} home`}
           >
             <img
-              src={logoImg}
+              src={mobileHeaderLogoAvif}
               alt=""
+              decoding="async"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = headerLogoPng;
+              }}
               className={cn(
                 "scale-[1.8] object-contain transition-[width,height] duration-500",
                 isCompact ? "size-[3.35rem]" : "size-[4rem]",

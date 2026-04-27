@@ -239,7 +239,7 @@ export function SolarCalculatorFunnel() {
                     <label htmlFor="bill-slider" className="text-sm font-medium text-muted-foreground">
                       {labels.bill}
                     </label>
-                    <span className="text-2xl font-bold text-primary">৳ {bill.toLocaleString()}</span>
+                    <span className="text-2xl font-bold text-[#5d497f]">৳ {bill.toLocaleString()}</span>
                   </div>
                   <input
                     id="bill-slider"
@@ -258,7 +258,7 @@ export function SolarCalculatorFunnel() {
                     <label htmlFor="area-slider" className="text-sm font-medium text-muted-foreground">
                       {labels.area}
                     </label>
-                    <span className="text-2xl font-bold text-primary">
+                    <span className="text-2xl font-bold text-[#5d497f]">
                       {area.toLocaleString()} {isBn ? "বর্গফুট" : "sqft"}
                     </span>
                   </div>
@@ -467,14 +467,14 @@ function ResultCard({ label, value, accent = false }: ResultCardProps) {
     <div
       className={cn(
         "rounded-[22px] border p-5 transition-all",
-        accent ? "border-primary/30 bg-primary/10" : "border-border/70 bg-secondary/24",
+        accent ? "border-primary/25 bg-primary/[0.08]" : "border-border/70 bg-secondary/24",
       )}
     >
       <div className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">{label}</div>
       <div
         className={cn(
           "text-2xl font-display tracking-[-0.04em]",
-          accent ? "text-primary" : "text-foreground",
+          accent ? "text-[#5d497f]" : "text-foreground",
         )}
       >
         {value}

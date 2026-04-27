@@ -146,25 +146,25 @@
 /* Font faces - godaylight fonts */
 @font-face {
   font-family: "aeonikPro";
-  src: url("https://godaylight.com/_next/static/media/ce50667cae3f791b-s.p.woff2") format("woff2");
+  src: url("/fonts/aeonikPro-400.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "socialMono";
-  src: url("https://godaylight.com/_next/static/media/1d56e343625edc89-s.p.woff2") format("woff2");
+  src: url("/fonts/socialMono-400.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "featureDeck";
-  src: url("https://godaylight.com/_next/static/media/a28bc5cb4f594492-s.p.woff2") format("woff2");
+  src: url("/fonts/featureDeck-700.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "featureDeck";
-  src: url("https://godaylight.com/_next/static/media/a28bc5cb4f594492-s.p.woff2") format("woff2");
+  src: url("/fonts/featureDeck-700.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }

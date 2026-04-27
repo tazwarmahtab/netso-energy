@@ -1,6 +1,7 @@
 import { Language } from "@/lib/i18n";
 
 const DEFAULT_ASSESSMENT_PATH = "/feasibility";
+const DEFAULT_WHATSAPP_NUMBER = "8801791222777";
 
 type WhatsAppStartOptions = {
   language: Language;
@@ -11,7 +12,8 @@ type WhatsAppStartOptions = {
 };
 
 function getWhatsAppNumber() {
-  return import.meta.env.VITE_WHATSAPP_NUMBER?.replace(/\D/g, "") ?? "";
+  const configuredNumber = import.meta.env.VITE_WHATSAPP_NUMBER?.replace(/\D/g, "") ?? "";
+  return configuredNumber || DEFAULT_WHATSAPP_NUMBER;
 }
 
 export function isWhatsAppConfigured() {

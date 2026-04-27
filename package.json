@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "generate:homepage-assets": "bash scripts/generate-homepage-assets.sh",
     "verify:seo": "node scripts/verify-seo-build.mjs",
     "verify:release": "npm run build && npm run lint && npm run test && npm run verify:seo && deno check supabase/functions/_shared/assessment-session.ts supabase/functions/start-assessment-session/index.ts supabase/functions/submit-lead/index.ts supabase/functions/whatsapp-intake-webhook/index.ts"
   },

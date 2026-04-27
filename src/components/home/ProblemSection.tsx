@@ -1,8 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
+import { ResponsiveImage } from "@/components/ui/responsive-image";
+import {
+  problemRooftopsAvifSources,
+  problemRooftopsFallback,
+  problemRooftopsJpegSources,
+} from "@/lib/homepage-media";
 import { useSiteCopy } from "@/lib/site-copy";
-import dhakaImg from "@/assets/custom/problem-urban-rooftops-optimized.jpg";
 
 export const ProblemSection = () => {
   const copy = useSiteCopy();
@@ -73,13 +78,15 @@ export const ProblemSection = () => {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="ivory-panel relative mt-24 aspect-[16/9] overflow-hidden rounded-[2rem] lg:aspect-[21/9]"
         >
-          <img
-            src={dhakaImg}
+          <ResponsiveImage
             alt="Dhaka rooftops aerial view"
-            width={1920}
-            height={1080}
             className="absolute inset-0 h-full w-full object-cover brightness-[0.96] saturate-[0.82]"
+            decoding="async"
+            fallbackSrc={problemRooftopsFallback}
+            fallbackSources={problemRooftopsJpegSources}
             loading="lazy"
+            sizes="(min-width: 1280px) 1180px, calc(100vw - 2rem)"
+            sources={problemRooftopsAvifSources}
           />
 
           <div className="absolute inset-y-0 left-0 z-10 w-full max-w-[44rem] bg-gradient-to-r from-background via-background/90 via-45% to-transparent" />

@@ -1,9 +1,3 @@
-import {
-  FunctionsFetchError,
-  FunctionsHttpError,
-  FunctionsRelayError,
-} from "@supabase/supabase-js";
-
 import { getSupabaseClient } from "@/lib/supabase-client";
 import {
   LeadSubmissionPayload,
@@ -19,8 +13,19 @@ export class AssessmentBackendUnavailableError extends Error {
   }
 }
 
-async function isFunctionMissing(error: FunctionsHttpError) {
-  const response = error.context instanceof Response ? error.context : null;
+function isNamedError(error: unknown, name: string) {
+  return error instanceof Error && error.name === name;
+}
+
+function getFunctionsErrorResponse(error: unknown) {
+  if (!error || typeof error !== "object" || !("context" in error)) return null;
+
+  const context = (error as { context?: unknown }).context;
+  return context instanceof Response ? context : null;
+}
+
+async function isFunctionMissing(error: unknown) {
+  const response = getFunctionsErrorResponse(error);
   if (!response) return false;
   if (response.status === 404) return true;
 
@@ -42,16 +47,16 @@ async function isFunctionMissing(error: FunctionsHttpError) {
 }
 
 async function formatFunctionError(error: unknown) {
-  if (error instanceof FunctionsFetchError || error instanceof FunctionsRelayError) {
+  if (isNamedError(error, "FunctionsFetchError") || isNamedError(error, "FunctionsRelayError")) {
     return new AssessmentBackendUnavailableError();
   }
 
-  if (error instanceof FunctionsHttpError) {
+  if (isNamedError(error, "FunctionsHttpError")) {
     if ((await isFunctionMissing(error)) || error.context?.status >= 500) {
       return new AssessmentBackendUnavailableError();
     }
 
-    const response = error.context instanceof Response ? error.context : null;
+    const response = getFunctionsErrorResponse(error);
     if (response) {
       try {
         const payload = await response.clone().json();
@@ -84,7 +89,7 @@ export async function startAssessmentSession(
   payload: LeadSubmissionPayload,
 ): Promise<StartAssessmentSessionResponse> {
   const validatedPayload = startAssessmentSessionSchema.parse(payload);
-  const supabase = getSupabaseClient();
+  const supabase = await getSupabaseClient();
 
   const { data, error } = await supabase.functions.invoke("start-assessment-session", {
     body: validatedPayload,

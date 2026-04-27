@@ -396,56 +396,5 @@ export default defineConfig(({ mode }) => {
         "@tanstack/query-core",
       ],
     },
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (!id.includes("node_modules")) {
-              return undefined;
-            }
-
-            if (
-              id.includes("/react/") ||
-              id.includes("react-dom") ||
-              id.includes("react-router") ||
-              id.includes("scheduler")
-            ) {
-              return "react-vendor";
-            }
-
-            if (
-              id.includes("framer-motion") ||
-              id.includes("/gsap/") ||
-              id.includes("lenis")
-            ) {
-              return "motion-vendor";
-            }
-
-            if (
-              id.includes("@supabase/") ||
-              id.includes("@tanstack/") ||
-              id.includes("react-hook-form") ||
-              id.includes("@hookform/") ||
-              id.includes("/zod/")
-            ) {
-              return "data-vendor";
-            }
-
-            if (
-              id.includes("@radix-ui/") ||
-              id.includes("lucide-react") ||
-              id.includes("cmdk") ||
-              id.includes("vaul") ||
-              id.includes("embla-carousel-react") ||
-              id.includes("sonner")
-            ) {
-              return "ui-vendor";
-            }
-
-            return "vendor";
-          },
-        },
-      },
-    },
   };
 });

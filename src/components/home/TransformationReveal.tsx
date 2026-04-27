@@ -153,12 +153,12 @@ export const TransformationReveal = () => {
     const section = containerRef.current;
     if (!section || typeof window === "undefined") return;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || isMobile) {
       setProgress(1);
       return;
     }
 
-    const distance = isMobile ? window.innerHeight * 1.5 : window.innerHeight * 2.15;
+    const distance = window.innerHeight * 1.85;
 
     const trigger = ScrollTrigger.create({
       trigger: section,
@@ -183,19 +183,60 @@ export const TransformationReveal = () => {
     };
   }, [isMobile, prefersReducedMotion, stages]);
 
+  const simplifiedLayout = prefersReducedMotion || isMobile;
+  const activeIndex = Math.round(progress * (stages.length - 1));
+
+  if (simplifiedLayout) {
+    return (
+      <section className="relative bg-night py-20 sm:py-24">
+        <div className="container-tight">
+          <div className="space-y-6">
+            {stages.map((stage) => (
+              <article
+                key={stage.label}
+                className="overflow-hidden rounded-[2rem] border border-white/8 bg-black/32"
+              >
+                <div className="relative aspect-[4/5] sm:aspect-[16/10]">
+                  <img
+                    src={stage.img}
+                    alt={stage.label}
+                    width={stage.width}
+                    height={stage.height}
+                    loading="lazy"
+                    className="h-full w-full object-cover brightness-[0.58]"
+                    style={{ objectPosition: stage.objectPosition ?? "center center" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/28 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                    <p className="eyebrow mb-3 text-primary/85">{stage.label}</p>
+                    <h2 className="max-w-2xl text-3xl font-display leading-[0.94] tracking-[-0.04em] text-white sm:text-4xl">
+                      {stage.desc}
+                    </h2>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section ref={containerRef} className="relative bg-night">
       <div className="relative flex h-[100svh] w-full items-center overflow-hidden">
-        {stages.map((stage, index) => (
-          <StageOverlay
-            key={stage.label}
-            stage={stage}
-            progress={progress}
-            index={index}
-            total={stages.length}
-            prefersReducedMotion={prefersReducedMotion}
-          />
-        ))}
+        {stages.map((stage, index) =>
+          Math.abs(index - activeIndex) <= 1 ? (
+            <StageOverlay
+              key={stage.label}
+              stage={stage}
+              progress={progress}
+              index={index}
+              total={stages.length}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+          ) : null,
+        )}
 
         <div className="absolute bottom-10 left-1/2 z-20 flex -translate-x-1/2 gap-3">
           {stages.map((_, index) => {

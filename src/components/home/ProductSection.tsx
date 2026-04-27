@@ -1,14 +1,18 @@
 import { motion } from "framer-motion";
 import { ClipboardCheck, ImagePlus, MapPinned, MessageSquare } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { StartAssessmentLink } from "@/components/AssessmentCtas";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSiteCopy } from "@/lib/site-copy";
 import productVideo from "@/assets/new/product-showcase.mp4";
+import productPoster from "@/assets/product-pergola.jpg";
 
 export const ProductSection = () => {
   const copy = useSiteCopy();
   const prefersReducedMotion = useReducedMotion();
+  const mediaRef = useRef<HTMLDivElement | null>(null);
+  const [videoActive, setVideoActive] = useState(false);
   const specs = [
     { ...copy.products.specs[0], icon: MapPinned },
     { ...copy.products.specs[1], icon: ImagePlus },
@@ -16,6 +20,22 @@ export const ProductSection = () => {
     { ...copy.products.specs[3], icon: MessageSquare },
   ];
   const repeatedSpecs = [...specs, ...specs, ...specs, ...specs];
+
+  useEffect(() => {
+    const node = mediaRef.current;
+    if (!node || prefersReducedMotion || typeof window === "undefined") {
+      setVideoActive(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => setVideoActive(entries[0]?.isIntersecting ?? false),
+      { rootMargin: "240px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
 
   return (
     <section className="relative overflow-hidden bg-background py-32 md:py-56">
@@ -28,6 +48,7 @@ export const ProductSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="group ivory-panel relative aspect-[4/5] overflow-hidden rounded-[1.9rem] lg:aspect-auto lg:h-[800px]"
+              ref={mediaRef}
             >
               {/* Noise Overlay to hide compression artifacts - Fixed with data URI to avoid 404 */}
               <div 
@@ -37,18 +58,29 @@ export const ProductSection = () => {
                 }}
               />
               
-              <video
-                src={productVideo}
-                autoPlay={!prefersReducedMotion}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                className="h-full w-full object-cover contrast-[1.02] brightness-[1.02] saturate-[1.06]"
-              />
+              {videoActive ? (
+                <video
+                  src={productVideo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  poster={productPoster}
+                  className="h-full w-full object-cover contrast-[1.02] brightness-[1.02] saturate-[1.06]"
+                />
+              ) : (
+                <img
+                  src={productPoster}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-full w-full object-cover contrast-[1.02] brightness-[1.02] saturate-[1.06]"
+                  loading="lazy"
+                />
+              )}
 
               <div className="readability-panel-light absolute right-8 top-8 z-20 rounded-full px-4 py-2">
-                <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                <p className="font-mono text-[0.8rem] uppercase tracking-widest text-foreground/68">
                   {copy.products.outputBadge}
                 </p>
               </div>

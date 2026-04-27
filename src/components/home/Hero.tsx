@@ -3,12 +3,20 @@ import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 
 import { EstimateLink, StartAssessmentLink } from "@/components/AssessmentCtas";
+import { ResponsiveImage } from "@/components/ui/responsive-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
 import { DitheringShader } from "@/components/ui/dithering-shader";
+import { useDataSaver } from "@/hooks/useDataSaver";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import {
+  heroBackgroundAvifSources,
+  heroBackgroundFallback,
+  heroBackgroundJpegSources,
+  heroPosterFallback,
+  heroPosterMobileFallback,
+} from "@/lib/homepage-media";
 import { useSiteCopy } from "@/lib/site-copy";
-import heroPoster from "@/assets/hero-rooftop.jpg";
-import heroBackground from "@/assets/custom/hero-background-reference-optimized.jpg";
 import heroVideo from "@/assets/new/hero-loop-optimized.mp4";
 
 type HeroOverlayProps = {
@@ -27,7 +35,8 @@ const HeroOverlay = ({
   prefersReducedMotion,
 }: HeroOverlayProps) => {
   const copy = useSiteCopy();
-  const revealProgress = prefersReducedMotion ? 1 : clamp((scrollProgress - 0.84) / 0.16);
+  const revealProgress =
+    prefersReducedMotion || isMobile ? 1 : clamp((scrollProgress - 0.84) / 0.16);
   const overlayY = `${(1 - revealProgress) * 8}vh`;
   const leftScale = 0.96 + revealProgress * 0.04;
   const leftY = `${(1 - revealProgress) * 2.8}vh`;
@@ -173,7 +182,7 @@ const HeroOverlay = ({
             {copy.hero.trustNotes.map((note) => (
               <div key={note} className="flex items-center gap-3 rounded-full border border-white/8 bg-black/16 px-4 py-3">
                 <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary/55" />
-                <span className="text-[0.66rem] uppercase tracking-[0.16em] text-white/76 md:text-[0.72rem] md:tracking-[0.18em]">
+                <span className="text-[0.75rem] uppercase tracking-[0.16em] text-white/80 md:text-[0.78rem] md:tracking-[0.18em]">
                   {note}
                 </span>
               </div>
@@ -189,18 +198,49 @@ const HeroOverlay = ({
 export const Hero = () => {
   const copy = useSiteCopy();
   const prefersReducedMotion = useReducedMotion();
-  const [introVisible, setIntroVisible] = useState(!prefersReducedMotion);
+  const isMobile = useIsMobile();
+  const saveData = useDataSaver();
+  const [introVisible, setIntroVisible] = useState(!prefersReducedMotion && !isMobile);
+  const [mobileVideoArmed, setMobileVideoArmed] = useState(!isMobile && !prefersReducedMotion);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || isMobile) {
+      setIntroVisible(false);
+      return;
+    }
     const timer = window.setTimeout(() => setIntroVisible(false), 1350);
     return () => window.clearTimeout(timer);
-  }, [prefersReducedMotion]);
+  }, [isMobile, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setMobileVideoArmed(true);
+      return;
+    }
+
+    if (prefersReducedMotion || saveData) {
+      setMobileVideoArmed(false);
+      return;
+    }
+
+    setMobileVideoArmed(false);
+
+    const enableVideo = () => setMobileVideoArmed(true);
+    window.addEventListener("touchstart", enableVideo, { once: true, passive: true });
+    window.addEventListener("wheel", enableVideo, { once: true, passive: true });
+    window.addEventListener("keydown", enableVideo, { once: true });
+
+    return () => {
+      window.removeEventListener("touchstart", enableVideo);
+      window.removeEventListener("wheel", enableVideo);
+      window.removeEventListener("keydown", enableVideo);
+    };
+  }, [isMobile, prefersReducedMotion, saveData]);
 
   return (
     <section className="theme-dark relative z-20 overflow-visible bg-background">
       <AnimatePresence>
-        {introVisible ? (
+        {introVisible && !isMobile ? (
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -222,29 +262,47 @@ export const Hero = () => {
       <ScrollExpandMedia
         mediaType="video"
         mediaSrc={heroVideo}
-        posterSrc={heroPoster}
-        title="NETSO ENERGY"
-        videoRevealStart={0}
-        showPosterBeforeReveal={false}
-        bgImageSrc={heroBackground}
+        posterSrc={isMobile ? heroPosterMobileFallback : heroPosterFallback}
+        mediaAlt=""
+        title={isMobile ? undefined : "NETSO ENERGY"}
+        videoRevealStart={isMobile ? 0.22 : 0}
+        showPosterBeforeReveal={isMobile}
+        playVideo={!isMobile || mobileVideoArmed}
+        videoPreload={isMobile ? "none" : "metadata"}
+        mobileSectionHeight="168svh"
+        bgComponent={
+          <ResponsiveImage
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-center"
+            decoding="async"
+            fetchPriority="high"
+            fallbackSrc={heroBackgroundFallback}
+            fallbackSources={heroBackgroundJpegSources}
+            loading="eager"
+            sizes="100vw"
+            sources={heroBackgroundAvifSources}
+          />
+        }
         initialWidthDesktop={448}
         expandedWidthDesktop={1680}
         initialHeightDesktop={286}
         expandedHeightDesktop={930}
-        initialWidthMobile={188}
-        expandedWidthMobile={1040}
-        initialHeightMobile={234}
-        expandedHeightMobile={540}
+        initialWidthMobile={236}
+        expandedWidthMobile={960}
+        initialHeightMobile={280}
+        expandedHeightMobile={520}
         maxMediaWidth="100vw"
         maxMediaHeight="112vh"
         mediaOverlayOpacity={0.18}
-        mediaObjectPosition="center 14%"
+        mediaObjectPosition={isMobile ? "center center" : "center 14%"}
         textBlend
+        titleVariant="zoom-wordmark"
         renderOverlay={({ scrollProgress, isMobile, showContent }) => (
           <HeroOverlay
             scrollProgress={scrollProgress}
             isMobile={isMobile}
-            contentVisible={showContent}
+            contentVisible={isMobile ? true : showContent}
             prefersReducedMotion={prefersReducedMotion}
           />
         )}

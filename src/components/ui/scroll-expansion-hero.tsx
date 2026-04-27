@@ -22,6 +22,9 @@ interface ScrollExpandMediaProps {
   mediaType?: 'video' | 'image';
   mediaSrc: string;
   posterSrc?: string;
+  mediaAlt?: string;
+  playVideo?: boolean;
+  videoPreload?: "auto" | "metadata" | "none";
   videoRevealStart?: number;
   showPosterBeforeReveal?: boolean;
   bgImageSrc?: string;
@@ -42,8 +45,11 @@ interface ScrollExpandMediaProps {
   date?: string;
   scrollToExpand?: string;
   textBlend?: boolean;
+  titleVariant?: 'split' | 'zoom-wordmark';
   children?: ReactNode;
   cuePosition?: 'media-bottom' | 'viewport-bottom' | 'below-media';
+  mobileSectionHeight?: string;
+  desktopSectionHeight?: string;
   renderOverlay?: (state: {
     scrollProgress: number;
     mediaFullyExpanded: boolean;
@@ -61,6 +67,9 @@ const ScrollExpandMedia = ({
   mediaType = 'video',
   mediaSrc,
   posterSrc,
+  mediaAlt,
+  playVideo = true,
+  videoPreload = "metadata",
   videoRevealStart = 0,
   showPosterBeforeReveal = true,
   bgImageSrc,
@@ -81,8 +90,11 @@ const ScrollExpandMedia = ({
   date,
   scrollToExpand,
   textBlend,
+  titleVariant = 'split',
   children,
   cuePosition = 'media-bottom',
+  mobileSectionHeight = "210svh",
+  desktopSectionHeight = "220svh",
   renderOverlay,
 }: ScrollExpandMediaProps) => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -139,7 +151,7 @@ const ScrollExpandMedia = ({
       fastScrollEnd: true,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
-        const nextProgress = Number(self.progress.toFixed(4));
+        const nextProgress = Number(self.progress.toFixed(2));
         if (nextProgress !== progressRef.current) {
           progressRef.current = nextProgress;
           setScrollProgress(nextProgress);
@@ -198,11 +210,35 @@ const ScrollExpandMedia = ({
   const titleRevealProgress = easeOutCubic(clamp(scrollProgress / Math.max(expandEnd, 0.001)));
   const titleOpacity = prefersReducedMotion
     ? 0
-    : 1 - clamp((scrollProgress - (isMobileState ? 0.54 : 0.58)) / (isMobileState ? 0.18 : 0.16));
+    : titleVariant === 'zoom-wordmark'
+      ? 1 -
+        easeOutCubic(
+          clamp(
+            (scrollProgress - (isMobileState ? 0.56 : 0.6)) /
+              (isMobileState ? 0.18 : 0.16),
+          ),
+        )
+      : 1 -
+        clamp(
+          (scrollProgress - (isMobileState ? 0.54 : 0.58)) /
+            (isMobileState ? 0.18 : 0.16),
+        );
   const titleScale = mix(1, 0.94, titleRevealProgress);
   const titleY = mix(0, isMobileState ? -4 : -2, titleRevealProgress);
   const titleDrift = mix(0, isMobileState ? 14 : 20, titleRevealProgress);
   const titleGap = mix(0.35, isMobileState ? 0.7 : 1.15, titleRevealProgress);
+  const wordmarkProgress = easeOutCubic(
+    clamp((scrollProgress - 0.02) / Math.max(expandEnd - 0.02, 0.001)),
+  );
+  const wordmarkScale = mix(1, isMobileState ? 1.44 : 1.94, wordmarkProgress);
+  const wordmarkY = mix(isMobileState ? 4 : 3, isMobileState ? -7 : -12, wordmarkProgress);
+  const wordmarkGap = mix(10, isMobileState ? 76 : 108, wordmarkProgress);
+  const wordmarkDrift = mix(0, isMobileState ? 190 : 280, wordmarkProgress);
+  const wordmarkWidth = isMobileState ? 'min(94vw, 860px)' : 'min(94vw, 1580px)';
+  const wordmarkDropShadow = isMobileState
+    ? 'drop-shadow(0 12px 26px rgba(0,0,0,0.34))'
+    : 'drop-shadow(0 18px 42px rgba(0,0,0,0.34))';
+  const mediaLabel = mediaAlt ?? title ?? '';
   const textTranslateX = mix(0, isMobileState ? 16 : 24, composedExpand);
   const cueTop = `calc(50% + ${expandedHeight * scaleY * 0.5}px + ${
     isMobileState ? 18 : 22
@@ -210,18 +246,18 @@ const ScrollExpandMedia = ({
   const sectionHeight = prefersReducedMotion
     ? '100svh'
     : isMobileState
-      ? '210svh'
-      : '220svh';
+      ? mobileSectionHeight
+      : desktopSectionHeight;
   const mediaFullyExpanded = prefersReducedMotion || scrollProgress >= expandEnd;
   const showContent = prefersReducedMotion || scrollProgress >= revealStart;
   const renderStaticPoster =
     mediaType === 'video' &&
     Boolean(posterSrc) &&
-    showPosterBeforeReveal &&
-    videoRevealProgress < 1;
+    ((showPosterBeforeReveal && videoRevealProgress < 1) || !playVideo);
   const renderVideoLayer =
     mediaType === 'video' &&
     !mediaSrc.includes('youtube.com') &&
+    playVideo &&
     (prefersReducedMotion || videoRevealStart <= 0 || videoRevealProgress > 0);
   const mediaOpacity = prefersReducedMotion ? 1 : mediaEntryProgress;
   const mediaEntryLift = videoRevealStart <= 0 ? 0 : mix(isMobileState ? 20 : 26, 0, mediaEntryProgress);
@@ -310,8 +346,8 @@ const ScrollExpandMedia = ({
                       {prefersReducedMotion && posterSrc ? (
                         <img
                           src={posterSrc}
-                          alt={title || ""}
-                          aria-hidden={title ? undefined : "true"}
+                          alt={mediaLabel}
+                          aria-hidden={mediaLabel ? undefined : 'true'}
                           className="h-full w-full object-cover"
                           style={{
                             objectPosition: mediaObjectPosition,
@@ -324,8 +360,8 @@ const ScrollExpandMedia = ({
                           {renderStaticPoster ? (
                             <img
                               src={posterSrc}
-                              alt={title || ""}
-                              aria-hidden={title ? undefined : "true"}
+                              alt={mediaLabel}
+                              aria-hidden={mediaLabel ? undefined : 'true'}
                               className="absolute inset-0 h-full w-full object-cover"
                               style={{
                                 objectPosition: mediaObjectPosition,
@@ -339,11 +375,11 @@ const ScrollExpandMedia = ({
                             <video
                               src={mediaSrc}
                               poster={posterSrc}
-                              autoPlay
+                              autoPlay={playVideo}
                               muted
                               loop
                               playsInline
-                              preload="metadata"
+                              preload={videoPreload}
                               className="absolute inset-0 h-full w-full object-cover"
                               style={{
                                 objectPosition: mediaObjectPosition,
@@ -364,7 +400,7 @@ const ScrollExpandMedia = ({
                 ) : (
                   <img
                     src={mediaSrc}
-                    alt={title || 'Media content'}
+                    alt={mediaLabel || 'Media content'}
                     className="h-full w-full object-cover"
                     style={{
                       objectPosition: mediaObjectPosition,
@@ -465,7 +501,67 @@ const ScrollExpandMedia = ({
                 </motion.div>
               ) : null}
 
-              {title ? (
+              {title && titleVariant === 'zoom-wordmark' ? (
+                <motion.div
+                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-3 mix-blend-normal"
+                  initial={false}
+                  animate={{ opacity: titleOpacity }}
+                  transition={{ duration: 0.18 }}
+                  style={{
+                    transform: `translate3d(0, ${wordmarkY}vh, 0)`,
+                    willChange: 'transform, opacity',
+                  }}
+                  aria-hidden="true"
+                >
+                  <svg
+                    viewBox="0 0 1600 420"
+                    preserveAspectRatio="xMidYMid meet"
+                    className="h-auto overflow-visible text-white"
+                    focusable="false"
+                    style={{
+                      width: wordmarkWidth,
+                      filter: wordmarkDropShadow,
+                    }}
+                  >
+                    <g
+                      transform={`translate(800 210) scale(${wordmarkScale}) translate(-800 -210)`}
+                    >
+                      <text
+                        x={800 - wordmarkGap - wordmarkDrift}
+                        y="248"
+                        textAnchor="end"
+                        fill="currentColor"
+                        style={{
+                          fontFamily: '"featureDeck", Georgia, serif',
+                          fontSize: 212,
+                          fontWeight: 700,
+                          letterSpacing: '-0.08em',
+                        }}
+                      >
+                        {firstWord}
+                      </text>
+                      {restOfTitle ? (
+                        <text
+                          x={800 + wordmarkGap + wordmarkDrift}
+                          y="248"
+                          textAnchor="start"
+                          fill="currentColor"
+                          style={{
+                            fontFamily: '"featureDeck", Georgia, serif',
+                            fontSize: 212,
+                            fontWeight: 700,
+                            letterSpacing: '-0.08em',
+                          }}
+                        >
+                          {restOfTitle}
+                        </text>
+                      ) : null}
+                    </g>
+                  </svg>
+                </motion.div>
+              ) : null}
+
+              {title && titleVariant !== 'zoom-wordmark' ? (
                 <motion.div
                   className={`pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-4 ${
                     textBlend ? 'mix-blend-difference' : 'mix-blend-normal'

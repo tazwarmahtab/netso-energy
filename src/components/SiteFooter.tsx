@@ -16,8 +16,8 @@ export const SiteFooter = () => {
             <h2 className="max-w-2xl font-display text-3xl tracking-[-0.04em] text-foreground sm:text-4xl">
               {copy.footer.title}
             </h2>
-            <p className="max-w-2xl text-muted-foreground">{copy.footer.body}</p>
-            <p className="text-sm text-muted-foreground">{copy.footer.note}</p>
+            <p className="max-w-2xl text-white/72">{copy.footer.body}</p>
+            <p className="text-sm text-white/64">{copy.footer.note}</p>
           </div>
 
           <div className="space-y-4">
@@ -34,14 +34,14 @@ export const SiteFooter = () => {
             <Link
               key={item.href}
               to={item.href}
-              className="rounded-full border border-border/60 px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+              className="rounded-full border border-border/60 px-4 py-2 text-sm text-white/72 transition-colors hover:border-primary/40 hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
           <Link
             to="/feasibility"
-            className="rounded-full border border-border/60 px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+            className="rounded-full border border-border/60 px-4 py-2 text-sm text-white/72 transition-colors hover:border-primary/40 hover:text-foreground"
           >
             {copy.common.fallbackForm}
           </Link>
