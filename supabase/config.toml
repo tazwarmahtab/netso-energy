@@ -1,0 +1,10 @@
+project_id = "rooftop-renaissance"
+
+[functions.submit-lead]
+verify_jwt = false
+
+[functions.start-assessment-session]
+verify_jwt = false
+
+[functions.whatsapp-intake-webhook]
+verify_jwt = false

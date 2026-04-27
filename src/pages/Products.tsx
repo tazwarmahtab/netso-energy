@@ -1,130 +1,111 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Check } from "lucide-react";
+
 import productImg from "@/assets/product-pergola.jpg";
 import t3 from "@/assets/transform-3-solar.jpg";
-import t4 from "@/assets/transform-4-lifestyle.jpg";
-
-const features = [
-  ["Modular spans", "Configurable from 3m to 8m to fit any rooftop geometry."],
-  ["Integrated PV", "Tier-1 monocrystalline panels become the canopy itself."],
-  ["Wind & monsoon rated", "Engineered for 180 km/h gusts and Bangladesh monsoons."],
-  ["Smart inverter", "Hybrid inverter with grid-tie and optional battery support."],
-  ["Underlight system", "Warm LED strip lighting integrated into the frame."],
-  ["Monitoring app", "Real-time generation, savings, and CO₂ data on your phone."],
-];
+import t4 from "@/assets/custom/transform-5-lifestyle-optimized.jpg";
+import { EstimateLink, StartAssessmentLink } from "@/components/AssessmentCtas";
+import { SEO } from "@/components/SEO";
+import { useSiteCopy } from "@/lib/site-copy";
 
 const Products = () => {
+  const copy = useSiteCopy();
+
   return (
     <>
-      <section className="pt-40 pb-12 md:pt-52 md:pb-20">
+      <SEO path="/products" />
+
+      <section className="pb-16 pt-40 md:pb-20 md:pt-52" id="solar-canopy-system">
         <div className="container-tight">
-          <p className="eyebrow mb-6">Product · Solar Pergola</p>
-          <h1 className="display-text text-5xl md:text-7xl max-w-4xl text-balance">
-            One product.<br />
-            <span className="italic text-primary">Three jobs.</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Shade, shelter, and generation — engineered into a single, beautiful
-            architectural object designed for Bangladesh rooftops.
+          <p className="eyebrow mb-6 text-primary/80">{copy.products.eyebrow}</p>
+          <h1 className="display-xl max-w-5xl text-balance">{copy.products.headline}</h1>
+          <p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">
+            {copy.products.body}
           </p>
         </div>
       </section>
 
-      <section className="pb-20">
-        <div className="container-tight">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-border/60 shadow-deep"
-          >
+      <section className="pb-24">
+        <div className="container-tight grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/60">
             <img
               src={productImg}
-              alt="NETSO Solar Pergola product detail"
-              className="h-full w-full object-cover"
-              loading="lazy"
+              alt="NETSO rooftop canopy system"
               width={1600}
               height={1200}
+              className="h-full w-full object-cover"
+              loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-28 bg-secondary/30">
-        <div className="container-tight grid md:grid-cols-2 gap-16">
-          <div>
-            <p className="eyebrow mb-6">Specifications</p>
-            <h2 className="display-text text-4xl md:text-5xl text-balance">
-              Built like infrastructure.<br />Lives like architecture.
-            </h2>
           </div>
-          <div className="grid gap-px bg-border/60 border border-border/60 rounded-xl overflow-hidden">
-            {[
-              ["Panel output", "5–15 kWp standard"],
-              ["Frame material", "Powder-coated steel"],
-              ["Roof load", "Distributed, no penetration option"],
-              ["Inverter", "Hybrid, IP65"],
-              ["Battery (optional)", "5–20 kWh LFP"],
-              ["Warranty", "25 years on panels · 10 on structure"],
-            ].map(([k, v]) => (
-              <div key={k} className="bg-card p-5 flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">{k}</span>
-                <span className="text-sm font-medium">{v}</span>
-              </div>
-            ))}
+          <div className="ivory-panel rounded-[2rem] p-8 md:p-10">
+            <p className="eyebrow mb-4 text-primary/80">{copy.products.systemHeadline}</p>
+            <p className="text-lg leading-8 text-muted-foreground">{copy.products.systemBody}</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <StartAssessmentLink source="products-page-hero" />
+              <EstimateLink source="products-page-hero" />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-28 md:py-36">
+      <section className="bg-secondary/26 py-24 md:py-32" id="review-factors">
         <div className="container-tight">
-          <h2 className="display-text text-4xl md:text-5xl mb-16 max-w-2xl text-balance">
-            What's included.
+          <h2 className="display-text max-w-3xl text-4xl text-balance md:text-5xl">
+            {copy.products.includedTitle}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map(([title, body], i) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 30 }}
+          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {copy.products.included.map((card, index) => (
+              <motion.article
+                key={card.title}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
-                className="p-6 rounded-xl border border-border/60 bg-card"
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="ivory-panel rounded-[1.7rem] p-8"
               >
-                <Check className="h-5 w-5 text-primary mb-4" />
-                <h3 className="font-display text-2xl mb-2">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{body}</p>
-              </motion.div>
+                <h3 className="font-display text-2xl tracking-[-0.04em] text-foreground">
+                  {card.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">{card.body}</p>
+              </motion.article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 md:py-28 bg-secondary/30">
-        <div className="container-tight grid md:grid-cols-2 gap-6">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border/60">
-            <img src={t3} alt="Pergola during day" className="h-full w-full object-cover" loading="lazy" />
+      <section className="py-24 md:py-32">
+        <div className="container-tight grid gap-6 md:grid-cols-2">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60">
+            <img
+              src={t3}
+              alt="Daytime rooftop solar canopy"
+              width={800}
+              height={1000}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
           </div>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border/60">
-            <img src={t4} alt="Pergola at night, lifestyle scene" className="h-full w-full object-cover" loading="lazy" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60">
+            <img
+              src={t4}
+              alt="Lifestyle rooftop scene under a solar canopy"
+              width={800}
+              height={1000}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
           </div>
         </div>
       </section>
 
-      <section className="py-28 text-center">
+      <section className="pb-32 text-center" id="start-chat">
         <div className="container-tight">
-          <h2 className="display-text text-4xl md:text-5xl text-balance mb-8">
-            Ready to model yours?
+          <h2 className="display-text text-4xl text-balance md:text-5xl">
+            {copy.products.ctaHeadline}
           </h2>
-          <Link
-            to="/feasibility"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-4 text-sm font-medium text-primary-foreground shadow-sun transition-all duration-300 hover:scale-[1.03] hover:brightness-110"
-          >
-            Check rooftop potential
-          </Link>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <StartAssessmentLink source="products-page" />
+            <EstimateLink source="products-page" />
+          </div>
         </div>
       </section>
     </>

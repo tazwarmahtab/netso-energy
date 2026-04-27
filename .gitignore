@@ -22,3 +22,36 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel
+
+# Local automation and verification artifacts
+.playwright-mcp/
+.superpowers/
+test-results/
+ANALYSIS_REPORT.md
+current-home-snapshot.md
+scroll-test.cjs
+verify-scroll.cjs
+hero-*.png
+
+# Local design references
+fluid-design/
+godaylight-design/
+src/assets/reference/
+
+# Source media not used by the shipped app
+src/assets/custom/*.png
+src/assets/new/IMG_*.PNG
+src/assets/new/*.JPG
+src/assets/new/4FE189CD-99C6-4747-8822-0F6999B8126F.MP4
+src/assets/new/AA77A2D0-B748-4AEA-8846-C9101257D783.MP4
+src/assets/new/Scene_a_man_202512171525_n6e5g.MP4
+src/assets/new/clouds-bg.mp4
+src/assets/new/logo.PNG
+src/assets/new/product-showcase.mov
+
+# Supabase local temp
+supabase/.temp/
+
+# Old deployment config
+netlify.toml

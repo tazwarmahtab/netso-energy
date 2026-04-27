@@ -1,0 +1,314 @@
+import { z } from "zod";
+import { estimateMonthlyConsumptionFromBill } from "@/lib/solar-engine";
+
+export const bdPhoneRegex = /^(?:\+?880|0)1[3-9]\d{8}$/;
+export const languageSchema = z.enum(["en", "bn"]);
+
+export const assessmentEntryPointSchema = z.enum([
+  "web_feasibility",
+  "calculator_handoff",
+  "whatsapp",
+]);
+
+export const qualificationStatusSchema = z.enum([
+  "started",
+  "in_progress",
+  "awaiting_evidence",
+  "auto_qualified",
+  "needs_manual_review",
+  "not_qualified",
+  "inspection_pending",
+  "inspection_confirmed",
+  "closed",
+]);
+
+export const inspectionReviewStateSchema = z.enum([
+  "not_requested",
+  "manual_review",
+  "inspection_pending",
+  "inspection_confirmed",
+  "declined",
+  "closed",
+]);
+
+export const preferredContactChannelSchema = z.enum(["whatsapp", "phone"]);
+export const humanReviewOutcomeSchema = z.enum([
+  "pending",
+  "confirmed",
+  "declined",
+  "closed",
+]);
+
+export const estimateRangeSchema = z
+  .object({
+    low: z.number().nonnegative(),
+    midpoint: z.number().nonnegative(),
+    high: z.number().nonnegative(),
+  })
+  .refine(({ low, midpoint, high }) => low <= midpoint && midpoint <= high, {
+    message: "Estimate ranges must be ordered low <= midpoint <= high.",
+  });
+
+export const modelOutputSchema = z.object({
+  systemKwp: z.number().positive(),
+  systemKwpRange: estimateRangeSchema,
+  monthlySavings: z.number().nonnegative(),
+  monthlySavingsRange: estimateRangeSchema,
+  paybackYears: z.number().positive(),
+  paybackYearsRange: estimateRangeSchema,
+  twentyYearProfit: z.number(),
+  twentyYearProfitRange: estimateRangeSchema,
+  co2Saved: z.number().nonnegative(),
+  annualGenerationKwh: z.number().nonnegative(),
+  confidenceLabel: z.literal("proof_first"),
+  assumptions: z.array(z.string().trim().min(1)).min(1),
+  disclaimer: z.string().trim().min(1),
+});
+
+export const calculatorContextSchema = z.object({
+  estimatedMonthlyBillBdt: z.number().positive(),
+  estimatedMonthlyConsumptionKwh: z.number().positive().optional(),
+  rooftopAreaSqft: z.number().positive(),
+  estimate: modelOutputSchema,
+});
+
+export const assessmentEvidenceSchema = z
+  .object({
+    kind: z.enum([
+      "roof_photo",
+      "electric_bill",
+      "voice_note",
+      "location_pin",
+      "document",
+      "other",
+    ]),
+    captureChannel: z.enum(["web_form", "calculator", "whatsapp"]).default("web_form"),
+    status: z.enum(["pending_review", "accepted", "rejected"]).default("pending_review"),
+    fileUrl: z.string().url().optional(),
+    storagePath: z.string().trim().min(1).optional(),
+    note: z.string().trim().min(1).max(300).optional(),
+    metadata: z.record(z.unknown()).default({}),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.fileUrl && !value.storagePath && !value.note) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Evidence must include a file URL, storage path, or note.",
+      });
+    }
+  });
+
+export const assessmentAnswersSchema = z.object({
+  address: z.string().trim().min(5).max(200).optional(),
+  district: z.string().trim().min(2).max(80).optional(),
+  neighborhood: z.string().trim().min(2).max(80).optional(),
+  propertyType: z.string().trim().min(1).max(80).optional(),
+  buildingType: z.string().trim().min(1).max(80).optional(),
+  ownershipStatus: z.string().trim().min(1).max(80).optional(),
+  roofSizeBand: z.string().trim().min(1).max(80).optional(),
+  roofAccessReadiness: z.string().trim().min(1).max(80).optional(),
+  shadingStatus: z.string().trim().min(1).max(80).optional(),
+  targetInstallTimeline: z.string().trim().min(1).max(80).optional(),
+  primaryGoal: z.string().trim().min(1).max(120).optional(),
+  servicePhase: z.enum(["single_phase", "three_phase", "unknown"]).optional(),
+  monthlyBillBand: z.string().trim().min(1).max(80).optional(),
+  monthlyBillAmount: z.number().positive().optional(),
+  monthlyConsumptionKwh: z.number().positive().optional(),
+  notes: z.string().trim().min(1).max(500).optional(),
+});
+
+export const assessmentContactSchema = z.object({
+  name: z.string().trim().min(2).max(80).optional(),
+  phone: z.string().trim().regex(bdPhoneRegex),
+  preferredChannel: preferredContactChannelSchema.default("whatsapp"),
+});
+
+const startAssessmentSessionShape = z.object({
+  entryPoint: assessmentEntryPointSchema,
+  preferredLanguage: languageSchema.default("en"),
+  routeSource: z.string().trim().min(1).max(80).optional(),
+  contact: assessmentContactSchema,
+  answers: assessmentAnswersSchema.default({}),
+  evidence: z.array(assessmentEvidenceSchema).default([]),
+  calculatorContext: calculatorContextSchema.optional(),
+});
+
+export const startAssessmentSessionSchema = startAssessmentSessionShape.superRefine((value, ctx) => {
+    const needsNamedContact = value.entryPoint !== "whatsapp";
+
+    if (needsNamedContact && !value.contact.name?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["contact", "name"],
+        message: "A contact name is required for non-WhatsApp intake.",
+      });
+    }
+
+    if (value.entryPoint === "web_feasibility") {
+      const requiredFields: Array<keyof z.infer<typeof assessmentAnswersSchema>> = [
+        "address",
+        "district",
+        "neighborhood",
+        "propertyType",
+        "ownershipStatus",
+        "roofSizeBand",
+        "roofAccessReadiness",
+        "shadingStatus",
+        "targetInstallTimeline",
+        "primaryGoal",
+        "monthlyBillBand",
+      ];
+
+      for (const field of requiredFields) {
+        if (!value.answers[field]) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["answers", field],
+            message: `${field} is required for web feasibility intake.`,
+          });
+        }
+      }
+    }
+
+    if (value.entryPoint === "calculator_handoff" && !value.calculatorContext) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["calculatorContext"],
+        message: "Calculator handoff sessions require calculator context.",
+      });
+    }
+  });
+
+export const assessmentSessionSchema = startAssessmentSessionShape.extend({
+  id: z.string().uuid(),
+  qualificationStatus: qualificationStatusSchema,
+  inspectionReviewState: inspectionReviewStateSchema,
+  qualificationScore: z.number().min(0).max(100).optional(),
+  humanReviewOutcome: humanReviewOutcomeSchema.optional(),
+  createdAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().optional(),
+});
+
+export const startAssessmentSessionResponseSchema = z.object({
+  success: z.literal(true),
+  nextStep: z.enum([
+    "continue_on_whatsapp",
+    "review_for_engineering",
+    "schedule_site_visit",
+  ]),
+  session: assessmentSessionSchema,
+});
+
+export type AssessmentEntryPoint = z.infer<typeof assessmentEntryPointSchema>;
+export type QualificationStatus = z.infer<typeof qualificationStatusSchema>;
+export type InspectionReviewState = z.infer<typeof inspectionReviewStateSchema>;
+export type AssessmentAnswers = z.infer<typeof assessmentAnswersSchema>;
+export type AssessmentEvidence = z.infer<typeof assessmentEvidenceSchema>;
+export type CalculatorContext = z.infer<typeof calculatorContextSchema>;
+export type AssessmentSession = z.infer<typeof assessmentSessionSchema>;
+export type StartAssessmentSessionPayload = z.infer<typeof startAssessmentSessionSchema>;
+export type StartAssessmentSessionResponse = z.infer<typeof startAssessmentSessionResponseSchema>;
+
+export type LeadSource = AssessmentEntryPoint;
+export type LeadSubmissionPayload = StartAssessmentSessionPayload;
+
+export type FeasibilityFormValues = {
+  preferredLanguage: z.infer<typeof languageSchema>;
+  name: string;
+  phone: string;
+  address: string;
+  district: string;
+  neighborhood: string;
+  propertyType: string;
+  ownershipStatus: string;
+  roofSize: string;
+  roofAccessReadiness: string;
+  shadingStatus: string;
+  targetInstallTimeline: string;
+  primaryGoal: string;
+  monthlyBillRange: string;
+  monthlyBillAmount?: number;
+  servicePhase: "single_phase" | "three_phase" | "unknown";
+};
+
+export type CalculatorLeadFormValues = {
+  preferredLanguage?: z.infer<typeof languageSchema>;
+  name: string;
+  phone: string;
+  address?: string;
+};
+
+export function createAssessmentSessionPayload(
+  payload: StartAssessmentSessionPayload,
+): StartAssessmentSessionPayload {
+  return startAssessmentSessionSchema.parse(payload);
+}
+
+export function createFeasibilityAssessmentSessionInput(
+  values: FeasibilityFormValues,
+): StartAssessmentSessionPayload {
+  return startAssessmentSessionSchema.parse({
+    entryPoint: "web_feasibility",
+    preferredLanguage: values.preferredLanguage,
+    routeSource: "fallback_form",
+    contact: {
+      name: values.name,
+      phone: values.phone,
+      preferredChannel: "whatsapp",
+    },
+    answers: {
+      address: values.address,
+      district: values.district,
+      neighborhood: values.neighborhood,
+      propertyType: values.propertyType,
+      buildingType: values.propertyType,
+      ownershipStatus: values.ownershipStatus,
+      roofSizeBand: values.roofSize,
+      roofAccessReadiness: values.roofAccessReadiness,
+      shadingStatus: values.shadingStatus,
+      targetInstallTimeline: values.targetInstallTimeline,
+      primaryGoal: values.primaryGoal,
+      monthlyBillBand: values.monthlyBillRange,
+      monthlyBillAmount: values.monthlyBillAmount,
+      servicePhase: values.servicePhase,
+    },
+    evidence: [],
+  });
+}
+
+export function createCalculatorAssessmentSessionInput(
+  values: CalculatorLeadFormValues,
+  estimates: {
+    calculatorBillEstimate: number;
+    calculatorAreaEstimate: number;
+    modelOutput: z.infer<typeof modelOutputSchema>;
+  },
+): StartAssessmentSessionPayload {
+  return startAssessmentSessionSchema.parse({
+    entryPoint: "calculator_handoff",
+    preferredLanguage: values.preferredLanguage ?? "en",
+    routeSource: "savings_estimate",
+    contact: {
+      name: values.name,
+      phone: values.phone,
+      preferredChannel: "whatsapp",
+    },
+    answers: values.address?.trim()
+      ? {
+          address: values.address.trim(),
+        }
+      : {},
+    calculatorContext: {
+      estimatedMonthlyBillBdt: estimates.calculatorBillEstimate,
+      estimatedMonthlyConsumptionKwh: estimateMonthlyConsumptionFromBill(
+        estimates.calculatorBillEstimate,
+      ),
+      rooftopAreaSqft: estimates.calculatorAreaEstimate,
+      estimate: estimates.modelOutput,
+    },
+    evidence: [],
+  });
+}
+
+export const createFeasibilityLeadPayload = createFeasibilityAssessmentSessionInput;
+export const createCalculatorLeadPayload = createCalculatorAssessmentSessionInput;

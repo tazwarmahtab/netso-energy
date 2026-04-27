@@ -1,41 +1,26 @@
 import { motion } from "framer-motion";
-import { Wallet, ShieldCheck, TrendingUp, Leaf } from "lucide-react";
-
-const values = [
-  {
-    icon: Wallet,
-    title: "Lower bills",
-    body: "Self-consume up to 70% of your generation. Typical payback in 4–6 years.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Resilience",
-    body: "Optional battery backup keeps essentials running through outages.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Property value",
-    body: "A solar-equipped roof commands 5–8% higher resale value in urban Dhaka.",
-  },
-  {
-    icon: Leaf,
-    title: "Cleaner air",
-    body: "Each rooftop offsets ~6 tonnes of CO₂ per year — measurable, local impact.",
-  },
-];
+import { Wallet, ShieldCheck, TrendingUp } from "lucide-react";
+import { useSiteCopy } from "@/lib/site-copy";
 
 export const ValueStack = () => {
+  const copy = useSiteCopy();
+  const values = [
+    { icon: Wallet, ...copy.value.cards[0] },
+    { icon: ShieldCheck, ...copy.value.cards[1] },
+    { icon: TrendingUp, ...copy.value.cards[2] },
+  ];
+
   return (
-    <section className="relative py-32 md:py-44 bg-secondary/30">
+    <section className="relative bg-secondary/24 py-32 md:py-44">
       <div className="container-tight">
         <div className="max-w-3xl">
-          <p className="eyebrow mb-6">The value stack</p>
-          <h2 className="display-text text-4xl md:text-6xl text-balance">
-            Four returns. <span className="italic text-primary">One install.</span>
+          <p className="eyebrow mb-6 text-primary/80">{copy.value.eyebrow}</p>
+          <h2 className="display-text text-4xl text-balance text-foreground md:text-6xl">
+            {copy.value.headline}
           </h2>
         </div>
 
-        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {values.map((v, i) => (
             <motion.div
               key={v.title}
@@ -43,13 +28,13 @@ export const ValueStack = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative p-8 rounded-2xl border border-border/60 bg-card hover:bg-card/80 transition-colors"
+              className="ivory-panel group relative rounded-[1.6rem] p-8 transition-colors"
             >
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary mb-6 transition-all duration-500 group-hover:bg-gradient-sun group-hover:text-primary-foreground">
+              <span className="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/15 bg-primary/10 text-primary transition-colors duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
                 <v.icon className="h-5 w-5" />
               </span>
-              <h3 className="font-display text-2xl mb-2">{v.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{v.body}</p>
+              <h3 className="mb-2 font-display text-2xl text-foreground">{v.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{v.body}</p>
             </motion.div>
           ))}
         </div>

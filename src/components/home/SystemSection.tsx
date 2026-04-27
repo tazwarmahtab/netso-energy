@@ -1,36 +1,25 @@
 import { motion } from "framer-motion";
 import { Sun, Cpu, TrendingUp } from "lucide-react";
-
-const steps = [
-  {
-    icon: Sun,
-    title: "Capture",
-    body: "Premium photovoltaic panels integrated into architectural pergolas convert sunlight into clean electricity — silently, all day.",
-  },
-  {
-    icon: Cpu,
-    title: "Optimize",
-    body: "Smart inverters and battery options balance generation with consumption, prioritising self-use and grid resilience.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Compound",
-    body: "Lower bills, backup during outages, and meaningful uplift in property value — your rooftop starts paying you back.",
-  },
-];
+import { useSiteCopy } from "@/lib/site-copy";
 
 export const SystemSection = () => {
+  const copy = useSiteCopy();
+  const steps = [
+    { icon: Sun, ...copy.system.steps[0] },
+    { icon: Cpu, ...copy.system.steps[1] },
+    { icon: TrendingUp, ...copy.system.steps[2] },
+  ];
+
   return (
-    <section className="relative py-32 md:py-44">
+    <section className="relative overflow-hidden bg-background py-28 md:py-40">
       <div className="container-tight">
         <div className="max-w-3xl">
-          <p className="eyebrow mb-6">The system</p>
-          <h2 className="display-text text-4xl md:text-6xl text-balance">
-            Three layers. One quietly powerful asset.
+          <p className="eyebrow mb-6 text-primary/80">{copy.system.eyebrow}</p>
+          <h2 className="display-text text-4xl text-balance text-foreground md:text-6xl">
+            {copy.system.headline}
           </h2>
-          <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
-            Every NETSO installation works as a single, integrated system — engineered
-            for the realities of Bangladesh's grid, weather, and architecture.
+          <p className="mt-6 max-w-2xl text-lg text-foreground/72">
+            {copy.system.body}
           </p>
         </div>
 
@@ -42,18 +31,18 @@ export const SystemSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="glass-card p-8 group hover:border-primary/40 transition-colors duration-500"
+              className="ivory-panel group rounded-[1.75rem] p-8 transition-colors duration-500 hover:border-primary/40"
             >
               <div className="flex items-start justify-between mb-10">
                 <span className="font-mono text-xs text-muted-foreground">
                   0{i + 1}
                 </span>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-primary/18 bg-primary/10 text-primary transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
                   <s.icon className="h-5 w-5" />
                 </span>
               </div>
-              <h3 className="font-display text-3xl mb-3">{s.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.body}</p>
+              <h3 className="mb-3 font-display text-3xl text-foreground">{s.title}</h3>
+              <p className="leading-relaxed text-muted-foreground">{s.body}</p>
             </motion.div>
           ))}
         </div>

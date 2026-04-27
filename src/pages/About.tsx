@@ -1,99 +1,113 @@
 import { motion } from "framer-motion";
+import { CheckCircle2 } from "lucide-react";
+
 import dhaka from "@/assets/dhaka-aerial.jpg";
+import { EstimateLink, StartAssessmentLink } from "@/components/AssessmentCtas";
+import { SEO } from "@/components/SEO";
+import { useSiteCopy } from "@/lib/site-copy";
 
 const About = () => {
+  const copy = useSiteCopy();
+
   return (
     <>
-      <section className="pt-40 pb-20 md:pt-52 md:pb-28 relative">
+      <SEO path="/about" />
+
+      <section className="relative pb-16 pt-40 md:pb-20 md:pt-52">
         <div className="container-tight">
-          <p className="eyebrow mb-6">About NETSO</p>
-          <h1 className="display-text text-5xl md:text-7xl max-w-4xl text-balance">
-            Building Bangladesh's <span className="italic text-primary">distributed</span>{" "}
-            energy backbone — one rooftop at a time.
+          <p className="eyebrow mb-6 text-primary/80">{copy.about.eyebrow}</p>
+          <h1 className="display-text max-w-4xl text-5xl text-balance md:text-7xl">
+            {copy.about.headline}
           </h1>
         </div>
       </section>
 
       <section className="pb-20">
         <div className="container-tight">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-border/60">
-            <img src={dhaka} alt="Dhaka skyline at dusk" className="h-full w-full object-cover" loading="lazy" width={1920} height={1080} />
-            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+          <div className="relative aspect-[16/9] overflow-hidden rounded-[2rem] border border-border/60">
+            <img
+              src={dhaka}
+              alt="Dhaka skyline at dusk"
+              className="h-full w-full object-cover"
+              loading="lazy"
+              width={1920}
+              height={1080}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
           </div>
         </div>
       </section>
 
       <section className="py-24 md:py-32">
-        <div className="container-tight grid md:grid-cols-12 gap-12">
+        <div className="container-tight grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
-            <p className="eyebrow mb-4">Our thesis</p>
+            <p className="eyebrow">{copy.about.thesisEyebrow}</p>
           </div>
-          <div className="md:col-span-8 space-y-6 text-lg text-muted-foreground leading-relaxed">
-            <p className="text-foreground text-2xl md:text-3xl font-display leading-snug">
-              Bangladesh doesn't have a land problem. It has a rooftop opportunity.
+          <div className="md:col-span-8 space-y-6 text-muted-foreground">
+            <p className="font-display text-2xl leading-snug text-foreground md:text-3xl">
+              {copy.about.thesisLead}
             </p>
-            <p>
-              Every flat concrete roof in Dhaka is, in effect, a piece of unused energy
-              infrastructure. NETSO exists to activate that infrastructure — turning
-              private rooftops into a distributed, citizen-owned power grid.
-            </p>
-            <p>
-              We're not a panel installer. We're a platform: design, financing,
-              installation, and lifetime monitoring, built around a single hardware
-              product — the Solar Pergola — that makes the upgrade beautiful,
-              not industrial.
-            </p>
+            {copy.about.thesisBody.map((paragraph) => (
+              <p key={paragraph} className="text-lg leading-8">
+                {paragraph}
+              </p>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-32 bg-secondary/30">
+      <section className="bg-secondary/26 py-24 md:py-32">
         <div className="container-tight">
-          <p className="eyebrow mb-6">By the numbers</p>
-          <div className="grid md:grid-cols-4 gap-px bg-border/60 border border-border/60 rounded-2xl overflow-hidden">
-            {[
-              ["120+", "Rooftops activated"],
-              ["1.4 MW", "Capacity installed"],
-              ["6,200 t", "CO₂ offset / year"],
-              ["BDT 38M", "Annual savings created"],
-            ].map(([n, l], i) => (
-              <motion.div
-                key={l}
-                initial={{ opacity: 0, y: 20 }}
+          <p className="eyebrow mb-6 text-primary/80">{copy.about.proofEyebrow}</p>
+          <div className="grid gap-6 md:grid-cols-3">
+            {copy.about.proofCards.map((card, index) => (
+              <motion.article
+                key={card.title}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.08 }}
-                className="bg-card p-8"
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="ivory-panel rounded-[1.8rem] p-8"
               >
-                <p className="display-text text-4xl md:text-5xl text-primary">{n}</p>
-                <p className="mt-3 text-sm text-muted-foreground">{l}</p>
-              </motion.div>
+                <CheckCircle2 className="mb-5 h-5 w-5 text-primary/80" />
+                <h2 className="font-display text-2xl tracking-[-0.04em] text-foreground">
+                  {card.title}
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">{card.body}</p>
+              </motion.article>
             ))}
           </div>
         </div>
       </section>
 
       <section className="py-24 md:py-32">
-        <div className="container-tight grid md:grid-cols-12 gap-12">
+        <div className="container-tight grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
-            <p className="eyebrow mb-4">For partners</p>
+            <p className="eyebrow">{copy.about.partnersEyebrow}</p>
           </div>
           <div className="md:col-span-8 space-y-6 text-muted-foreground">
-            <p className="text-foreground text-xl font-display">
-              Developers, investors and institutions: we're building the rooftop layer
-              of Bangladesh's energy transition.
+            <p className="font-display text-2xl leading-snug text-foreground md:text-3xl">
+              {copy.about.partnersLead}
             </p>
-            <p>
-              We work with property developers integrating NETSO at design stage,
-              with financiers building rooftop-as-a-service portfolios, and with
-              institutions deploying at scale across staff housing and commercial assets.
-            </p>
-            <p>
-              <a href="mailto:partners@netso.energy" className="text-primary hover:text-primary-glow transition-colors">
-                partners@netso.energy →
-              </a>
-            </p>
+            {copy.about.partnersBody.map((paragraph) => (
+              <p key={paragraph} className="text-lg leading-8">
+                {paragraph}
+              </p>
+            ))}
+            <a
+              href="mailto:partners@netso.energy"
+              className="inline-flex text-primary transition-colors hover:text-primary-glow"
+            >
+              partners@netso.energy
+            </a>
           </div>
+        </div>
+      </section>
+
+      <section className="pb-32">
+        <div className="container-tight flex flex-col gap-3 sm:flex-row">
+          <StartAssessmentLink source="about-page" />
+          <EstimateLink source="about-page" />
         </div>
       </section>
     </>

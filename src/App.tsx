@@ -1,34 +1,54 @@
+import { Suspense, lazy, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteLayout } from "@/components/SiteLayout";
+import { RouteSEO } from "@/components/SEO";
 import Index from "./pages/Index.tsx";
-import HowItWorks from "./pages/HowItWorks.tsx";
-import Projects from "./pages/Projects.tsx";
-import Products from "./pages/Products.tsx";
-import About from "./pages/About.tsx";
-import Feasibility from "./pages/Feasibility.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+const HowItWorks = lazy(() => import("./pages/HowItWorks.tsx"));
+const Projects = lazy(() => import("./pages/Projects.tsx"));
+const Products = lazy(() => import("./pages/Products.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
+const Feasibility = lazy(() => import("./pages/Feasibility.tsx"));
+
 const queryClient = new QueryClient();
+
+const RouteFallback = () => <div className="min-h-[40vh]" aria-hidden="true" />;
+
+const withSuspense = (element: ReactNode) => (
+  <Suspense fallback={<RouteFallback />}>{element}</Suspense>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_relativeSplatPath: true,
+          v7_startTransition: true,
+        }}
+      >
+        <RouteSEO />
         <Routes>
           <Route element={<SiteLayout />}>
             <Route path="/" element={<Index />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/feasibility" element={<Feasibility />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route
+              path="/how-it-works"
+              element={withSuspense(<HowItWorks />)}
+            />
+            <Route path="/projects" element={withSuspense(<Projects />)} />
+            <Route path="/products" element={withSuspense(<Products />)} />
+            <Route path="/about" element={withSuspense(<About />)} />
+            <Route
+              path="/feasibility"
+              element={withSuspense(<Feasibility />)}
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
