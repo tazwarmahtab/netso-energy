@@ -11,19 +11,19 @@ export const SystemSection = () => {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-background py-28 md:py-40">
+    <section className="relative overflow-hidden bg-background py-20 md:py-40">
       <div className="container-tight">
         <div className="max-w-3xl">
           <p className="eyebrow mb-6 text-primary/80">{copy.system.eyebrow}</p>
           <h2 className="display-text text-4xl text-balance text-foreground md:text-6xl">
             {copy.system.headline}
           </h2>
-          <p className="mt-6 max-w-2xl text-lg text-foreground/72">
+          <p className="mt-4 max-w-[22rem] text-base leading-8 text-foreground/72 md:mt-6 md:max-w-2xl md:text-lg md:leading-normal">
             {copy.system.body}
           </p>
         </div>
 
-        <div className="mt-20 grid md:grid-cols-3 gap-6">
+        <div className="mt-12 grid gap-5 md:mt-20 md:grid-cols-3 md:gap-6">
           {steps.map((s, i) => (
             <motion.div
               key={s.title}
@@ -31,9 +31,9 @@ export const SystemSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="ivory-panel group rounded-[1.75rem] p-8 transition-colors duration-500 hover:border-primary/40"
+              className="ivory-panel group rounded-[1.75rem] p-6 transition-colors duration-500 hover:border-primary/40 md:p-8"
             >
-              <div className="flex items-start justify-between mb-10">
+              <div className="mb-8 flex items-start justify-between md:mb-10">
                 <span className="font-mono text-xs text-muted-foreground">
                   0{i + 1}
                 </span>
@@ -42,7 +42,7 @@ export const SystemSection = () => {
                 </span>
               </div>
               <h3 className="mb-3 font-display text-3xl text-foreground">{s.title}</h3>
-              <p className="leading-relaxed text-muted-foreground">{s.body}</p>
+              <p className="text-foreground/66 leading-7 md:leading-relaxed">{s.body}</p>
             </motion.div>
           ))}
         </div>

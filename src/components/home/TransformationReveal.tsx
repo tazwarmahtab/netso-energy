@@ -137,7 +137,7 @@ export const TransformationReveal = () => {
       { img: t2, label: copy.transformation.stages[1].title, desc: copy.transformation.stages[1].body, width: 1536, height: 1024, objectPosition: "38% center" },
       { img: t3, label: copy.transformation.stages[2].title, desc: copy.transformation.stages[2].body, width: 1920, height: 1080 },
       { img: t3, label: copy.transformation.stages[3].title, desc: copy.transformation.stages[3].body, width: 1920, height: 1080, energyFlow: true },
-      { img: t4, label: copy.transformation.stages[4].title, desc: copy.transformation.stages[4].body, width: 1024, height: 1536, objectPosition: "center 62%" },
+      { img: t4, label: copy.transformation.stages[4].title, desc: copy.transformation.stages[4].body, width: 1024, height: 1536, objectPosition: "center 18%" },
     ],
     [copy.transformation.stages],
   );

@@ -24,7 +24,7 @@ export function ResponsiveImage({
   sizes,
   fallbackSrc,
   fallbackSources,
-  modernType = "image/webp",
+  modernType = "image/avif",
   alt,
   ...imgProps
 }: ResponsiveImageProps) {

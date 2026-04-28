@@ -17,8 +17,8 @@ Production marketing site and intake funnel for NETSO, built with Vite, React, a
 3. Set:
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_PUBLISHABLE_KEY`
-   - `VITE_SITE_URL`
-   - `VITE_WHATSAPP_NUMBER`
+   - `VITE_SITE_URL` (optional override, defaults to `https://netsoenergy.com`)
+   - `VITE_WHATSAPP_NUMBER` (optional override, defaults to the public NETSO intake number)
 4. Start the app:
    - `npm run dev`
 
@@ -32,10 +32,12 @@ npm run verify:release
 
 This runs:
 
+- public config verification
 - production build
 - lint
 - tests
 - SEO build verification
+- browser smoke tests against the built `dist/` output
 - Supabase function type checks
 
 ## Production Notes
@@ -58,5 +60,8 @@ Build settings:
 
 - Build command: `npm run build`
 - Output directory: `dist`
+- Runtime preview / smoke server: `npm run preview:dist`
 
 After deploy, attach the custom domain `netsoenergy.com` in Vercel project settings and point the registrar DNS records to the values Vercel provides.
+
+Vercel is the authoritative deployment target for this repo. Any legacy Netlify-specific configuration should be considered removed or obsolete.

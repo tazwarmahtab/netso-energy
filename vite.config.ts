@@ -3,159 +3,17 @@ import path from "node:path";
 import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { componentTagger } from "lovable-tagger";
-
-type ChangeFrequency =
-  | "always"
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "yearly"
-  | "never";
-
-type RouteMetadata = {
-  changefreq?: ChangeFrequency;
-  description: string;
-  image?: string;
-  imageAlt?: string;
-  indexable?: boolean;
-  path: string;
-  prerender?: boolean;
-  priority?: number;
-  robots?: string;
-  title: string;
-};
-
-const DEFAULT_SITE_URL = "https://netsoenergy.com";
-const SITE_NAME = "NETSO ENERGY";
-const DEFAULT_SOCIAL_IMAGE_PATH = "/og-image.jpg";
-const DEFAULT_SOCIAL_IMAGE_ALT =
-  "NETSO rooftop solar pergola overlooking the Dhaka skyline";
-const DEFAULT_TWITTER_CARD = "summary_large_image";
-const DEFAULT_INDEX_ROBOTS =
-  "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
-const DEFAULT_NOINDEX_ROBOTS = "noindex, nofollow, noarchive";
-
-const routeMetadata: RouteMetadata[] = [
-  {
-    path: "/",
-    title: "Infrastructure for a Solar Future",
-    description:
-      "NETSO Energy turns unused rooftops into energy-generating assets with high-performance solar pergolas built for Bangladesh.",
-    priority: 1,
-    changefreq: "weekly",
-  },
-  {
-    path: "/how-it-works",
-    title: "How It Works",
-    description:
-      "A staged, engineering-led process for assessing, designing, and delivering rooftop solar projects in Dhaka.",
-    priority: 0.8,
-    changefreq: "monthly",
-  },
-  {
-    path: "/projects",
-    title: "Projects",
-    description:
-      "Selected residential and commercial rooftop contexts across Dhaka.",
-    priority: 0.8,
-    changefreq: "monthly",
-  },
-  {
-    path: "/products",
-    title: "Solar Pergola",
-    description:
-      "Solar pergola systems designed around shade, shelter, and energy generation for Dhaka rooftops.",
-    priority: 0.9,
-    changefreq: "monthly",
-  },
-  {
-    path: "/about",
-    title: "About",
-    description:
-      "Building Bangladesh's distributed energy backbone — one rooftop at a time. Learn about the NETSO mission and impact.",
-    priority: 0.7,
-    changefreq: "monthly",
-  },
-  {
-    path: "/feasibility",
-    title: "Check Feasibility",
-    description:
-      "Start a rooftop assessment and share the building, bill, and roof context NETSO needs to review fit.",
-    priority: 0.9,
-    changefreq: "weekly",
-  },
-  {
-    path: "/404",
-    title: "Page Not Found",
-    description: "The page you requested could not be found.",
-    indexable: false,
-    prerender: true,
-  },
-];
+import {
+  DEFAULT_SITE_URL,
+  DEFAULT_TWITTER_CARD,
+  SITE_NAME,
+  getIndexableRoutes,
+  getPrerenderRoutes,
+  resolveRouteMetadata,
+  resolveSiteUrl,
+} from "./src/lib/site-metadata.shared.js";
 
 const legacyRedirects: Array<{ from: string; to: string }> = [];
-
-const normalizePathname = (pathname: string) => {
-  if (!pathname) {
-    return "/";
-  }
-
-  const cleanedPath = pathname.split(/[?#]/u)[0] || "/";
-
-  if (cleanedPath !== "/" && cleanedPath.endsWith("/")) {
-    return cleanedPath.slice(0, -1);
-  }
-
-  return cleanedPath;
-};
-
-const resolveSiteUrl = (siteUrl: string = DEFAULT_SITE_URL) =>
-  siteUrl.replace(/\/+$/u, "");
-
-const createDocumentTitle = (title: string) => `${title} | ${SITE_NAME}`;
-
-const toAbsoluteUrl = (siteUrl: string, pathname: string) => {
-  if (/^https?:\/\//u.test(pathname)) {
-    return pathname;
-  }
-
-  const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  return `${resolveSiteUrl(siteUrl)}${normalizedPath}`;
-};
-
-const resolveRouteMetadata = (pathname: string, siteUrl: string) => {
-  const normalizedPath = normalizePathname(pathname);
-  const route =
-    routeMetadata.find((entry) => entry.path === normalizedPath) ||
-    routeMetadata.find((entry) => entry.path === "/404");
-
-  if (!route) {
-    throw new Error("Missing /404 SEO metadata configuration.");
-  }
-
-  const resolvedSiteUrl = resolveSiteUrl(siteUrl);
-  const imagePath = route.image || DEFAULT_SOCIAL_IMAGE_PATH;
-  const indexable = route.indexable !== false;
-
-  return {
-    canonicalUrl: toAbsoluteUrl(resolvedSiteUrl, route.path),
-    description: route.description,
-    imageAlt: route.imageAlt || DEFAULT_SOCIAL_IMAGE_ALT,
-    imageUrl: toAbsoluteUrl(resolvedSiteUrl, imagePath),
-    indexable,
-    ogType: "website",
-    robotsContent: route.robots || (indexable ? DEFAULT_INDEX_ROBOTS : DEFAULT_NOINDEX_ROBOTS),
-    titleText: createDocumentTitle(route.title),
-    twitterCard: DEFAULT_TWITTER_CARD,
-  };
-};
-
-const getPrerenderRoutes = () =>
-  routeMetadata.filter((route) => route.prerender !== false);
-
-const getSitemapRoutes = () =>
-  routeMetadata.filter((route) => route.indexable !== false);
 
 const escapeHtml = (value: string) =>
   value
@@ -306,15 +164,15 @@ const renderRedirectHtml = ({
 
 const renderSitemap = (siteUrl: string) => {
   const lastModified = new Date().toISOString();
-  const entries = getSitemapRoutes()
-    .map((route) => {
-      const metadata = resolveRouteMetadata(route.path, siteUrl);
+  const entries = getIndexableRoutes()
+    .map((routePath) => {
+      const metadata = resolveRouteMetadata(routePath, siteUrl);
 
       return `  <url>
     <loc>${escapeHtml(metadata.canonicalUrl)}</loc>
     <lastmod>${lastModified}</lastmod>
-    <changefreq>${route.changefreq || "monthly"}</changefreq>
-    <priority>${(route.priority || 0.5).toFixed(1)}</priority>
+    <changefreq>${metadata.changefreq}</changefreq>
+    <priority>${metadata.priority.toFixed(1)}</priority>
   </url>`;
     })
     .join("\n");
@@ -332,6 +190,18 @@ Allow: /
 Sitemap: ${resolveSiteUrl(siteUrl)}/sitemap.xml
 `;
 
+const getNodeModulePackage = (id: string) => {
+  const normalized = id.split("node_modules/")[1];
+  if (!normalized) return null;
+
+  const segments = normalized.split("/");
+  if (segments[0]?.startsWith("@")) {
+    return `${segments[0]}/${segments[1]}`;
+  }
+
+  return segments[0] ?? null;
+};
+
 const staticSeoPlugin = (siteUrl: string): Plugin => ({
   apply: "build",
   closeBundle: async () => {
@@ -339,10 +209,10 @@ const staticSeoPlugin = (siteUrl: string): Plugin => ({
     const rootHtmlPath = path.join(outDir, "index.html");
     const template = await readFile(rootHtmlPath, "utf8");
 
-    for (const route of getPrerenderRoutes()) {
-      const outputPath = routeOutputPath(outDir, route.path);
+    for (const routePath of getPrerenderRoutes()) {
+      const outputPath = routeOutputPath(outDir, routePath);
       await mkdir(path.dirname(outputPath), { recursive: true });
-      await writeFile(outputPath, renderRouteHtml(template, route.path, siteUrl), "utf8");
+      await writeFile(outputPath, renderRouteHtml(template, routePath, siteUrl), "utf8");
     }
 
     for (const redirect of legacyRedirects) {
@@ -395,6 +265,70 @@ export default defineConfig(({ mode }) => {
         "@tanstack/react-query",
         "@tanstack/query-core",
       ],
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return undefined;
+
+            const pkg = getNodeModulePackage(id);
+            if (!pkg) return "vendor";
+
+            if (pkg === "framer-motion") return "motion-core";
+            if (pkg === "gsap") return "gsap-core";
+
+            if (
+              pkg.startsWith("@supabase") ||
+              pkg.startsWith("@tanstack")
+            ) {
+              return "data-clients";
+            }
+
+            if (pkg === "remotion" || pkg === "@remotion/player") {
+              return "remotion";
+            }
+
+            if (pkg === "recharts" || pkg.startsWith("d3-")) {
+              return "charts";
+            }
+
+            if (
+              pkg.startsWith("@radix-ui") ||
+              pkg === "sonner" ||
+              pkg === "next-themes" ||
+              pkg === "vaul" ||
+              pkg === "cmdk" ||
+              pkg === "embla-carousel-react" ||
+              pkg === "react-day-picker" ||
+              pkg === "input-otp" ||
+              pkg === "react-resizable-panels"
+            ) {
+              return "ui-kit";
+            }
+
+            if (
+              pkg === "react-hook-form" ||
+              pkg === "@hookform/resolvers" ||
+              pkg === "zod" ||
+              pkg === "date-fns"
+            ) {
+              return "forms-data";
+            }
+
+            if (
+              pkg === "lucide-react" ||
+              pkg === "class-variance-authority" ||
+              pkg === "clsx" ||
+              pkg === "tailwind-merge"
+            ) {
+              return "ui-primitives";
+            }
+
+            return "vendor";
+          },
+        },
+      },
     },
   };
 });

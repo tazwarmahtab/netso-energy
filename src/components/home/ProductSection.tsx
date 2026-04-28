@@ -67,6 +67,7 @@ export const ProductSection = () => {
                   playsInline
                   preload="metadata"
                   poster={productPoster}
+                  aria-hidden="true"
                   className="h-full w-full object-cover contrast-[1.02] brightness-[1.02] saturate-[1.06]"
                 />
               ) : (

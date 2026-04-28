@@ -28,6 +28,8 @@ type SiteCopy = {
     english: string;
     bangla: string;
     startAssessment: string;
+    startOnWhatsApp: string;
+    joinReviewQueue: string;
     runEstimate: string;
     continueWhatsApp: string;
     fallbackForm: string;
@@ -157,11 +159,13 @@ type SiteCopy = {
 
 const en: SiteCopy = {
   common: {
-    brand: "NETSO",
+    brand: "NETSO ENERGY",
     languageLabel: "Language",
     english: "English",
     bangla: "বাংলা",
     startAssessment: "Check rooftop potential",
+    startOnWhatsApp: "Start on WhatsApp",
+    joinReviewQueue: "Claim early access",
     runEstimate: "Calculate my savings",
     continueWhatsApp: "Continue on WhatsApp",
     fallbackForm: "Feasibility",
@@ -257,9 +261,9 @@ const en: SiteCopy = {
   },
   conversionBand: {
     eyebrow: "Start where you are",
-    headline: "Check your rooftop potential in about 60 seconds.",
+    headline: "Start your rooftop review in about 60 seconds.",
     body:
-      "Use the estimate for a first-pass model, then continue to a rooftop feasibility check when you're ready.",
+      "Start on WhatsApp now. Share the basics below and NETSO will review fit before guiding the next step.",
     checklistTitle: "What you'll need",
     checklist: [
       "Full name",
@@ -324,10 +328,10 @@ const en: SiteCopy = {
     checklist: ["Roof condition", "Daytime load", "Access", "Shading"],
   },
   finalCta: {
-    eyebrow: "Start where you are",
-    headline: "Your rooftop is already there. Let it work for you.",
+    eyebrow: "Early access",
+    headline: "Claim early access for your rooftop review.",
     body:
-      "A quick assessment gives the team enough context to review fit and guide the next step.",
+      "Start on WhatsApp to reserve an early place. NETSO reviews the basics first, then guides the next step from there.",
   },
   howItWorks: {
     eyebrow: "How it works",
@@ -503,11 +507,13 @@ const en: SiteCopy = {
 
 const bn: SiteCopy = {
   common: {
-    brand: "NETSO",
+    brand: "NETSO ENERGY",
     languageLabel: "ভাষা",
     english: "English",
     bangla: "বাংলা",
     startAssessment: "ছাদের সম্ভাবনা দেখুন",
+    startOnWhatsApp: "হোয়াটসঅ্যাপে শুরু করুন",
+    joinReviewQueue: "আর্লি অ্যাক্সেস নিন",
     runEstimate: "সেভিংস হিসাব করুন",
     continueWhatsApp: "হোয়াটসঅ্যাপে চালিয়ে যান",
     fallbackForm: "ফিজিবিলিটি",
@@ -603,9 +609,9 @@ const bn: SiteCopy = {
   },
   conversionBand: {
     eyebrow: "যেখান থেকে আছেন, সেখান থেকেই শুরু করুন",
-    headline: "প্রায় ৬০ সেকেন্ডে আপনার ছাদের সম্ভাবনা দেখুন।",
+    headline: "প্রায় ৬০ সেকেন্ডে আপনার ছাদের রিভিউ শুরু করুন।",
     body:
-      "প্রথম-পাস মডেলের জন্য এই হিসাব ব্যবহার করুন, তারপর প্রস্তুত হলে রুফটপ ফিজিবিলিটি চেকে যান।",
+      "এখনই হোয়াটসঅ্যাপে শুরু করুন। নিচের মৌলিক তথ্য শেয়ার করলে NETSO উপযুক্ততা রিভিউ করে পরের ধাপ জানাবে।",
     checklistTitle: "যা লাগবে",
     checklist: [
       "পূর্ণ নাম",
@@ -670,10 +676,10 @@ const bn: SiteCopy = {
     checklist: ["ছাদের অবস্থা", "দিনের লোড", "অ্যাক্সেস", "ছায়া"],
   },
   finalCta: {
-    eyebrow: "যেখান থেকে শুরু করা যায়",
-    headline: "ছাদ তো আছেই। এবার তাকে আপনার জন্য কাজ করতে দিন।",
+    eyebrow: "আর্লি অ্যাক্সেস",
+    headline: "আপনার ছাদ রিভিউয়ের জন্য আর্লি অ্যাক্সেস নিন।",
     body:
-      "একটি দ্রুত অ্যাসেসমেন্ট দলকে যথেষ্ট প্রসঙ্গ দেয়, যাতে তারা ফিট রিভিউ করে পরের ধাপ গাইড করতে পারে।",
+      "হোয়াটসঅ্যাপে শুরু করে একটি আগাম জায়গা রিজার্ভ করুন। NETSO আগে মৌলিক তথ্য রিভিউ করে, তারপর পরের ধাপ গাইড করবে।",
   },
   howItWorks: {
     eyebrow: "কীভাবে কাজ করে",

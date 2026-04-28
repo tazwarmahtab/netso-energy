@@ -1,5 +1,15 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import {
+  DEFAULT_NOINDEX_ROBOTS,
+  DEFAULT_SITE_URL,
+  DEFAULT_TWITTER_CARD,
+  SITE_NAME,
+  createDocumentTitle,
+  resolveRouteMetadata,
+  resolveSiteUrl,
+  toAbsoluteUrl,
+} from "@/lib/site-metadata.shared.js";
 
 interface SEOProps {
   title?: string;
@@ -21,125 +31,6 @@ interface ResolvedSEOState {
   robotsContent: string;
   titleText: string;
 }
-
-interface RouteMetadata {
-  canonicalPath?: string;
-  description: string;
-  image?: string;
-  imageAlt?: string;
-  indexable?: boolean;
-  path: string;
-  robots?: string;
-  title: string;
-}
-
-const SITE_NAME = "NETSO ENERGY";
-const DEFAULT_SITE_URL = "https://netsoenergy.com";
-const DEFAULT_SOCIAL_IMAGE_PATH = "/og-image.jpg";
-const DEFAULT_SOCIAL_IMAGE_ALT =
-  "NETSO rooftop solar pergola overlooking the Dhaka skyline";
-const DEFAULT_INDEX_ROBOTS =
-  "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
-const DEFAULT_NOINDEX_ROBOTS = "noindex, nofollow, noarchive";
-const DEFAULT_TWITTER_CARD = "summary_large_image";
-
-const ROUTE_METADATA: RouteMetadata[] = [
-  {
-    path: "/",
-    title: "Infrastructure for a Solar Future",
-    description:
-      "NETSO Energy turns unused rooftops into energy-generating assets with high-performance solar pergolas built for Bangladesh.",
-  },
-  {
-    path: "/how-it-works",
-    title: "How It Works",
-    description:
-      "A staged, engineering-led process for assessing, designing, and delivering rooftop solar projects in Dhaka.",
-  },
-  {
-    path: "/projects",
-    title: "Projects",
-    description:
-      "Selected residential and commercial rooftop contexts across Dhaka.",
-  },
-  {
-    path: "/products",
-    title: "Solar Pergola",
-    description:
-      "Solar pergola systems designed around shade, shelter, and energy generation for Dhaka rooftops.",
-  },
-  {
-    path: "/about",
-    title: "About",
-    description:
-      "Building Bangladesh's distributed energy backbone — one rooftop at a time. Learn about the NETSO mission and impact.",
-  },
-  {
-    path: "/feasibility",
-    title: "Check Feasibility",
-    description:
-      "Start a rooftop assessment and share the building, bill, and roof context NETSO needs to review fit.",
-  },
-  {
-    path: "/404",
-    title: "Page Not Found",
-    description: "The page you requested could not be found.",
-    indexable: false,
-  },
-];
-
-const normalizePathname = (pathname: string) => {
-  const cleanedPath = pathname.split(/[?#]/u)[0] || "/";
-
-  if (cleanedPath !== "/" && cleanedPath.endsWith("/")) {
-    return cleanedPath.slice(0, -1);
-  }
-
-  return cleanedPath;
-};
-
-const resolveSiteUrl = (siteUrl: string = DEFAULT_SITE_URL) =>
-  siteUrl.replace(/\/+$/u, "");
-
-const createDocumentTitle = (title: string) => `${title} | ${SITE_NAME}`;
-
-const toAbsoluteUrl = (siteUrl: string, pathname: string) => {
-  if (/^https?:\/\//u.test(pathname)) {
-    return pathname;
-  }
-
-  const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  return `${resolveSiteUrl(siteUrl)}${normalizedPath}`;
-};
-
-const resolveRouteMetadata = (pathname: string, siteUrl: string) => {
-  const normalizedPath = normalizePathname(pathname);
-  const routeMetadata =
-    ROUTE_METADATA.find((route) => route.path === normalizedPath) ||
-    ROUTE_METADATA.find((route) => route.path === "/404");
-
-  if (!routeMetadata) {
-    throw new Error("Missing /404 SEO metadata configuration.");
-  }
-
-  const resolvedSiteUrl = resolveSiteUrl(siteUrl);
-  const canonicalPath = routeMetadata.canonicalPath || routeMetadata.path;
-  const imagePath = routeMetadata.image || DEFAULT_SOCIAL_IMAGE_PATH;
-  const indexable = routeMetadata.indexable !== false;
-
-  return {
-    canonicalPath,
-    description: routeMetadata.description,
-    imageAlt: routeMetadata.imageAlt || DEFAULT_SOCIAL_IMAGE_ALT,
-    imagePath,
-    indexable,
-    ogType: "website",
-    robotsContent: routeMetadata.robots || (indexable ? DEFAULT_INDEX_ROBOTS : DEFAULT_NOINDEX_ROBOTS),
-    siteUrl: resolvedSiteUrl,
-    title: routeMetadata.title,
-    twitterCard: DEFAULT_TWITTER_CARD,
-  };
-};
 
 const upsertMetaTag = (
   selector: string,
@@ -185,25 +76,28 @@ const resolveSEOState = (
     robots,
   }: SEOProps,
 ): ResolvedSEOState => {
-  const routeMetadata = resolveRouteMetadata(
-    pathname,
-    import.meta.env.VITE_SITE_URL || DEFAULT_SITE_URL,
-  );
+  const siteUrl = resolveSiteUrl(import.meta.env.VITE_SITE_URL || DEFAULT_SITE_URL);
+  const routeMetadata = resolveRouteMetadata(pathname, siteUrl);
   const resolvedTitle = title || routeMetadata.title;
   const resolvedDescription = description || routeMetadata.description;
   const resolvedCanonicalPath = canonicalPath || routeMetadata.canonicalPath;
-  const resolvedImagePath = image || routeMetadata.imagePath;
+  const resolvedImageUrl = image
+    ? toAbsoluteUrl(image, siteUrl)
+    : routeMetadata.imageUrl;
 
   return {
-    canonicalUrl: toAbsoluteUrl(routeMetadata.siteUrl, resolvedCanonicalPath),
+    canonicalUrl: toAbsoluteUrl(resolvedCanonicalPath, siteUrl),
     description: resolvedDescription,
     imageAlt: imageAlt || routeMetadata.imageAlt,
-    imageUrl: toAbsoluteUrl(routeMetadata.siteUrl, resolvedImagePath),
+    imageUrl: resolvedImageUrl,
     ogType: routeMetadata.ogType,
     robotsContent: noindex
       ? DEFAULT_NOINDEX_ROBOTS
       : robots || routeMetadata.robotsContent,
-    titleText: createDocumentTitle(resolvedTitle),
+    titleText:
+      resolvedTitle === routeMetadata.title
+        ? routeMetadata.titleText
+        : createDocumentTitle(resolvedTitle),
   };
 };
 
@@ -271,7 +165,7 @@ const applySEOState = ({
   });
 
   upsertMetaTag('meta[name="twitter:card"]', {
-    content: "summary_large_image",
+    content: DEFAULT_TWITTER_CARD,
     "data-seo": "twitter:card",
     name: "twitter:card",
   });
@@ -328,9 +222,9 @@ export const SEO = ({
     image,
     imageAlt,
     noindex,
+    path,
     robots,
     title,
-    path,
   ]);
 
   return null;

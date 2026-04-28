@@ -24,7 +24,11 @@ export const FinalCta = () => {
           <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto">
             {copy.finalCta.body}
           </p>
-          <StartAssessmentLink source="final-cta" className="mt-10" />
+          <StartAssessmentLink
+            source="final-cta"
+            label={copy.common.joinReviewQueue}
+            className="mt-10"
+          />
         </motion.div>
       </div>
     </section>

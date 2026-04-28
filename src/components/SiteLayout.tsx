@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { trackEvent } from "@/lib/analytics";
-import { LanguageProvider } from "@/lib/i18n";
+import { LanguageProvider, useLanguage } from "@/lib/i18n";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const getHeaderOffset = () => {
@@ -74,29 +74,38 @@ const ScrollToTop = () => {
   return null;
 };
 
-export const SiteLayout = () => {
+const SiteLayoutFrame = () => {
   const location = useLocation();
+  const { language } = useLanguage();
 
   useEffect(() => {
-    trackEvent("page_view", { pathname: location.pathname, hash: location.hash || null });
-  }, [location.hash, location.pathname]);
+    trackEvent("page_view", {
+      pathname: location.pathname,
+      hash: location.hash || null,
+      language,
+    });
+  }, [language, location.hash, location.pathname]);
 
   return (
-    <LanguageProvider>
-      <div className="min-h-screen bg-background text-foreground flex flex-col">
-        <ScrollToTop />
-        <a
-          href="#main-content"
-          className="sr-only z-[70] rounded-full bg-background px-4 py-2 text-sm font-medium text-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
-        >
-          Skip to content
-        </a>
-        <SiteHeader />
-        <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
-    </LanguageProvider>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <ScrollToTop />
+      <a
+        href="#main-content"
+        className="sr-only z-[70] rounded-full bg-background px-4 py-2 text-sm font-medium text-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        Skip to content
+      </a>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+        <Outlet />
+      </main>
+      <SiteFooter />
+    </div>
   );
 };
+
+export const SiteLayout = () => (
+  <LanguageProvider>
+    <SiteLayoutFrame />
+  </LanguageProvider>
+);

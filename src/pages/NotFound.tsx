@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useLanguage } from "@/lib/i18n";
+import { SEO } from "@/components/SEO";
 
 const NotFound = () => {
   const location = useLocation();
@@ -24,7 +25,9 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <section className="min-h-[80vh] flex items-center pt-32">
+    <>
+      <SEO path="/404" />
+      <section className="min-h-[80vh] flex items-center pt-32">
       <div className="container-tight text-center max-w-xl mx-auto">
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary mb-6">404</p>
         <h1 className="display-text text-5xl md:text-7xl text-balance">
@@ -40,7 +43,8 @@ const NotFound = () => {
           {copy.cta}
         </Link>
       </div>
-    </section>
+      </section>
+    </>
   );
 };
 

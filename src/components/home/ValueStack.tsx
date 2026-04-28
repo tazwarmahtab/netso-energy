@@ -11,7 +11,7 @@ export const ValueStack = () => {
   ];
 
   return (
-    <section className="relative bg-secondary/24 py-32 md:py-44">
+    <section className="relative bg-secondary/24 py-20 md:py-44">
       <div className="container-tight">
         <div className="max-w-3xl">
           <p className="eyebrow mb-6 text-primary/80">{copy.value.eyebrow}</p>
@@ -20,7 +20,7 @@ export const ValueStack = () => {
           </h2>
         </div>
 
-        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-12 grid gap-5 md:mt-16 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
           {values.map((v, i) => (
             <motion.div
               key={v.title}
@@ -28,13 +28,13 @@ export const ValueStack = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="ivory-panel group relative rounded-[1.6rem] p-8 transition-colors"
+              className="ivory-panel group relative rounded-[1.6rem] p-6 transition-colors md:p-8"
             >
-              <span className="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/15 bg-primary/10 text-primary transition-colors duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
+              <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary/15 bg-primary/10 text-primary transition-colors duration-500 group-hover:bg-primary group-hover:text-primary-foreground md:mb-6">
                 <v.icon className="h-5 w-5" />
               </span>
               <h3 className="mb-2 font-display text-2xl text-foreground">{v.title}</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">{v.body}</p>
+              <p className="text-sm leading-7 text-foreground/66 md:leading-relaxed">{v.body}</p>
             </motion.div>
           ))}
         </div>
