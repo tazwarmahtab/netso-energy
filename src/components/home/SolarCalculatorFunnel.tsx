@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { CSSProperties, FormEvent, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Calculator, CheckCircle, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
@@ -32,11 +32,31 @@ type CalculatorFormState = {
   address: string;
 };
 
+type RangeStyle = CSSProperties & {
+  "--range-progress": string;
+};
+
 const initialFormState: CalculatorFormState = {
   name: "",
   phone: "",
   address: "",
 };
+
+const billRange = {
+  min: 1500,
+  max: 40000,
+  step: 500,
+};
+
+const areaRange = {
+  min: 250,
+  max: 5000,
+  step: 50,
+};
+
+const buildRangeStyle = (value: number, min: number, max: number): RangeStyle => ({
+  "--range-progress": `${((value - min) / (max - min)) * 100}%`,
+});
 
 export function SolarCalculatorFunnel() {
   const { language } = useLanguage();
@@ -246,12 +266,13 @@ export function SolarCalculatorFunnel() {
                   <input
                     id="bill-slider"
                     type="range"
-                    min="1500"
-                    max="40000"
-                    step="500"
+                    min={billRange.min}
+                    max={billRange.max}
+                    step={billRange.step}
                     value={bill}
                     onChange={(event) => setBill(Number(event.target.value))}
                     className="calc-range w-full cursor-pointer appearance-none rounded-full bg-border/70 accent-primary"
+                    style={buildRangeStyle(bill, billRange.min, billRange.max)}
                   />
                 </div>
 
@@ -267,12 +288,13 @@ export function SolarCalculatorFunnel() {
                   <input
                     id="area-slider"
                     type="range"
-                    min="250"
-                    max="5000"
-                    step="50"
+                    min={areaRange.min}
+                    max={areaRange.max}
+                    step={areaRange.step}
                     value={area}
                     onChange={(event) => setArea(Number(event.target.value))}
                     className="calc-range w-full cursor-pointer appearance-none rounded-full bg-border/70 accent-primary"
+                    style={buildRangeStyle(area, areaRange.min, areaRange.max)}
                   />
                 </div>
 
