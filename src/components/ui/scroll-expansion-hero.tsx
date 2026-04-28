@@ -216,7 +216,7 @@ const ScrollExpandMedia = ({
       );
   const titleScale = mix(1, 0.94, titleRevealProgress);
   const titleY = mix(0, isMobileState ? -4 : -2, titleRevealProgress);
-  const titleDrift = mix(0, isMobileState ? 14 : 20, titleRevealProgress);
+  const titleDrift = mix(0, isMobileState ? 18 : 40, titleRevealProgress);
   const titleGap = mix(0.35, isMobileState ? 0.7 : 1.15, titleRevealProgress);
   const mediaLabel = mediaAlt ?? title ?? '';
   const textTranslateX = mix(0, isMobileState ? 16 : 24, composedExpand);
@@ -241,12 +241,6 @@ const ScrollExpandMedia = ({
     (prefersReducedMotion || videoRevealStart <= 0 || videoRevealProgress > 0);
   const mediaOpacity = prefersReducedMotion ? 1 : mediaEntryProgress;
   const mediaEntryLift = videoRevealStart <= 0 ? 0 : mix(isMobileState ? 20 : 26, 0, mediaEntryProgress);
-  const titleMaskFocus = isMobileState
-    ? "radial-gradient(ellipse 44% 24% at 50% 54%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 48%, rgba(0,0,0,0.92) 62%, rgba(0,0,0,0.28) 78%, transparent 90%)"
-    : "radial-gradient(ellipse 46% 24% at 50% 54%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0.9) 64%, rgba(0,0,0,0.26) 80%, transparent 91%)";
-  const titleMaskOutside = isMobileState
-    ? "radial-gradient(ellipse 44% 24% at 50% 54%, transparent 0%, transparent 50%, rgba(0,0,0,0.18) 63%, rgba(0,0,0,0.86) 80%, rgba(0,0,0,1) 92%)"
-    : "radial-gradient(ellipse 46% 24% at 50% 54%, transparent 0%, transparent 52%, rgba(0,0,0,0.16) 66%, rgba(0,0,0,0.84) 82%, rgba(0,0,0,1) 92%)";
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -529,7 +523,9 @@ const ScrollExpandMedia = ({
 
               {title ? (
                 <motion.div
-                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-4"
+                  className={`pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-4 ${
+                    textBlend ? 'mix-blend-difference' : 'mix-blend-normal'
+                  }`}
                   initial={false}
                   animate={{ opacity: titleOpacity }}
                   transition={{ duration: 0.2 }}
@@ -538,73 +534,30 @@ const ScrollExpandMedia = ({
                   }}
                   aria-hidden="true"
                 >
-                  <div className="relative">
-                    <div
-                      className="flex items-center justify-center whitespace-nowrap font-display leading-[0.88] tracking-[-0.08em] text-white drop-shadow-[0_14px_32px_rgba(0,0,0,0.34)]"
+                  <div
+                    className="flex items-center justify-center whitespace-nowrap font-display leading-[0.88] tracking-[-0.08em] text-white drop-shadow-[0_14px_32px_rgba(0,0,0,0.34)]"
+                    style={{
+                      gap: `${titleGap}rem`,
+                      fontSize: isMobileState
+                        ? 'clamp(2.45rem, 12vw, 4rem)'
+                        : 'clamp(4.2rem, 9vw, 8.25rem)',
+                    }}
+                  >
+                    <span
                       style={{
-                        gap: `${titleGap}rem`,
-                        fontSize: isMobileState
-                          ? 'clamp(2.45rem, 12vw, 4rem)'
-                          : 'clamp(4.2rem, 9vw, 8.25rem)',
-                        opacity: textBlend && !isMobileState ? 0.98 : 0.92,
-                        WebkitMaskImage:
-                          textBlend && !isMobileState ? titleMaskOutside : undefined,
-                        maskImage: textBlend && !isMobileState ? titleMaskOutside : undefined,
+                        transform: `translate3d(-${titleDrift}vw, 0, 0)`,
                       }}
                     >
+                      {firstWord}
+                    </span>
+                    {restOfTitle ? (
                       <span
                         style={{
-                          transform: `translate3d(-${titleDrift}vw, 0, 0)`,
+                          transform: `translate3d(${titleDrift}vw, 0, 0)`,
                         }}
                       >
-                        {firstWord}
+                        {restOfTitle}
                       </span>
-                      {restOfTitle ? (
-                        <span
-                          style={{
-                            transform: `translate3d(${titleDrift}vw, 0, 0)`,
-                          }}
-                        >
-                          {restOfTitle}
-                        </span>
-                      ) : null}
-                    </div>
-                    {!isMobileState && textBlend ? (
-                      <div
-                        className="absolute inset-0 flex items-center justify-center mix-blend-difference"
-                        style={{
-                          WebkitMaskImage: titleMaskFocus,
-                          maskImage: titleMaskFocus,
-                          opacity: 1,
-                        }}
-                      >
-                        <div
-                          className="flex items-center justify-center whitespace-nowrap font-display leading-[0.88] tracking-[-0.08em] text-white"
-                          style={{
-                            gap: `${titleGap}rem`,
-                            fontSize: isMobileState
-                              ? 'clamp(2.45rem, 12vw, 4rem)'
-                              : 'clamp(4.2rem, 9vw, 8.25rem)',
-                          }}
-                        >
-                          <span
-                            style={{
-                              transform: `translate3d(-${titleDrift}vw, 0, 0)`,
-                            }}
-                          >
-                            {firstWord}
-                          </span>
-                          {restOfTitle ? (
-                            <span
-                              style={{
-                                transform: `translate3d(${titleDrift}vw, 0, 0)`,
-                              }}
-                            >
-                              {restOfTitle}
-                            </span>
-                          ) : null}
-                        </div>
-                      </div>
                     ) : null}
                   </div>
                 </motion.div>
