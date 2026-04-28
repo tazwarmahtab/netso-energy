@@ -1,7 +1,10 @@
 import { Language } from "@/lib/i18n";
+import {
+  DEFAULT_WHATSAPP_NUMBER,
+  sanitizePhoneNumber,
+} from "@/lib/site-metadata";
 
 const DEFAULT_ASSESSMENT_PATH = "/feasibility";
-const DEFAULT_WHATSAPP_NUMBER = "8801791222777";
 
 type WhatsAppStartOptions = {
   language: Language;
@@ -12,12 +15,31 @@ type WhatsAppStartOptions = {
 };
 
 function getWhatsAppNumber() {
-  const configuredNumber = import.meta.env.VITE_WHATSAPP_NUMBER?.replace(/\D/g, "") ?? "";
-  return configuredNumber || DEFAULT_WHATSAPP_NUMBER;
+  const configuredNumber = sanitizePhoneNumber(import.meta.env.VITE_WHATSAPP_NUMBER);
+  if (configuredNumber) {
+    return configuredNumber;
+  }
+
+  if (import.meta.env.DEV || import.meta.env.MODE === "test") {
+    return DEFAULT_WHATSAPP_NUMBER;
+  }
+
+  if (
+    typeof window !== "undefined" &&
+    /^(localhost|127\.0\.0\.1)$/u.test(window.location.hostname)
+  ) {
+    return DEFAULT_WHATSAPP_NUMBER;
+  }
+
+  return "";
 }
 
 export function isWhatsAppConfigured() {
   return getWhatsAppNumber().length >= 10;
+}
+
+export function getAssessmentFallbackPath() {
+  return DEFAULT_ASSESSMENT_PATH;
 }
 
 export function buildWhatsAppStartUrl(options: WhatsAppStartOptions) {

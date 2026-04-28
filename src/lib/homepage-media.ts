@@ -1,4 +1,4 @@
-import heroPoster from "@/assets/hero-rooftop.jpg";
+import heroPoster from "@/assets/custom/hero-video-poster-reference.jpg";
 import heroPoster480 from "@/assets/generated/home/hero-poster-480.jpg";
 import heroPoster480Avif from "@/assets/generated/home/hero-poster-480.avif";
 import heroPoster960Avif from "@/assets/generated/home/hero-poster-960.avif";
@@ -35,6 +35,8 @@ export const heroPosterAvifSources = [
   { src: heroPoster480Avif, width: 480 },
   { src: heroPoster960Avif, width: 960 },
 ];
+
+export const heroPosterJpegSources = [{ src: heroPoster480, width: 480 }];
 
 export const heroPosterFallback = heroPoster;
 export const heroPosterMobileFallback = heroPoster480;

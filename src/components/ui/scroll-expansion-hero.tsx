@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
   type ReactNode,
-  type CSSProperties,
 } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
@@ -46,7 +45,6 @@ interface ScrollExpandMediaProps {
   date?: string;
   scrollToExpand?: string;
   textBlend?: boolean;
-  titleVariant?: 'split' | 'zoom-wordmark';
   children?: ReactNode;
   cuePosition?: 'media-bottom' | 'viewport-bottom' | 'below-media';
   mobileSectionHeight?: string;
@@ -91,7 +89,6 @@ const ScrollExpandMedia = ({
   date,
   scrollToExpand,
   textBlend,
-  titleVariant = 'split',
   children,
   cuePosition = 'media-bottom',
   mobileSectionHeight = "210svh",
@@ -99,6 +96,7 @@ const ScrollExpandMedia = ({
   renderOverlay,
 }: ScrollExpandMediaProps) => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const progressRef = useRef(prefersReducedMotion ? 1 : 0);
   const [scrollProgress, setScrollProgress] = useState<number>(
@@ -211,35 +209,15 @@ const ScrollExpandMedia = ({
   const titleRevealProgress = easeOutCubic(clamp(scrollProgress / Math.max(expandEnd, 0.001)));
   const titleOpacity = prefersReducedMotion
     ? 0
-    : titleVariant === 'zoom-wordmark'
-      ? 1 -
-        easeOutCubic(
-          clamp(
-            (scrollProgress - (isMobileState ? 0.56 : 0.6)) /
-              (isMobileState ? 0.18 : 0.16),
-          ),
-        )
-      : 1 -
-        clamp(
-          (scrollProgress - (isMobileState ? 0.54 : 0.58)) /
-            (isMobileState ? 0.18 : 0.16),
-        );
+    : 1 -
+      clamp(
+        (scrollProgress - (isMobileState ? 0.54 : 0.58)) /
+          (isMobileState ? 0.18 : 0.16),
+      );
   const titleScale = mix(1, 0.94, titleRevealProgress);
   const titleY = mix(0, isMobileState ? -4 : -2, titleRevealProgress);
   const titleDrift = mix(0, isMobileState ? 14 : 20, titleRevealProgress);
   const titleGap = mix(0.35, isMobileState ? 0.7 : 1.15, titleRevealProgress);
-  const wordmarkProgress = easeOutCubic(
-    clamp((scrollProgress - 0.02) / Math.max(expandEnd - 0.02, 0.001)),
-  );
-  const wordmarkScale = mix(1, isMobileState ? 1.44 : 1.94, wordmarkProgress);
-  const wordmarkY = mix(isMobileState ? 4 : 3, isMobileState ? -7 : -12, wordmarkProgress);
-  const wordmarkGap = mix(10, isMobileState ? 76 : 108, wordmarkProgress);
-  const wordmarkDrift = mix(0, isMobileState ? 190 : 280, wordmarkProgress);
-  const wordmarkAnchorX = isMobileState ? 788 : 760;
-  const wordmarkWidth = isMobileState ? 'min(94vw, 860px)' : 'min(94vw, 1580px)';
-  const wordmarkDropShadow = isMobileState
-    ? 'drop-shadow(0 12px 26px rgba(0,0,0,0.34))'
-    : 'drop-shadow(0 18px 42px rgba(0,0,0,0.34))';
   const mediaLabel = mediaAlt ?? title ?? '';
   const textTranslateX = mix(0, isMobileState ? 16 : 24, composedExpand);
   const cueTop = `calc(50% + ${expandedHeight * scaleY * 0.5}px + ${
@@ -263,6 +241,12 @@ const ScrollExpandMedia = ({
     (prefersReducedMotion || videoRevealStart <= 0 || videoRevealProgress > 0);
   const mediaOpacity = prefersReducedMotion ? 1 : mediaEntryProgress;
   const mediaEntryLift = videoRevealStart <= 0 ? 0 : mix(isMobileState ? 20 : 26, 0, mediaEntryProgress);
+  const titleMaskFocus = isMobileState
+    ? "radial-gradient(ellipse 44% 24% at 50% 54%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 48%, rgba(0,0,0,0.92) 62%, rgba(0,0,0,0.28) 78%, transparent 90%)"
+    : "radial-gradient(ellipse 46% 24% at 50% 54%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0.9) 64%, rgba(0,0,0,0.26) 80%, transparent 91%)";
+  const titleMaskOutside = isMobileState
+    ? "radial-gradient(ellipse 44% 24% at 50% 54%, transparent 0%, transparent 50%, rgba(0,0,0,0.18) 63%, rgba(0,0,0,0.86) 80%, rgba(0,0,0,1) 92%)"
+    : "radial-gradient(ellipse 46% 24% at 50% 54%, transparent 0%, transparent 52%, rgba(0,0,0,0.16) 66%, rgba(0,0,0,0.84) 82%, rgba(0,0,0,1) 92%)";
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -272,81 +256,48 @@ const ScrollExpandMedia = ({
     );
   }, [showContent]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !renderVideoLayer || !playVideo) return;
+
+    let cancelled = false;
+
+    const attemptPlay = () => {
+      if (cancelled) return;
+      video.defaultMuted = true;
+      video.muted = true;
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          /* Ignore autoplay rejections; interaction handlers can retry later. */
+        });
+      }
+    };
+
+    if (video.readyState >= 2) {
+      attemptPlay();
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    video.addEventListener('loadedmetadata', attemptPlay);
+    video.addEventListener('loadeddata', attemptPlay);
+    video.addEventListener('canplay', attemptPlay);
+    video.addEventListener('canplaythrough', attemptPlay);
+
+    return () => {
+      cancelled = true;
+      video.removeEventListener('loadedmetadata', attemptPlay);
+      video.removeEventListener('loadeddata', attemptPlay);
+      video.removeEventListener('canplay', attemptPlay);
+      video.removeEventListener('canplaythrough', attemptPlay);
+    };
+  }, [playVideo, renderVideoLayer, mediaSrc]);
+
   const titleWords = title?.trim().split(/\s+/).filter(Boolean) ?? [];
   const firstWord = titleWords[0] ?? '';
   const restOfTitle = titleWords.slice(1).join(' ');
-  const renderWordmarkLayer = ({
-    opacity,
-    blendMode,
-    strokeOpacity,
-    fillOpacity,
-    extraFilter,
-  }: {
-    opacity: number;
-    blendMode?: CSSProperties["mixBlendMode"];
-    strokeOpacity?: number;
-    fillOpacity?: number;
-    extraFilter?: string;
-  }) => (
-    <svg
-      viewBox="0 0 1600 420"
-      preserveAspectRatio="xMidYMid meet"
-      className="h-auto overflow-visible text-white"
-      focusable="false"
-      style={{
-        width: wordmarkWidth,
-        filter: extraFilter ?? wordmarkDropShadow,
-        mixBlendMode: blendMode,
-        opacity,
-      }}
-    >
-      <g
-        transform={`translate(${wordmarkAnchorX} 210) scale(${wordmarkScale}) translate(-${wordmarkAnchorX} -210)`}
-      >
-        <text
-          x={wordmarkAnchorX - wordmarkGap - wordmarkDrift}
-          y="248"
-          textAnchor="end"
-          fill="currentColor"
-          fillOpacity={fillOpacity}
-          stroke="rgba(255,255,255,0.9)"
-          strokeOpacity={strokeOpacity}
-          strokeWidth={strokeOpacity ? 1.15 : 0}
-          paintOrder="stroke fill"
-          style={{
-            fontFamily: '"featureDeck", Georgia, serif',
-            fontSize: 212,
-            fontWeight: 700,
-            letterSpacing: '-0.08em',
-          }}
-        >
-          {firstWord}
-        </text>
-        {restOfTitle ? (
-          <text
-            x={wordmarkAnchorX + wordmarkGap + wordmarkDrift}
-            y="248"
-            textAnchor="start"
-            fill="currentColor"
-            fillOpacity={fillOpacity}
-            stroke="rgba(255,255,255,0.9)"
-            strokeOpacity={strokeOpacity}
-            strokeWidth={strokeOpacity ? 1.15 : 0}
-            paintOrder="stroke fill"
-            style={{
-              fontFamily: '"featureDeck", Georgia, serif',
-              fontSize: 212,
-              fontWeight: 700,
-              letterSpacing: '-0.08em',
-            }}
-          >
-            {restOfTitle}
-          </text>
-        ) : null}
-      </g>
-    </svg>
-  );
-
   return (
     <div
       ref={sectionRef}
@@ -446,6 +397,7 @@ const ScrollExpandMedia = ({
                           ) : null}
                           {renderVideoLayer ? (
                             <video
+                              ref={videoRef}
                               src={mediaSrc}
                               poster={posterSrc}
                               autoPlay={playVideo}
@@ -454,6 +406,7 @@ const ScrollExpandMedia = ({
                               playsInline
                               preload={videoPreload}
                               className="absolute inset-0 h-full w-full object-cover"
+                              aria-hidden={mediaLabel ? undefined : "true"}
                               style={{
                                 objectPosition: mediaObjectPosition,
                                 transform: `translate3d(0, ${videoY}%, 0) scale(${mediaScale})`,
@@ -574,85 +527,84 @@ const ScrollExpandMedia = ({
                 </motion.div>
               ) : null}
 
-              {title && titleVariant === 'zoom-wordmark' ? (
+              {title ? (
                 <motion.div
-                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-3"
-                  initial={false}
-                  animate={{ opacity: titleOpacity }}
-                  transition={{ duration: 0.18 }}
-                  style={{
-                    transform: `translate3d(0, ${wordmarkY}vh, 0)`,
-                    willChange: 'transform, opacity',
-                  }}
-                  aria-hidden="true"
-                >
-                  <div className="relative flex items-center justify-center">
-                    {renderWordmarkLayer({
-                      opacity: 0.94,
-                      fillOpacity: 1,
-                      strokeOpacity: isMobileState ? 0.1 : 0.12,
-                      extraFilter: 'drop-shadow(0 18px 42px rgba(0,0,0,0.32))',
-                    })}
-                    {!isMobileState ? (
-                      <div
-                        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                        style={{
-                          opacity: 0.92,
-                          WebkitMaskImage:
-                            'radial-gradient(ellipse 34% 18% at 50% 58%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 38%, rgba(0,0,0,0.88) 54%, rgba(0,0,0,0.3) 72%, transparent 84%)',
-                          maskImage:
-                            'radial-gradient(ellipse 34% 18% at 50% 58%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 38%, rgba(0,0,0,0.88) 54%, rgba(0,0,0,0.3) 72%, transparent 84%)',
-                        }}
-                      >
-                        {renderWordmarkLayer({
-                          opacity: 1,
-                          blendMode: 'difference',
-                          fillOpacity: 1,
-                          strokeOpacity: 0.04,
-                          extraFilter: 'drop-shadow(0 8px 28px rgba(0,0,0,0.14))',
-                        })}
-                      </div>
-                    ) : null}
-                  </div>
-                </motion.div>
-              ) : null}
-
-              {title && titleVariant !== 'zoom-wordmark' ? (
-                <motion.div
-                  className={`pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-4 ${
-                    textBlend ? 'mix-blend-difference' : 'mix-blend-normal'
-                  }`}
+                  className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-4"
                   initial={false}
                   animate={{ opacity: titleOpacity }}
                   transition={{ duration: 0.2 }}
                   style={{
                     transform: `translate3d(0, ${titleY}vh, 0) scale(${titleScale})`,
                   }}
+                  aria-hidden="true"
                 >
-                  <div
-                    className="flex items-center justify-center whitespace-nowrap font-display leading-[0.88] tracking-[-0.08em] text-white drop-shadow-[0_14px_32px_rgba(0,0,0,0.34)]"
-                    style={{
-                      gap: `${titleGap}rem`,
-                      fontSize: isMobileState
-                        ? 'clamp(2.45rem, 12vw, 4rem)'
-                        : 'clamp(4.2rem, 9vw, 8.25rem)',
-                    }}
-                  >
-                    <span
+                  <div className="relative">
+                    <div
+                      className="flex items-center justify-center whitespace-nowrap font-display leading-[0.88] tracking-[-0.08em] text-white drop-shadow-[0_14px_32px_rgba(0,0,0,0.34)]"
                       style={{
-                        transform: `translate3d(-${titleDrift}vw, 0, 0)`,
+                        gap: `${titleGap}rem`,
+                        fontSize: isMobileState
+                          ? 'clamp(2.45rem, 12vw, 4rem)'
+                          : 'clamp(4.2rem, 9vw, 8.25rem)',
+                        opacity: textBlend && !isMobileState ? 0.98 : 0.92,
+                        WebkitMaskImage:
+                          textBlend && !isMobileState ? titleMaskOutside : undefined,
+                        maskImage: textBlend && !isMobileState ? titleMaskOutside : undefined,
                       }}
                     >
-                      {firstWord}
-                    </span>
-                    {restOfTitle ? (
                       <span
                         style={{
-                          transform: `translate3d(${titleDrift}vw, 0, 0)`,
+                          transform: `translate3d(-${titleDrift}vw, 0, 0)`,
                         }}
                       >
-                        {restOfTitle}
+                        {firstWord}
                       </span>
+                      {restOfTitle ? (
+                        <span
+                          style={{
+                            transform: `translate3d(${titleDrift}vw, 0, 0)`,
+                          }}
+                        >
+                          {restOfTitle}
+                        </span>
+                      ) : null}
+                    </div>
+                    {!isMobileState && textBlend ? (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center mix-blend-difference"
+                        style={{
+                          WebkitMaskImage: titleMaskFocus,
+                          maskImage: titleMaskFocus,
+                          opacity: 1,
+                        }}
+                      >
+                        <div
+                          className="flex items-center justify-center whitespace-nowrap font-display leading-[0.88] tracking-[-0.08em] text-white"
+                          style={{
+                            gap: `${titleGap}rem`,
+                            fontSize: isMobileState
+                              ? 'clamp(2.45rem, 12vw, 4rem)'
+                              : 'clamp(4.2rem, 9vw, 8.25rem)',
+                          }}
+                        >
+                          <span
+                            style={{
+                              transform: `translate3d(-${titleDrift}vw, 0, 0)`,
+                            }}
+                          >
+                            {firstWord}
+                          </span>
+                          {restOfTitle ? (
+                            <span
+                              style={{
+                                transform: `translate3d(${titleDrift}vw, 0, 0)`,
+                              }}
+                            >
+                              {restOfTitle}
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
                     ) : null}
                   </div>
                 </motion.div>

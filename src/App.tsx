@@ -1,10 +1,7 @@
 import { Suspense, lazy, type ReactNode } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteLayout } from "@/components/SiteLayout";
-import { RouteSEO } from "@/components/SEO";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -21,8 +18,7 @@ const withSuspense = (element: ReactNode) => (
 );
 
 const App = () => (
-  <TooltipProvider>
-    <Toaster />
+  <>
     <Sonner />
     <BrowserRouter
       future={{
@@ -30,7 +26,6 @@ const App = () => (
         v7_startTransition: true,
       }}
     >
-      <RouteSEO />
       <Routes>
         <Route element={<SiteLayout />}>
           <Route path="/" element={<Index />} />
@@ -49,7 +44,7 @@ const App = () => (
         </Route>
       </Routes>
     </BrowserRouter>
-  </TooltipProvider>
+  </>
 );
 
 export default App;

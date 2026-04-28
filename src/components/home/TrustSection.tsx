@@ -4,7 +4,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import p1 from "@/assets/project-1.jpg";
 import p2 from "@/assets/project-2.jpg";
 import p3 from "@/assets/project-3.jpg";
-import { StartAssessmentLink } from "@/components/AssessmentCtas";
 import { splitWords } from "@/lib/split-words";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { EASING, DURATION, STAGGER, SCROLL } from "@/lib/animations";
@@ -196,10 +195,6 @@ export const TrustSection = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="container-tight mt-12 flex justify-end">
-        <StartAssessmentLink source="trust-section" />
       </div>
     </section>
   );

@@ -13,3 +13,8 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+Object.defineProperty(navigator, "sendBeacon", {
+  writable: true,
+  value: () => true,
+});

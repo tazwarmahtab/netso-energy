@@ -6,6 +6,7 @@ import { ArrowRight, Calculator, CheckCircle, ChevronRight } from "lucide-react"
 import { toast } from "sonner";
 
 import { StartAssessmentLink } from "@/components/AssessmentCtas";
+import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import {
   bdPhoneRegex,
@@ -102,13 +103,14 @@ export function SolarCalculatorFunnel() {
   const manualWhatsAppDetails = useMemo(() => {
     const details = [
       `name=${formState.name.trim() || (isBn ? "দেওয়া হবে" : "to share in chat")}`,
+      `phone=${formState.phone.trim() || (isBn ? "চ্যাটে শেয়ার" : "to share in chat")}`,
       `roof=${area}sqft`,
       `bill=${bill}bdt`,
       `address=${formState.address.trim() || (isBn ? "শেয়ারের অপেক্ষায়" : "to share in chat")}`,
     ];
 
     return details;
-  }, [area, bill, formState.address, formState.name, isBn]);
+  }, [area, bill, formState.address, formState.name, formState.phone, isBn]);
 
   const validateContactStep = () => {
     const nextErrors: Partial<Record<keyof CalculatorFormState, string>> = {};
@@ -239,7 +241,7 @@ export function SolarCalculatorFunnel() {
                     <label htmlFor="bill-slider" className="text-sm font-medium text-muted-foreground">
                       {labels.bill}
                     </label>
-                    <span className="text-2xl font-bold text-[#5d497f]">৳ {bill.toLocaleString()}</span>
+                    <span className="text-2xl font-bold text-[#3f325c]">৳ {bill.toLocaleString()}</span>
                   </div>
                   <input
                     id="bill-slider"
@@ -258,7 +260,7 @@ export function SolarCalculatorFunnel() {
                     <label htmlFor="area-slider" className="text-sm font-medium text-muted-foreground">
                       {labels.area}
                     </label>
-                    <span className="text-2xl font-bold text-[#5d497f]">
+                    <span className="text-2xl font-bold text-[#3f325c]">
                       {area.toLocaleString()} {isBn ? "বর্গফুট" : "sqft"}
                     </span>
                   </div>
@@ -282,7 +284,10 @@ export function SolarCalculatorFunnel() {
 
                 <button
                   type="button"
-                  onClick={() => setStep(2)}
+                  onClick={() => {
+                    trackEvent("calculator_start", { language, bill, area });
+                    setStep(2);
+                  }}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-medium text-primary-foreground transition-all duration-300 hover:brightness-110"
                 >
                   {labels.cta}
@@ -368,8 +373,14 @@ export function SolarCalculatorFunnel() {
                       setErrors((state) => ({ ...state, name: undefined }));
                     }}
                     className={inputCls(Boolean(errors.name))}
+                    aria-invalid={errors.name ? "true" : "false"}
+                    aria-describedby={errors.name ? "calculator-name-error" : undefined}
                   />
-                  {errors.name ? <p className="mt-2 text-xs text-destructive">{errors.name}</p> : null}
+                  {errors.name ? (
+                    <p id="calculator-name-error" className="mt-2 text-xs text-destructive">
+                      {errors.name}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div>
@@ -388,8 +399,14 @@ export function SolarCalculatorFunnel() {
                       setErrors((state) => ({ ...state, phone: undefined }));
                     }}
                     className={inputCls(Boolean(errors.phone))}
+                    aria-invalid={errors.phone ? "true" : "false"}
+                    aria-describedby={errors.phone ? "calculator-phone-error" : undefined}
                   />
-                  {errors.phone ? <p className="mt-2 text-xs text-destructive">{errors.phone}</p> : null}
+                  {errors.phone ? (
+                    <p id="calculator-phone-error" className="mt-2 text-xs text-destructive">
+                      {errors.phone}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div>
@@ -474,7 +491,7 @@ function ResultCard({ label, value, accent = false }: ResultCardProps) {
       <div
         className={cn(
           "text-2xl font-display tracking-[-0.04em]",
-          accent ? "text-[#5d497f]" : "text-foreground",
+          accent ? "text-[#3f325c]" : "text-foreground",
         )}
       >
         {value}

@@ -63,10 +63,7 @@ describe("public copy guard", () => {
 
   it("aligns production URL defaults to the deployment domain", () => {
     const files = [
-      "src/components/SEO.tsx",
-      "src/lib/site-metadata.ts",
-      "vite.config.ts",
-      "scripts/verify-seo-build.mjs",
+      "src/lib/site-metadata.shared.js",
       "index.html",
       ".env.example",
       "public/robots.txt",

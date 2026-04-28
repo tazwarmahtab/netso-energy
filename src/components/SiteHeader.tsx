@@ -3,7 +3,7 @@ import { ArrowUpRight, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import { EstimateLink, StartAssessmentLink } from "@/components/AssessmentCtas";
+import { StartAssessmentLink } from "@/components/AssessmentCtas";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import {
   Sheet,
@@ -14,6 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { trackEvent } from "@/lib/analytics";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { headerLogoAvif, headerLogoPng, mobileHeaderLogoAvif } from "@/lib/homepage-media";
 import { useLanguage } from "@/lib/i18n";
@@ -26,6 +27,7 @@ export const SiteHeader = () => {
   const copy = useSiteCopy();
   const location = useLocation();
   const { language } = useLanguage();
+  const isMobileView = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -69,10 +71,18 @@ export const SiteHeader = () => {
     ? "border-white/14 bg-black/66 shadow-[0_28px_70px_-38px_rgba(0,0,0,0.82)]"
     : "border-white/10 bg-black/42 shadow-[0_20px_56px_-36px_rgba(0,0,0,0.78)]";
   const shouldAnimate = !prefersReducedMotion;
-  const isCompact = location.pathname === "/" ? heroRevealed : true;
+  const isCompact = isMobileView || location.pathname !== "/" || heroRevealed;
 
   return (
-    <header data-site-header className="fixed inset-x-0 top-4 z-50 px-4">
+    <header
+      data-site-header
+      className={cn(
+        "z-50 px-4",
+        isMobileView
+          ? "sticky top-0 pt-4 pb-2"
+          : "fixed inset-x-0 top-4",
+      )}
+    >
       <div className="mx-auto flex max-w-[1240px] items-center justify-between lg:justify-center">
         <motion.div
           layout
@@ -105,6 +115,7 @@ export const SiteHeader = () => {
               <img
                 src={headerLogoAvif}
                 alt=""
+                aria-hidden="true"
                 decoding="async"
                 onError={(event) => {
                   event.currentTarget.onerror = null;
@@ -121,7 +132,7 @@ export const SiteHeader = () => {
               initial={false}
               animate={{
                 opacity: isCompact ? 0 : 1,
-                width: isCompact ? 0 : 132,
+                width: isCompact ? 0 : 176,
                 x: isCompact ? -10 : 0,
               }}
               transition={{
@@ -133,10 +144,11 @@ export const SiteHeader = () => {
             >
               <div
                 className={cn(
-                  "flex h-14 items-center text-[0.68rem] font-medium uppercase tracking-[0.24em] text-white/74 whitespace-nowrap transition-[height,opacity] duration-500",
+                  "flex h-14 items-center gap-2 whitespace-nowrap text-[0.78rem] font-medium uppercase tracking-[0.24em] transition-[height,opacity] duration-500",
                 )}
               >
-                {brandWordmark}
+                <span className="text-white/48">{brandWordmark.split(" ")[0]}</span>
+                <span className="text-white">{brandWordmark.split(" ")[1]}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -246,56 +258,67 @@ export const SiteHeader = () => {
               delay: shouldAnimate ? 0.08 : 0,
               layout: { duration: shouldAnimate ? 0.55 : 0, ease: [0.22, 1, 0.36, 1] },
             }}
-            className="flex items-center gap-2"
+            className="flex items-center justify-end"
           >
-            <motion.div
+            <motion.a
+              href={leadHref}
+              onClick={() => trackEvent("cta_start_assessment", { source: "header", language })}
               initial={false}
               animate={{
-                opacity: isCompact ? 0 : 0,
-                width: isCompact ? 0 : 132,
-                x: isCompact ? 10 : 0,
+                width: isCompact ? 48 : 200,
+                height: isCompact ? 48 : 56,
+                paddingLeft: isCompact ? 0 : 24,
+                paddingRight: isCompact ? 0 : 24,
               }}
               transition={{
                 duration: shouldAnimate ? 0.48 : 0,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="pointer-events-none overflow-hidden"
-              aria-hidden="true"
+              className="inline-flex items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sun hover:brightness-110"
+              aria-label="WhatsApp"
             >
-              <div
-                className={cn(
-                  "flex h-14 items-center text-[0.68rem] font-medium uppercase tracking-[0.24em] whitespace-nowrap opacity-0 transition-[height] duration-500",
-                )}
+              <motion.span
+                initial={false}
+                animate={{
+                  opacity: isCompact ? 0 : 1,
+                  width: isCompact ? 0 : 92,
+                  x: isCompact ? 14 : 0,
+                }}
+                transition={{
+                  duration: shouldAnimate ? 0.36 : 0,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="shrink-0 overflow-hidden whitespace-nowrap text-[0.92rem] font-medium"
+                aria-hidden={isCompact}
               >
-                {brandWordmark}
-              </div>
-            </motion.div>
-            <a
-              href={leadHref}
-              onClick={() => trackEvent("cta_start_assessment", { source: "header", language })}
-              className={cn(
-                "inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sun transition-[width,height,transform,box-shadow,filter] duration-500 hover:scale-[1.03] hover:brightness-110",
-                isCompact ? "h-12 w-12" : "h-14 w-14",
-              )}
-              aria-label={copy.common.startAssessment}
-            >
-              <ArrowUpRight
-                className={cn(
-                  "transition-[width,height] duration-500",
-                  isCompact ? "h-[18px] w-[18px]" : "h-5 w-5",
-                )}
-                strokeWidth={2.3}
-              />
-            </a>
+                WhatsApp
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ x: isCompact ? 0 : 4 }}
+                transition={{
+                  duration: shouldAnimate ? 0.36 : 0,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="inline-flex shrink-0 items-center justify-center"
+              >
+                <ArrowUpRight
+                  className={cn(
+                    "shrink-0 transition-[width,height] duration-500",
+                    isCompact ? "h-[18px] w-[18px]" : "h-5 w-5",
+                  )}
+                  strokeWidth={2.3}
+                />
+              </motion.span>
+            </motion.a>
           </motion.div>
         </motion.div>
 
-        <div className="flex w-full items-center justify-between lg:hidden">
+        <div className="grid w-full grid-cols-[3rem_minmax(0,1fr)_3rem] items-center gap-3 lg:hidden">
           <Link
             to="/"
             className={cn(
-              "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border backdrop-blur-[18px] transition-[width,height,transform,box-shadow,background-color,border-color] duration-500 hover:scale-[1.03]",
-              isCompact ? "h-12 w-12" : "h-14 w-14",
+              "inline-flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border backdrop-blur-[18px] transition-[transform,box-shadow,background-color,border-color] duration-500 hover:scale-[1.03]",
               surfaceClassName,
             )}
             aria-label={`${copy.common.brand} home`}
@@ -303,29 +326,36 @@ export const SiteHeader = () => {
             <img
               src={mobileHeaderLogoAvif}
               alt=""
+              aria-hidden="true"
               decoding="async"
               onError={(event) => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = headerLogoPng;
               }}
               className={cn(
-                "scale-[1.8] object-contain transition-[width,height] duration-500",
-                isCompact ? "size-[3.35rem]" : "size-[4rem]",
+                "size-[3.35rem] scale-[1.8] object-contain transition-[width,height] duration-500",
               )}
             />
           </Link>
 
-          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <SheetTrigger
-              className={cn(
-                "inline-flex items-center justify-center rounded-full border text-white backdrop-blur-[18px] transition-[width,height,transform,box-shadow,background-color,border-color] duration-500",
-                isCompact ? "h-12 w-12" : "h-14 w-14",
-                surfaceClassName,
-              )}
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">{copy.nav.menuLabel}</span>
-            </SheetTrigger>
+          <div className="flex min-w-0 items-center justify-center">
+            <StartAssessmentLink
+              source="mobile-header"
+              label="WhatsApp"
+              className="w-full max-w-[8.9rem] justify-center px-5 py-3 text-[0.82rem] shadow-[0_18px_36px_-24px_rgba(200,178,255,0.72)]"
+            />
+          </div>
+          <div className="flex items-center justify-end">
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger
+                className={cn(
+                  "inline-flex h-12 w-12 items-center justify-center rounded-full border text-white backdrop-blur-[18px] transition-[transform,box-shadow,background-color,border-color] duration-500",
+                  surfaceClassName,
+                )}
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">{copy.nav.menuLabel}</span>
+              </SheetTrigger>
             <SheetContent
               side="right"
               className="w-[90vw] border-white/10 bg-[#0d0d0d] text-white sm:max-w-md"
@@ -359,15 +389,11 @@ export const SiteHeader = () => {
 
                 <div className="grid gap-3">
                   <StartAssessmentLink source="mobile-menu" className="w-full" />
-                  <EstimateLink
-                    source="mobile-menu"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="w-full border-white/12 bg-white/[0.04] text-white hover:bg-white/[0.08]"
-                  />
                 </div>
               </div>
             </SheetContent>
-          </Sheet>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>

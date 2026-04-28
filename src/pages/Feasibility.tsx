@@ -1,4 +1,4 @@
-import { ReactNode, FormEvent, useEffect, useMemo, useState } from "react";
+import { cloneElement, isValidElement, ReactNode, FormEvent, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -297,6 +297,7 @@ const Feasibility = () => {
   const buildManualWhatsAppDetails = () => {
     const details = [
       `name=${values.name.trim() || (isBn ? "চ্যাটে জানাবো" : "to share in chat")}`,
+      `phone=${values.phone.trim()}`,
       `district=${values.district.trim()}`,
       `area=${values.neighborhood.trim()}`,
       `type=${values.propertyType}`,
@@ -814,18 +815,28 @@ const FieldGroup = ({
   error?: string;
   htmlFor: string;
   children: ReactNode;
-}) => (
-  <div>
-    <label htmlFor={htmlFor} className="mb-2 block text-sm font-medium text-foreground">
-      {label}
-    </label>
-    {children}
-    {error ? (
-      <p id={`${htmlFor}-error`} className="mt-2 text-xs text-destructive">
-        {error}
-      </p>
-    ) : null}
-  </div>
-);
+}) => {
+  const describedBy = error ? `${htmlFor}-error` : undefined;
+  const enhancedChild = isValidElement(children)
+    ? cloneElement(children, {
+        "aria-describedby": describedBy,
+        "aria-invalid": error ? "true" : "false",
+      })
+    : children;
+
+  return (
+    <div>
+      <label htmlFor={htmlFor} className="mb-2 block text-sm font-medium text-foreground">
+        {label}
+      </label>
+      {enhancedChild}
+      {error ? (
+        <p id={`${htmlFor}-error`} className="mt-2 text-xs text-destructive">
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+};
 
 export default Feasibility;

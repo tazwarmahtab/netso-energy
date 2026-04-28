@@ -26,6 +26,7 @@ dist-ssr
 
 # Local automation and verification artifacts
 .playwright-mcp/
+.playwright-cli/
 .superpowers/
 test-results/
 ANALYSIS_REPORT.md
