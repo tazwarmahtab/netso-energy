@@ -22,8 +22,8 @@ const loadConversionBandSection = () =>
     default: module.ConversionBand,
   }));
 const loadCalculatorSection = () =>
-  import("@/components/home/SolarCalculatorFunnel").then((module) => ({
-    default: module.SolarCalculatorFunnel,
+  import("@/components/home/HeroCalculator").then((module) => ({
+    default: module.HeroCalculator,
   }));
 const loadProductSection = () =>
   import("@/components/home/ProductSection").then((module) => ({
