@@ -16,7 +16,8 @@ type WhatsAppStartOptions = {
 
 function getWhatsAppNumber() {
   const configuredNumber = sanitizePhoneNumber(import.meta.env.VITE_WHATSAPP_NUMBER);
-  if (configuredNumber) {
+  // At least 10 digits (BDD phone numbers are 10+ digits)
+  if (configuredNumber && configuredNumber.length >= 10) {
     return configuredNumber;
   }
 
