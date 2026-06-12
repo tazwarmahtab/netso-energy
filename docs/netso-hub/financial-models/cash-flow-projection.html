@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netso Energy - 20-Year Cash Flow Projection</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .chart-container {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            width: 900px;
+        }
+        h1 {
+            color: #f0f6fc;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #8b949e;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .chart {
+            position: relative;
+            height: 400px;
+            margin: 0 80px 40px;
+        }
+        .bar-group {
+            display: flex;
+            align-items: flex-end;
+            height: 350px;
+            gap: 4px;
+        }
+        .bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 5px;
+            position: relative;
+        }
+        .revenue {
+            background: linear-gradient(180deg, #238636, #2ea043);
+            border-radius: 4px 4px 0 0;
+        }
+        .cumulative {
+            background: linear-gradient(180deg, #1f6feb, #3a8fff);
+            border-radius: 4px 4px 0 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0.7;
+        }
+        .year-label {
+            text-align: center;
+            font-size: 10px;
+            color: #8b949e;
+            margin-top: 8px;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        .g-green { background: #2ea043; }
+        .g-blue { background: #3a8fff; }
+        .metrics-box {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #21262d;
+            border-radius: 8px;
+        }
+        .metric {
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0f6fc;
+        }
+        .metric-label {
+            font-size: 11px;
+            color: #8b949e;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h1>20-Year Portfolio Cash Flow Projection</h1>
+        <div class="subtitle">Single 50kW Asset | BDT 8.50/kWh Base Tariff | 8% Annual Escalation</div>
+        
+        <div class="chart">
+            <div class="bar-group" id="chart-bars"></div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color g-green"></div>
+                <span>Annual Revenue</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color g-blue"></div>
+                <span>Cumulative Cash Flow</span>
+            </div>
+        </div>
+        
+        <div class="metrics-box">
+            <div class="metric">
+                <div class="metric-value">BDT 476k</div>
+                <div class="metric-label">Y1 Revenue</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">BDT 2.2M</div>
+                <div class="metric-label">Total Revenue (20yr)</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">BDT 1.5M</div>
+                <div class="metric-label">Net Cash (20yr)</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">66.8%</div>
+                <div class="metric-label">Project IRR</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Data points for 20 years
+        const years = 20;
+        const baseRevenue = 476544;
+        const growthRate = 0.08;
+        const debtService = 205071;
+        const omExpense = 23400;
+        
+        const maxRev = baseRevenue * Math.pow(1 + growthRate, years - 1);
+        const chartHeight = 350;
+        
+        let cumulative = 0;
+        let html = '';
+        
+        for (let year = 1; year <= years; year++) {
+            const revenue = baseRevenue * Math.pow(1 + growthRate, year - 1);
+            const netCash = revenue - debtService - omExpense;
+            cumulative += netCash;
+            
+            const revHeight = (revenue / maxRev) * chartHeight;
+            const netHeight = (Math.max(netCash, 0) / maxRev) * chartHeight;
+            
+            html += `
+                <div class="bar">
+                    <div class="revenue" style="height: ${revHeight}px;"></div>
+                    <div class="cumulative" style="height: ${Math.min(netHeight, revHeight)}px;"></div>
+                    <div class="year-label">Y${year}</div>
+                </div>
+            `;
+        }
+        
+        document.getElementById('chart-bars').innerHTML = html;
+    </script>
+</body>
+</html>

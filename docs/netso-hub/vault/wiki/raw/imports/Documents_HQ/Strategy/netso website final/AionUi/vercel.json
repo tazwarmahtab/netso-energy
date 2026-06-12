@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": ".",
+  "installCommand": "echo 'No install needed'",
+  "rewrites": [
+    {
+      "source": "/login",
+      "destination": "/api/login"
+    },
+    {
+      "source": "/logout",
+      "destination": "/api/logout"
+    },
+    {
+      "source": "/api/auth/status",
+      "destination": "/api/auth/status"
+    },
+    {
+      "source": "/api/auth/user",
+      "destination": "/api/auth/user"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ]
+}

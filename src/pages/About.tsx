@@ -24,7 +24,7 @@ const About = () => {
 
       <section className="pb-20">
         <div className="container-tight">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-[2rem] border border-border/60">
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-[2rem] border border-border/60">
             <img
               src={dhaka}
               alt="Dhaka skyline at dusk"

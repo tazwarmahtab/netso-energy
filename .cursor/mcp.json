@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "open-design": {
+      "command": "/Users/tazwarmahtab/.local/bin/od",
+      "args": ["mcp", "--daemon-url", "od://app"],
+      "env": { "OD_DATA_DIR": "/Users/tazwarmahtab/.open-design" }
+    }
+  }
+}

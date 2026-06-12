@@ -1,0 +1,90 @@
+
+Netso Energy – Building Screening and Proposal Checklist
+=======================================================
+
+A. Initial Screening – Is This Building a Good Fit?
+---------------------------------------------------
+
+1. Basic Profile
+- Building type: 5–8 storey residential, ideally 10–20 apartments.
+- Location: Chattogram or similar solar resource area.
+- Monthly BPDB bill: Typically BDT 40,000–60,000 (target ~BDT 50,000 first).
+
+2. Roof and Technical Fit
+- Sufficient flat roof area for ~22 kW system (estimate 100–150 m² of usable space).
+- Limited shading from adjacent buildings, water tanks, or trees during most of the day.
+- Roof structure appears sound (concrete roof in good condition).
+
+3. Decision-Making and Governance
+- Clear decision-maker or active building committee.
+- Willingness to share last 3–6 months of BPDB bills.
+- Genuine interest in reducing electricity costs, not just casual curiosity.
+
+If all three sections above are positive, proceed to detailed assessment.
+
+
+B. Detailed Assessment – Before Preparing Proposal
+--------------------------------------------------
+
+1. Data Collection
+- Obtain copies or photos of 3–6 recent BPDB bills.
+- Record:
+  - Average monthly bill amount.
+  - Units consumed (kWh).
+  - Tariff category and meter details.
+- Conduct a site visit to:
+  - Measure roof area and note obstacles.
+  - Check for shading at different times of day (visual estimate).
+
+2. Financial Modelling
+- Input the building’s actual bill and consumption into the Netso financial model.
+- Confirm whether a 22 kW system is appropriate or adjust system size.
+- Generate key outputs:
+  - Expected monthly solar generation.
+  - Customer’s new bill with Netso.
+  - Monthly savings for the customer.
+  - Netso’s monthly profit during loan period and post-loan.
+
+3. Commercial Fit Check
+- Confirm that customer savings are meaningful (e.g., 10–20% bill reduction).
+- Confirm that Netso’s margins and payback remain within internal targets.
+
+
+C. Proposal Preparation
+-----------------------
+
+1. One-Page Proposal
+- Use the standard “Netso One-Page Proposal Template”.
+- Insert building-specific numbers for:
+  - Current BPDB bill and kWh.
+  - Proposed system size and Netso tariff.
+  - Before vs After monthly cost and savings.
+
+2. Attachments
+- Short FAQ/objection-handling sheet.
+- Optional: simple schematic or photo of rooftop with indicative array layout.
+
+3. Internal Review
+- Have another team member quickly review numbers and wording.
+- Confirm that the minimum-generation commitment and contract term are clearly stated.
+
+
+D. Meeting and Follow-Up
+------------------------
+
+1. First Presentation Meeting
+- Walk the owner/committee through the one-page proposal.
+- Focus on:
+  - Today’s bill vs new bill.
+  - Zero upfront, 7.00 BDT/kWh, 12-year term.
+  - Minimum-generation commitment explained with simple analogy.
+  - System ownership transfer after 12 years.
+
+2. Handling Objections
+- Use the Sales Playbook’s objection & answer section.
+- Note down new questions to refine the playbook.
+
+3. Next Steps
+- If interest is positive: seek a non-binding Letter of Intent (LOI).
+- If not ready: schedule a follow-up after sharing additional clarifications.
+

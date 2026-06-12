@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netso — Digital Excellence from Bangladesh</title>
+    
+    <!-- Add these meta tags if missing -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e85d04'/%3E%3Cpath d='M30 30 L70 50 L30 70 Z' fill='white'/%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com ">
+    <link rel="preconnect" href="https://fonts.gstatic.com " crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300 ;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js "></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js "></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest "></script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --accent: #e85d04;
+            --accent-soft: #f48c06;
+            --border: #262626;
+            --border-light: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg '%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--text-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease, background 0.15s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            transform: scale(2.5);
+            background: var(--text-primary);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            mix-blend-mode: difference;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav.scrolled {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.625rem 1.25rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 2.5rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+        .hero-bg-gradient {
+            position: absolute;
+            top: 20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(232, 93, 4, 0.15) 0%, transparent 70%);
+            filter: blur(60px);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.3;
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title-line span {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .hero-title-accent {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-cta-primary {
+            padding: 1rem 2rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta-primary:hover {
+            background: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-cta-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta-secondary:hover {
+            border-color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: 4rem;
+            right: 2.5rem;
+            display: flex;
+            gap: 4rem;
+            z-index: 1;
+        }
+
+        .hero-stat {
+            text-align: right;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border: 1px solid var(--border);
+            opacity: 0.5;
+        }
+
+        .floating-shape-1 {
+            width: 300px;
+            height: 300px;
+            top: 20%;
+            left: 10%;
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-shape-2 {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            transform: rotate(45deg);
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .floating-shape-3 {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 30%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 8rem 0;
+        }
+
+        .services-grid {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding: 0 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-8px);
+        }
+
+        .service-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .service-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .service-tag {
+            padding: 0.375rem 0.875rem;
+            background: var(--bg-tertiary);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Work Section */
+        .work {
+            padding: 8rem 0;
+        }
+
+        .work-showcase {
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .work-item {
+            position: sticky;
+            top: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 2.5rem;
+        }
+
+        .work-item-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .work-visual {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        .work-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .work-item:hover .work-visual img {
+            transform: scale(1.05);
+        }
+
+        .work-visual-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.8), transparent);
+        }
+
+        .work-content {
+            padding: 2rem 0;
+        }
+
+        .work-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--bg-tertiary);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .work-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .work-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .work-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .work-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .work-meta-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .work-meta-value {
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        .work-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: gap 0.3s ease;
+        }
+
+        .work-link:hover {
+            gap: 1rem;
+        }
+
+        /* Bangladesh Pride Section */
+        .bangladesh {
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bangladesh-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.05;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    #006a4e 0px,
+                    #006a4e 40px,
+                    #f42a41 40px,
+                    #f42a41 80px
+                );
+        }
+
+        .bangladesh-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bangladesh-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .bangladesh-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+        }
+
+        .bangladesh-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .bangladesh-highlight {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .bangladesh-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .bangladesh-stat {
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .bangladesh-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--accent);
+        }
+
+        .bangladesh-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 8rem 0;
+        }
+
+        .process-timeline {
+            max-width: 1000px;
+            margin: 4rem auto 0;
+            padding: 0 2.5rem;
+            position: relative;
+        }
+
+        .process-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--border);
+            transform: translateX(-50%);
+        }
+
+        .process-line-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--accent);
+            height: 0%;
+            transition: height 0.1s linear;
+        }
+
+        .process-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .process-step:nth-child(even) .process-step-content {
+            grid-column: 2;
+        }
+
+        .process-step:nth-child(even) .process-step-visual {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .process-step-dot {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .process-step.active .process-step-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(232, 93, 4, 0.5);
+        }
+
+        .process-step-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--bg-tertiary);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .process-step-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .process-step-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 8rem 0;
+            overflow: hidden;
+        }
+
+        .testimonials-track {
+            display: flex;
+            gap: 2rem;
+            margin-top: 4rem;
+            padding: 0 2.5rem;
+            cursor: grab;
+        }
+
+        .testimonials-track:active {
+            cursor: grabbing;
+        }
+
+        .testimonial-card {
+            flex-shrink: 0;
+            width: 500px;
+            padding: 2.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-4px);
+        }
+
+        .testimonial-quote {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .testimonial-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .testimonial-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-secondary);
+        }
+
+        .cta-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-desc {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .cta-input:focus {
+            border-color: var(--accent);
+        }
+
+        .cta-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social-link {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .footer-social-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .footer-column h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+        }
+
+        .footer-link {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .footer-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .work-item-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .work-visual {
+                aspect-ratio: 16/9;
+            }
+
+            .bangladesh-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .process-step {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .process-step:nth-child(even) .process-step-content,
+            .process-step:nth-child(even) .process-step-visual {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .process-line {
+                left: 1rem;
+            }
+
+            .process-step-dot {
+                left: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 3rem;
+                justify-content: flex-start;
+                gap: 2rem;
+            }
+
+            .hero-stat {
+                text-align: left;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                width: 340px;
+            }
+
+            .cta-form {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .cursor, .cursor-dot {
+                display: none;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Scroll Velocity Skew */
+        .velocity-skew {
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <div class="nav-logo-icon">
+                    <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
+                </div>
+                Netso
+            </div>
+            <div class="loader-bar">
+                <div class="loader-progress" id="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">
+                <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
+            </div>
+            Netso
+        </a>
+        <div class="nav-links">
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#process" class="nav-link">Process</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-cta">Start Project</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-grid"></div>
+            <div class="hero-bg-gradient"></div>
+        </div>
+        
+        <div class="floating-shapes">
+            <div class="floating-shape floating-shape-1"></div>
+            <div class="floating-shape floating-shape-2"></div>
+            <div class="floating-shape floating-shape-3"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Available for projects
+            </div>
+            
+            <h1 class="hero-title font-display">
+                <span class="hero-title-line"><span>Digital experiences</span></span>
+                <span class="hero-title-line"><span>crafted in <span class="hero-title-accent">Bangladesh</span></span></span>
+                <span class="hero-title-line"><span>for the world</span></span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                We build transformative digital products that merge strategic thinking with exceptional design. From Dhaka to global markets.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="#work" class="hero-cta-primary">
+                    View our work
+                    <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                </a>
+                <a href="#contact" class="hero-cta-secondary">
+                    Start a project
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="150">0</div>
+                <div class="hero-stat-label">Projects Delivered</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="50">0</div>
+                <div class="hero-stat-label">Global Clients</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="8">0</div>
+                <div class="hero-stat-label">Years Active</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <p class="section-label">What We Do</p>
+            <h2 class="section-title">Services built for<br>modern challenges</h2>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="smartphone" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Mobile Development</h3>
+                <p class="service-desc">Native and cross-platform applications that deliver seamless experiences across iOS and Android ecosystems.</p>
+                <div class="service-tags">
+                    <span class="service-tag">iOS</span>
+                    <span class="service-tag">Android</span>
+                    <span class="service-tag">Flutter</span>
+                    <span class="service-tag">React Native</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="globe" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Web Platforms</h3>
+                <p class="service-desc">High-performance web applications and marketing sites with cutting-edge technologies and exceptional UX.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Next.js</span>
+                    <span class="service-tag">React</span>
+                    <span class="service-tag">Node.js</span>
+                    <span class="service-tag">AWS</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="palette" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Brand & Design</h3>
+                <p class="service-desc">Strategic brand identity and visual systems that communicate value and create lasting impressions.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Identity</span>
+                    <span class="service-tag">UI/UX</span>
+                    <span class="service-tag">Motion</span>
+                    <span class="service-tag">Strategy</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="cpu" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">AI Integration</h3>
+                <p class="service-desc">Intelligent solutions powered by machine learning and LLMs to automate and enhance business operations.</p>
+                <div class="service-tags">
+                    <span class="service-tag">LLMs</span>
+                    <span class="service-tag">ML</span>
+                    <span class="service-tag">Automation</span>
+                    <span class="service-tag">Analytics</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="shopping-cart" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">E-Commerce</h3>
+                <p class="service-desc">End-to-end commerce solutions with payment integration, inventory management, and conversion optimization.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Shopify</span>
+                    <span class="service-tag">Custom</span>
+                    <span class="service-tag">bKash</span>
+                    <span class="service-tag">Stripe</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="shield-check" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Enterprise Solutions</h3>
+                <p class="service-desc">Scalable systems for large organizations with security, compliance, and performance at their core.</p>
+                <div class="service-tags">
+                    <span class="service-tag">ERP</span>
+                    <span class="service-tag">CRM</span>
+                    <span class="service-tag">Cloud</span>
+                    <span class="service-tag">Security</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section class="work" id="work">
+        <div class="section-header">
+            <p class="section-label">Selected Work</p>
+            <h2 class="section-title">Projects that define<br>our craft</h2>
+        </div>
+        
+        <div class="work-showcase">
+            <div class="work-item" style="background: var(--bg-primary);">
+                <div class="work-item-inner">
+                    <div class="work-visual">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop " alt="Fintech Platform">
+                        <div class="work-visual-overlay"></div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-number">01</div>
+                        <h3 class="work-title">Nagad Digital</h3>
+                        <p class="work-desc">Complete redesign and platform engineering for one of Bangladesh's largest mobile financial services, serving 50M+ users with seamless transaction experiences.</p>
+                        <div class="work-meta">
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Industry</span>
+                                <span class="work-meta-value">Fintech</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Services</span>
+                                <span class="work-meta-value">UX, Engineering</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Year</span>
+                                <span class="work-meta-value">2024</span>
+                            </div>
+                        </div>
+                        <a href="#" class="work-link">
+                            View case study
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="work-item" style="background: var(--bg-secondary);">
+                <div class="work-item-inner">
+                    <div class="work-visual">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&h=800&fit=crop " alt="Healthcare Platform">
+                        <div class="work-visual-overlay"></div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-number">02</div>
+                        <h3 class="work-title">Pulse Health</h3>
+                        <p class="work-desc">Telemedicine platform connecting patients with specialists across Bangladesh, featuring AI-powered symptom checking and real-time consultation.</p>
+                        <div class="work-meta">
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Industry</span>
+                                <span class="work-meta-value">Healthcare</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Services</span>
+                                <span class="work-meta-value">Full Stack, AI</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Year</span>
+                                <span class="work-meta-value">2024</span>
+                            </div>
+                        </div>
+                        <a href="#" class="work-link">
+                            View case study
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="work-item" style="background: var(--bg-primary);">
+                <div class="work-item-inner">
+                    <div class="work-visual">
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop " alt="E-commerce Platform">
+                        <div class="work-visual-overlay"></div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-number">03</div>
+                        <h3 class="work-title">Chaldal Global</h3>
+                        <p class="work-desc">Expansion of Bangladesh's leading grocery platform into international markets with localized experiences and supply chain optimization.</p>
+                        <div class="work-meta">
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Industry</span>
+                                <span class="work-meta-value">E-Commerce</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Services</span>
+                                <span class="work-meta-value">Strategy, Engineering</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Year</span>
+                                <span class="work-meta-value">2023</span>
+                            </div>
+                        </div>
+                        <a href="#" class="work-link">
+                            View case study
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bangladesh Pride Section -->
+    <section class="bangladesh" id="about">
+        <div class="bangladesh-bg"></div>
+        <div class="bangladesh-content">
+            <div class="section-header">
+                <p class="section-label">Our Origin</p>
+                <h2 class="section-title">Proudly built in<br>Bangladesh</h2>
+            </div>
+            
+            <div class="bangladesh-grid">
+                <div class="bangladesh-text">
+                    <p>From our headquarters in <span class="bangladesh-highlight">Dhaka's innovation district</span>, we're part of a rapidly evolving tech ecosystem that's transforming how the world sees Bangladesh.</p>
+                    <p>We combine <span class="bangladesh-highlight">global standards</span> with deep local insight—understanding the unique challenges and opportunities of emerging markets while delivering work that competes on any stage.</p>
+                    <p>Our team represents the best of Bangladeshi talent: engineers trained at BUET, designers shaped by local art traditions, strategists who understand both Silicon Valley and Sonargaon.</p>
+                </div>
+                
+                <div class="bangladesh-stats">
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="650">0</div>
+                        <div class="bangladesh-stat-label">Million Population</div>
+                    </div>
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="7">0</div>
+                        <div class="bangladesh-stat-label">% GDP Growth</div>
+                    </div>
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="200">0</div>
+                        <div class="bangladesh-stat-label">Million Internet Users</div>
+                    </div>
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="15">0</div>
+                        <div class="bangladesh-stat-label">Unicorn Potential</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <div class="section-header">
+            <p class="section-label">How We Work</p>
+            <h2 class="section-title">A proven process for<br>exceptional outcomes</h2>
+        </div>
+        
+        <div class="process-timeline">
+            <div class="process-line">
+                <div class="process-line-progress" id="process-progress"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">01</div>
+                    <h3 class="process-step-title">Discovery & Strategy</h3>
+                    <p class="process-step-desc">Deep immersion into your business, users, and market. We define success metrics, map user journeys, and establish the strategic foundation that guides every decision.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">02</div>
+                    <h3 class="process-step-title">Design & Prototyping</h3>
+                    <p class="process-step-desc">Rapid iteration from wireframes to high-fidelity designs. We build interactive prototypes for user testing, ensuring the solution resonates before a single line of production code.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">03</div>
+                    <h3 class="process-step-title">Engineering & Build</h3>
+                    <p class="process-step-desc">Clean, scalable architecture with modern frameworks. Our engineering team prioritizes performance, security, and maintainability—building systems that grow with your ambition.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">04</div>
+                    <h3 class="process-step-title">Launch & Optimize</h3>
+                    <p class="process-step-desc">Measured deployment with comprehensive monitoring. We analyze real user behavior, iterate based on data, and continuously improve the experience post-launch.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="section-header">
+            <p class="section-label">Testimonials</p>
+            <h2 class="section-title">Words from those<br>we've worked with</h2>
+        </div>
+        
+        <div class="testimonials-track" id="testimonials-track">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Netso transformed our digital presence completely. Their understanding of both local context and global standards resulted in a platform that outperforms our international competitors."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">TK</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Tanvir Khan</span>
+                        <span class="testimonial-role">CEO, Nagad</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The team's technical depth is matched only by their design sensibility. They built our telemedicine platform in record time without compromising on quality or user experience."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SR</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Dr. Samira Rahman</span>
+                        <span class="testimonial-role">Founder, Pulse Health</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Working with a Bangladeshi team that operates at this level of professionalism has been refreshing. They delivered our expansion platform ahead of schedule and under budget."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">WA</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Waseem Alim</span>
+                        <span class="testimonial-role">CEO, Chaldal</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Netso's AI integration expertise helped us automate 60% of our customer service operations while improving satisfaction scores. Exceptional technical and strategic partners."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">FH</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Farhana Haque</span>
+                        <span class="testimonial-role">CTO, Pathao</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-bg">
+            <div class="cta-grid"></div>
+        </div>
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to build<br>something exceptional?</h2>
+            <p class="cta-desc">Let's discuss how we can transform your digital presence. From strategy to launch, we're your partners in building products that matter.</p>
+            <form class="cta-form" data-netlify="true" onsubmit="handleSubmit(event)">
+                <input type="email" class="cta-input" placeholder="Enter your email" required>
+                <button type="submit" class="cta-button">
+                    Get in touch
+                    <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="nav-logo-icon">
+                        <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
+                    </div>
+                    Netso
+                </div>
+                <p class="footer-tagline">Digital excellence from Bangladesh. Building transformative products for global markets since 2016.</p>
+                <div class="footer-social">
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="twitter" style="width: 18px; height: 18px;"></i>
+                    </a>
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="linkedin" style="width: 18px; height: 18px;"></i>
+                    </a>
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="github" style="width: 18px; height: 18px;"></i>
+                    </a>
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="dribbble" style="width: 18px; height: 18px;"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Services</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Mobile Development</a>
+                    <a href="#" class="footer-link">Web Platforms</a>
+                    <a href="#" class="footer-link">Brand & Design</a>
+                    <a href="#" class="footer-link">AI Integration</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Careers</a>
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Legal</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Netso Digital. All rights reserved.</p>
+            <div class="footer-location">
+                <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
+                Dhaka, Bangladesh
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Loader
+        const loader = document.getElementById('loader');
+        const loaderProgress = document.getElementById('loader-progress');
+        let progress = 0;
+
+        const loadInterval = setInterval(() => {
+            progress += Math.random() * 30;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    initAnimations();
+                }, 500);
+            }
+            loaderProgress.style.width = progress + '%';
+        }, 200);
+
+        // Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // GSAP ScrollTrigger integration with Lenis
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        if (window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.left = mouseX - 2 + 'px';
+                cursorDot.style.top = mouseY - 2 + 'px';
+            });
+
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.1;
+                cursorY += (mouseY - cursorY) * 0.1;
+                cursor.style.left = cursorX - 10 + 'px';
+                cursor.style.top = cursorY - 10 + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hover effects
+            const hoverElements = document.querySelectorAll('a, button, .service-card, .testimonial-card');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        let lastScroll = 0;
+
+        lenis.on('scroll', ({ scroll }) => {
+            if (scroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+            lastScroll = scroll;
+        });
+
+        // Smooth scroll to sections
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    lenis.scrollTo(target, { offset: -80 });
+                }
+            });
+        });
+
+        // Main animations
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero entrance animations
+            const heroTl = gsap.timeline();
+            
+            heroTl.to('.hero-badge', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            })
+            .to('.hero-title-line span', {
+                y: 0,
+                duration: 1,
+                stagger: 0.1,
+                ease: 'power3.out'
+            }, '-=0.4')
+            .to('.hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, '-=0.6')
+            .to('.hero-cta', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, '-=0.6')
+            .to('.hero-stat', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out',
+                onComplete: animateCounters
+            }, '-=0.4');
+
+            // Hero parallax
+            gsap.to('.hero-bg-gradient', {
+                y: 200,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            gsap.to('.floating-shape', {
+                y: -100,
+                rotation: 20,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // Services cards animation
+            gsap.from('.service-card', {
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.services-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Work items sticky animation
+            const workItems = document.querySelectorAll('.work-item');
+            workItems.forEach((item, i) => {
+                gsap.from(item.querySelector('.work-visual'), {
+                    scale: 0.9,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 60%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+
+                gsap.from(item.querySelector('.work-content'), {
+                    x: i % 2 === 0 ? 50 : -50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 60%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+
+            // Bangladesh stats animation
+            gsap.from('.bangladesh-stat', {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.bangladesh-stats',
+                    start: 'top 80%',
+                    onEnter: animateBangladeshCounters
+                }
+            });
+
+            // Process timeline animation
+            const processSteps = document.querySelectorAll('.process-step');
+            const processProgress = document.getElementById('process-progress');
+
+            ScrollTrigger.create({
+                trigger: '.process-timeline',
+                start: 'top 60%',
+                end: 'bottom 40%',
+                onUpdate: (self) => {
+                    processProgress.style.height = (self.progress * 100) + '%';
+                    
+                    processSteps.forEach((step, i) => {
+                        const stepProgress = (i + 1) / processSteps.length;
+                        if (self.progress >= stepProgress - 0.2) {
+                            step.classList.add('active');
+                        } else {
+                            step.classList.remove('active');
+                        }
+                    });
+                }
+            });
+
+            gsap.from('.process-step', {
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.process-timeline',
+                    start: 'top 70%'
+                }
+            });
+
+            // Testimonials drag
+            const track = document.getElementById('testimonials-track');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.style.cursor = 'grabbing';
+                startX = e.pageX - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX) * 2;
+                track.scrollLeft = scrollLeft - walk;
+            });
+
+            // CTA animation
+            gsap.from('.cta-content', {
+                y: 60,
+                opacity: 0,
+                duration: 1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.cta',
+                    start: 'top 70%'
+                }
+            });
+
+            // Section headers animation
+            gsap.utils.toArray('.section-header').forEach(header => {
+                gsap.from(header.children, {
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: header,
+                        start: 'top 80%'
+                    }
+                });
+            });
+
+            // Velocity skew effect
+            let currentSkew = 0;
+            let targetSkew = 0;
+
+            lenis.on('scroll', ({ velocity }) => {
+                targetSkew = Math.max(-5, Math.min(5, velocity * 0.02));
+            });
+
+            function updateSkew() {
+                currentSkew += (targetSkew - currentSkew) * 0.1;
+                targetSkew *= 0.95;
+                
+                document.querySelectorAll('.velocity-skew').forEach(el => {
+                    el.style.transform = `skewY(${currentSkew}deg)`;
+                });
+                
+                requestAnimationFrame(updateSkew);
+            }
+            updateSkew();
+        }
+
+        // Counter animation
+        function animateCounters() {
+            document.querySelectorAll('.hero-stat-value[data-count]').forEach(counter => {
+                const target = parseInt(counter.dataset.count);
+                const duration = 2000;
+                const start = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeProgress = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(easeProgress * target);
+                    
+                    counter.textContent = current + (target > 100 ? '+' : '');
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                requestAnimationFrame(update);
+            });
+        }
+
+        function animateBangladeshCounters() {
+            document.querySelectorAll('.bangladesh-stat-value[data-count]').forEach(counter => {
+                const target = parseInt(counter.dataset.count);
+                const duration = 2000;
+                const start = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeProgress = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(easeProgress * target);
+                    
+                    counter.textContent = current + (target > 100 ? 'M+' : target > 10 ? '%' : '+');
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                requestAnimationFrame(update);
+            });
+        }
+
+        // Form handling
+        function handleSubmit(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('.cta-button');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span>Message sent!</span>';
+            button.style.background = '#22c55e';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+                e.target.reset();
+            }, 3000);
+        }
+
+        // Prefers reduced motion
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            lenis.destroy();
+        }
+    </script>
+</body>
+</html>
+
+----
+
+comment on this

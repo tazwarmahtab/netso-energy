@@ -1,0 +1,346 @@
+{
+  "main": {
+    "id": "5324373015726ba8",
+    "type": "split",
+    "children": [
+      {
+        "id": "c7edc0e11661de55",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8cb3a9ad65e6f1aa",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ee0307950e983823",
+    "type": "split",
+    "children": [
+      {
+        "id": "d66ac56a49e305b2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e8845c358dabbd04",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "923a6fa0a14d3f8c",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "file-tree-view",
+              "state": {},
+              "pinned": true,
+              "icon": "lucide-ghost",
+              "title": "file-tree-view"
+            }
+          },
+          {
+            "id": "251575ea20bc2d6b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "eed1ec9789fb1d17",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "terminal:terminal",
+              "state": {
+                "terminal:terminal": {
+                  "cwd": "/Users/tazwarmahtab/Documents/Projects/BigBrain",
+                  "focus": false,
+                  "profile": {
+                    "args": [
+                      "--login"
+                    ],
+                    "executable": "/bin/zsh",
+                    "followTheme": true,
+                    "name": "",
+                    "platforms": {
+                      "darwin": true
+                    },
+                    "pythonExecutable": "python3",
+                    "restoreHistory": false,
+                    "rightClickAction": "copyPaste",
+                    "successExitCodes": [
+                      "0",
+                      "SIGINT",
+                      "SIGTERM"
+                    ],
+                    "terminalOptions": {
+                      "documentOverride": null
+                    },
+                    "type": "integrated",
+                    "useWin32Conhost": true
+                  },
+                  "serial": null
+                }
+              },
+              "pinned": true,
+              "icon": "lucide-ghost",
+              "title": "terminal:terminal"
+            }
+          },
+          {
+            "id": "0ab104bb7120b1eb",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          },
+          {
+            "id": "488cb9a5b6782cd8",
+            "type": "leaf",
+            "state": {
+              "type": "mk-path-view",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "mk-path-view"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "492884401e80cd4e",
+    "type": "split",
+    "children": [
+      {
+        "id": "82a624d7b0bc542b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "54e90d7fd64a8d38",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "93925264b6a11d9e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "26be3f1161fab0fc",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "f858b041a4566db6",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "c2691cc024db5197",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "11ab09083ce5be2e",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "calendar"
+            }
+          },
+          {
+            "id": "5da4437771504eef",
+            "type": "leaf",
+            "state": {
+              "type": "planner-timeline",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "planner-timeline"
+            }
+          },
+          {
+            "id": "19b28ad4a86e01e2",
+            "type": "leaf",
+            "state": {
+              "type": "todo",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "todo"
+            }
+          },
+          {
+            "id": "14d149a0458aff70",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "lucide-ghost",
+              "title": "git-view"
+            }
+          }
+        ],
+        "currentTab": 6
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "audio-recorder:Start/stop recording": false,
+      "workspaces:Manage workspace layouts": false,
+      "bases:Create new base": false,
+      "templater-obsidian:Templater": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
+    }
+  },
+  "active": "8cb3a9ad65e6f1aa",
+  "lastOpenFiles": [
+    "30-Atlas/wiki/entities/LICENSE.md",
+    "30-Atlas/wiki/entities/README (39).md",
+    "30-Atlas/wiki/entities/CHANGELOG (7).md",
+    "30-Atlas/wiki/entities/README (38).md",
+    "30-Atlas/wiki/entities/CHANGELOG (6).md",
+    "30-Atlas/wiki/entities/README (37).md",
+    "30-Atlas/wiki/entities/README (36).md",
+    "30-Atlas/wiki/entities/CHANGELOG (5).md",
+    "30-Atlas/wiki/entities/README (35).md",
+    "30-Atlas/wiki/entities/CHANGELOG (4).md",
+    "30-Atlas/wiki/entities/readme (34).md",
+    "30-Atlas/wiki/entities/readme (33).md",
+    "30-Atlas/wiki/entities/SECURITY.md",
+    "30-Atlas/wiki/entities/README (32).md",
+    "30-Atlas/wiki/entities/CHANGELOG (3).md",
+    "30-Atlas/wiki/entities/README (31).md",
+    "30-Atlas/wiki/entities/README (30).md",
+    "30-Atlas/wiki/entities/README (29).md",
+    "30-Atlas/wiki/entities/README (28).md",
+    "30-Atlas/wiki/entities/CHANGELOG (2).md",
+    "30-Atlas/wiki/entities/README (27).md",
+    "30-Atlas/wiki/entities/README (26).md",
+    "30-Atlas/wiki/entities/History (1).md",
+    "30-Atlas/wiki/entities/readme (25).md",
+    "30-Atlas/wiki/entities/CHANGELOG (1).md",
+    "30-Atlas/wiki/entities/README (24).md",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/lib/finance",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/lib/ai",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/lib/transit",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/components/ui",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/lib",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/store",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/hooks",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/db",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src/components",
+    "60-Development/CascadeProjects-local/transitbd-nexus/src",
+    "07_04_17_rachel_chudley0100_2.jpg",
+    "claude-obsidian/wiki/meta/workflow-loop.gif",
+    "claude-obsidian/wiki/meta/wiki-graph-grow.gif",
+    "claude-obsidian/wiki/meta/welcome-canvas.gif",
+    "claude-obsidian/wiki/meta/image-example-wiki-map-view.png",
+    "claude-obsidian/wiki/meta/image-example-graph-view.png",
+    "claude-obsidian/wiki/meta/claude-obsidian-gif-cover-16x9.gif",
+    "claude-obsidian/wiki/meta/claude-obsidian-gif-1x1.gif",
+    "claude-obsidian/wiki/meta/claude-obsidian-cover-square.png",
+    "claude-obsidian/wiki/meta/claude-obsidian-cover-16x9.png",
+    "claude-obsidian/wiki/canvases/youtube-explainer.canvas",
+    "claude-obsidian/wiki/canvases/welcome.canvas",
+    "claude-obsidian/wiki/canvases/main.canvas",
+    "claude-obsidian/wiki/canvases/claude-obsidian-presentation.canvas",
+    "claude-obsidian/wiki/Wiki Map.canvas",
+    "Untitled 2.canvas",
+    "Untitled 1.canvas"
+  ]
+}

@@ -1,0 +1,29 @@
+# Build artifacts
+.next/
+.git/
+.obsidian/graph.json
+
+# Templates and setup (not content)
+templates/
+setup-guides/
+examples/
+scenarios/
+
+# Duplicate patterns
+*(1)*
+
+# Sensitive content
+**/credentials/**
+**/*API*Key*
+
+# Raw binary formats (not parsed as content)
+*.pdf
+*.docx
+*.pptx
+*.zip
+*.jpeg
+*.png
+*.jpg
+
+# Manual review (not yet ingested)
+wiki/raw/manual-review/

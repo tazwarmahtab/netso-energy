@@ -1,0 +1,82 @@
+{
+  "communities": {
+    "0": [
+      "netso_observer",
+      "netso_observer_classifytoolaction",
+      "netso_observer_detectpatterns",
+      "netso_observer_groupbydomain",
+      "netso_observer_logtowiki",
+      "netso_observer_parseobservations"
+    ],
+    "1": [
+      "netso_observer_generateconceptstub",
+      "netso_observer_generatedomainstubs",
+      "netso_observer_main",
+      "netso_observer_writeconceptpage"
+    ]
+  },
+  "cohesion": {
+    "0": 0.4,
+    "1": 0.83
+  },
+  "gods": [
+    {
+      "id": "netso_observer_main",
+      "label": "main()",
+      "edges": 8
+    },
+    {
+      "id": "netso_observer_generatedomainstubs",
+      "label": "generateDomainStubs()",
+      "edges": 4
+    },
+    {
+      "id": "netso_observer_groupbydomain",
+      "label": "groupByDomain()",
+      "edges": 3
+    },
+    {
+      "id": "netso_observer_generateconceptstub",
+      "label": "generateConceptStub()",
+      "edges": 3
+    },
+    {
+      "id": "netso_observer_writeconceptpage",
+      "label": "writeConceptPage()",
+      "edges": 3
+    },
+    {
+      "id": "netso_observer_classifytoolaction",
+      "label": "classifyToolAction()",
+      "edges": 2
+    },
+    {
+      "id": "netso_observer_parseobservations",
+      "label": "parseObservations()",
+      "edges": 2
+    },
+    {
+      "id": "netso_observer_detectpatterns",
+      "label": "detectPatterns()",
+      "edges": 2
+    },
+    {
+      "id": "netso_observer_logtowiki",
+      "label": "logToWiki()",
+      "edges": 2
+    }
+  ],
+  "surprises": [
+    {
+      "source": "main()",
+      "target": "parseObservations()",
+      "source_files": [
+        "wiki/raw/agents/netso-observer.js",
+        "wiki/raw/agents/netso-observer.js"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "note": "Bridges community 0 \u2192 community 1"
+    }
+  ]
+}

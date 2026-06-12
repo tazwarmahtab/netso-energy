@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netso Energy - Competitive Matrix</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .chart-container {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            width: 850px;
+        }
+        h1 {
+            color: #f0f6fc;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #8b949e;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+        th {
+            background: #21262d;
+            color: #f0f6fc;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            font-size: 13px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .netso {
+            background: linear-gradient(90deg, rgba(46, 160, 67, 0.1), transparent);
+            border-left: 3px solid #2ea043;
+        }
+        .check {
+            color: #2ea043;
+            font-weight: 700;
+        }
+        .cross {
+            color: #f85149;
+            font-weight: 700;
+        }
+        .highlight {
+            color: #3fb950;
+            font-weight: 600;
+        }
+        .neutral {
+            color: #8b949e;
+        }
+        .moat-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(46, 160, 67, 0.1), rgba(2, 132, 10, 0.05));
+            border: 1px solid #2ea043;
+            border-radius: 8px;
+        }
+        .moat-title {
+            color: #2ea043;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .moat-text {
+            color: #c9d1d9;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h1>Competitive Landscape</h1>
+        <div class="subtitle">Netso Energy vs. Traditional EPC & Grid Dependency</div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Feature</th>
+                    <th style="width: 25%;" class="netso">Netso Energy</th>
+                    <th style="width: 25%;">Traditional EPC</th>
+                    <th style="width: 25%;">Grid / Diesel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Initial Upfront CAPEX</td>
+                    <td class="netso highlight">$0 (Zero Upfront)</td>
+                    <td>BDT 25–30L</td>
+                    <td class="neutral">High Opex</td>
+                </tr>
+                <tr>
+                    <td>Operating Expenses</td>
+                    <td class="netso highlight">$0 (Netso Managed)</td>
+                    <td>High (Client Managed)</td>
+                    <td class="neutral">Variable</td>
+                </tr>
+                <tr>
+                    <td>Tariff / Cost Stability</td>
+                    <td class="netso highlight">Locked BDT 8.50/kWh</td>
+                    <td class="neutral">Variable</td>
+                    <td class="cross">Volatile BDT 15.62+</td>
+                </tr>
+                <tr>
+                    <td>Risk Allocation</td>
+                    <td class="netso highlight">Netso Assumes Risk</td>
+                    <td class="cross">Client Assumes Risk</td>
+                    <td class="cross">Full Market Risk</td>
+                </tr>
+                <tr>
+                    <td>Maintenance</td>
+                    <td class="netso highlight">Included (20-yr)</td>
+                    <td>Annual Contract</td>
+                    <td class="cross">None</td>
+                </tr>
+                <tr>
+                    <td>Financing Leverage</td>
+                    <td class="netso highlight">IDCOL Debt (80% @ 9%)</td>
+                    <td class="cross">Equity Only</td>
+                    <td class="cross">None</td>
+                </tr>
+                <tr>
+                    <td>Contract Term</td>
+                    <td class="netso highlight">20-Year PPA</td>
+                    <td class="neutral">1–5 Year</td>
+                    <td class="neutral">Rolling</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="moat-box">
+            <div class="moat-title">🔒 Competitive Moat</div>
+            <div class="moat-text">
+                Netso combines exclusive access to IDCOL's 9% debt capital (vs. 18%+ local rates) with operational data from our pilot. 
+                Traditional EPCs cannot offer zero-upfront economics, while grid-dependent customers face 85% higher costs with full volatility risk.
+                Our 20-year PPAs lock in defensive pricing that escalates below inflation, creating long-term yield visibility.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(tail *)",
+      "Bash(cd *)",
+      "Bash(wiki-*)",
+      "Bash(python3 *)",
+      "Bash(node *)",
+      "Bash(/Users/tazwarmahtab/Documents/30-Atlas/bin/*.sh)",
+      "Write(/Users/tazwarmahtab/Documents/*)",
+      "Write(/Users/tazwarmahtab/.claude/*)",
+      "Bash(npm run *)",
+      "Bash(bun run *)",
+      "Bash(generate-wiki)",
+      "Bash(ls *)",
+      "Bash(python *)",
+      "Bash(brew list*)",
+      "Bash(uv run *)",
+      "Bash(python3 /Users/tazwarmahtab/Documents/30-Atlas/bin/*.py)",
+      "Bash(git commit*)",
+      "Bash(head *)",
+      "Bash(npx *)",
+      "Bash(git diff*)",
+      "Bash(wc *)",
+      "Read(*)",
+      "Bash(git add*)",
+      "Bash(find *)",
+      "Bash(git log*)",
+      "Bash(git pull*)",
+      "Bash(git checkout*)",
+      "Bash(git branch*)",
+      "Bash(cat *)",
+      "Bash(mkdir *)",
+      "Bash(which *)",
+      "Bash(echo *)",
+      "Bash(git push*)",
+      "Bash(grep *)",
+      "Bash(clawhub *)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf /*)",
+      "Bash(curl * | sh)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)",
+      "Read(~/.ssh/*)",
+      "Read(~/.aws/*)"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "on_session_start": [
+      "python3 /Users/tazwarmahtab/Documents/30-Atlas/bin/session-backup.py"
+    ],
+    "on_compact": [
+      "python3 /Users/tazwarmahtab/Documents/30-Atlas/bin/before-compact-backup.py"
+    ],
+    "on_session_end": [
+      "python3 /Users/tazwarmahtab/Documents/30-Atlas/bin/session-backup.py"
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "command": "npx tsc --noEmit 2>/dev/null | head -10"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/tazwarmahtab/Documents/30-Atlas/bin/netso-observe.sh",
+            "async": true,
+            "timeout": 5
+          }
+        ],
+        "description": "Capture tool use for Netso ops pattern learning",
+        "id": "post:netso:observe"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "command": "npm test --prefix apps/website/ --silent 2>&1 | tail -5"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/tazwarmahtab/Documents/10-Projects/Netso_HQ/scripts/ops-fact-force.js",
+            "timeout": 10
+          }
+        ],
+        "description": "Netso ops governance: require BDT number sources before file edits",
+        "id": "pre:netso:fact-force"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/tazwarmahtab/Documents/30-Atlas/bin/netso-observe.sh",
+            "async": true,
+            "timeout": 5
+          }
+        ],
+        "description": "Capture tool use for Netso ops pattern learning",
+        "id": "pre:netso:observe"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/tazwarmahtab/Documents/30-Atlas/bin/ops-session-summary.sh",
+            "async": true,
+            "timeout": 15
+          }
+        ],
+        "description": "Save Netso ops session state to PROGRESS.md and LATEST log",
+        "id": "stop:ops-session-summary"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/tazwarmahtab/Documents/30-Atlas/bin/ops-session-summary.sh",
+            "async": true,
+            "timeout": 15
+          }
+        ],
+        "description": "Final state persistence: update PROGRESS.md + wiki log on session end",
+        "id": "session:end:ops-summary"
+      }
+    ]
+  }
+}

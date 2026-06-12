@@ -1,0 +1,36 @@
+# Always ignore
+node_modules/
+.git/
+dist/
+build/
+.next/
+__pycache__/
+*.pyc
+*.log
+package-lock.json
+yarn.lock
+.DS_Store
+
+# Block code from project symlinks
+projects/TransitBD_Nexus/node_modules/
+projects/TransitBD_Nexus/dist/
+
+# Block agent internals
+agents/OpenClaw/app/
+agents/OpenClaw/node_modules/
+agents/Paperclip/node_modules/
+agents/Paperclip/dist/
+agents/Paperclip/hf-space-deploy/
+
+# Block binary tools
+bin/
+raw/assets/
+*.tar.gz
+*.zip
+*.gif
+*.mp4
+*.mp3
+*.node
+*.wasm
+*.so
+*.dylib

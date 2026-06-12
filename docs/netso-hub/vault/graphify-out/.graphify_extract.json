@@ -1,0 +1,250 @@
+{
+  "nodes": [
+    {
+      "id": "netso_observer",
+      "label": "netso-observer.js",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "netso_observer_classifytoolaction",
+      "label": "classifyToolAction()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L52"
+    },
+    {
+      "id": "netso_observer_parseobservations",
+      "label": "parseObservations()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L66"
+    },
+    {
+      "id": "netso_observer_groupbydomain",
+      "label": "groupByDomain()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L86"
+    },
+    {
+      "id": "netso_observer_detectpatterns",
+      "label": "detectPatterns()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L98"
+    },
+    {
+      "id": "netso_observer_generateconceptstub",
+      "label": "generateConceptStub()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L124"
+    },
+    {
+      "id": "netso_observer_generatedomainstubs",
+      "label": "generateDomainStubs()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L174"
+    },
+    {
+      "id": "netso_observer_writeconceptpage",
+      "label": "writeConceptPage()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L222"
+    },
+    {
+      "id": "netso_observer_logtowiki",
+      "label": "logToWiki()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L233"
+    },
+    {
+      "id": "netso_observer_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L240"
+    }
+  ],
+  "edges": [
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_classifytoolaction",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_parseobservations",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_groupbydomain",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_detectpatterns",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L98",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_generateconceptstub",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L124",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_generatedomainstubs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L174",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_writeconceptpage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L222",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_logtowiki",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L233",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer",
+      "target": "netso_observer_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L240",
+      "weight": 1.0
+    },
+    {
+      "source": "netso_observer_groupbydomain",
+      "target": "netso_observer_classifytoolaction",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L89",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_generateconceptstub",
+      "target": "netso_observer_generatedomainstubs",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L125",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_writeconceptpage",
+      "target": "netso_observer_generatedomainstubs",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L223",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_parseobservations",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L247",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_groupbydomain",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L264",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_detectpatterns",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L265",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_generateconceptstub",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L284",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_generatedomainstubs",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L288",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_writeconceptpage",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L290",
+      "weight": 0.8
+    },
+    {
+      "source": "netso_observer_main",
+      "target": "netso_observer_logtowiki",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "wiki/raw/agents/netso-observer.js",
+      "source_location": "L301",
+      "weight": 0.8
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 1000,
+  "output_tokens": 950
+}

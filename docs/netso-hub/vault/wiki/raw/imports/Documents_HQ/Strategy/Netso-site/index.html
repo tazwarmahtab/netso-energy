@@ -1,0 +1,3636 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Netso — We turn rooftops into income-generating solar infrastructure.</title>
+  <meta name="description" content="Netso deploys solar pergola infrastructure that generates electricity and recurring value via SREDA net metering or power offtake — Bangladesh-native execution." />
+  <meta name="theme-color" content="#0b0f14" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Bengali:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="preload" as="image" href="assets/hero-rooftop-night.jpg">
+
+  <style>
+    :root{
+      --bg:#070a0e;
+      --bg2:#0b0f14;
+      --ink:#e9edf2;
+      --muted:#a8b0bd;
+      --muted2:#707a89;
+      --line:rgba(255,255,255,.10);
+      --line2:rgba(255,255,255,.07);
+
+      --gold:#ffb000;
+      --gold2:#ffcf66;
+      --green:#46f5b5;
+      --blue:#76a7ff;
+
+      --radius:24px;
+      --radius2:18px;
+      --shadow: 0 30px 90px rgba(0,0,0,.45);
+      --blur: saturate(1.1) blur(12px);
+
+      --max: 1120px;
+      --pad: clamp(18px, 4vw, 40px);
+      --h1: clamp(44px, 6vw, 76px);
+      --h2: clamp(28px, 3.5vw, 46px);
+      --h3: clamp(18px, 2vw, 22px);
+      --p:  clamp(15px, 1.2vw, 18px);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans Bengali", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 760px at 18% -12%, rgba(255,176,0,.10), transparent 60%),
+        radial-gradient(900px 700px at 85% 10%, rgba(70,245,181,.10), transparent 55%),
+        radial-gradient(800px 620px at 70% 90%, rgba(118,167,255,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 70%, #070a0e 100%);
+      overflow-x:hidden;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: geometricPrecision;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button, input, select{ font:inherit; }
+
+    .container{ width:100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+    /* Jamdani weave overlay (very subtle) */
+    .pattern{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.11;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360' viewBox='0 0 360 360'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.14' stroke-width='1'%3E%3Cpath d='M40 58c25-22 55-22 80 0 25 22 55 22 80 0 25-22 55-22 80 0'/%3E%3Cpath d='M40 112c25-22 55-22 80 0 25 22 55 22 80 0 25-22 55-22 80 0'/%3E%3Cpath d='M40 166c25-22 55-22 80 0 25 22 55 22 80 0 25-22 55-22 80 0'/%3E%3Cpath d='M40 220c25-22 55-22 80 0 25 22 55 22 80 0 25-22 55-22 80 0'/%3E%3Cpath d='M40 274c25-22 55-22 80 0 25 22 55 22 80 0 25-22 55-22 80 0'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 420px 420px;
+      transform: translateZ(0);
+    }
+
+    header{
+      position:fixed; top:0; left:0; right:0;
+      z-index:50;
+      backdrop-filter: var(--blur);
+      background: linear-gradient(180deg, rgba(10,13,18,.82), rgba(10,13,18,.46));
+      border-bottom: 1px solid var(--line2);
+    }
+    .nav{ height:74px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand{ display:flex; align-items:center; gap:12px; min-width:240px; }
+    .brand img{ width:34px; height:34px; border-radius:10px; display:block; }
+    .brand b{ font-weight:600; letter-spacing:-0.02em; }
+    .brand small{ display:block; color: var(--muted); font-size:12px; letter-spacing:.04em; text-transform: uppercase; margin-top:2px; }
+
+    .navlinks{ display:flex; align-items:center; gap:18px; color: var(--muted); font-size:14px; }
+    .navlinks a{ padding:10px 10px; border-radius:12px; transition:.2s ease; }
+    .navlinks a:hover{ color: var(--ink); background: rgba(255,255,255,.05); }
+
+    .navcta{ display:flex; align-items:center; gap:10px; min-width: 300px; justify-content:flex-end; }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--ink);
+      padding:10px 14px;
+      border-radius:999px;
+      transition:.2s ease;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.18); }
+    .btn.primary{
+      border-color: rgba(255,176,0,.40);
+      background: linear-gradient(135deg, rgba(255,176,0,.22), rgba(70,245,181,.10));
+      box-shadow: 0 22px 70px rgba(255,176,0,.10);
+    }
+    .btn.primary:hover{ border-color: rgba(255,176,0,.62); box-shadow: 0 28px 86px rgba(255,176,0,.15); }
+
+    .lang{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:6px; border-radius:999px;
+      display:flex; align-items:center; gap:6px;
+    }
+    .lang button{
+      border:0; background: transparent;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .lang button.active{
+      color: var(--ink);
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    @media (max-width: 980px){
+      .navlinks{ display:none; }
+      .brand, .navcta{ min-width:auto; }
+    }
+
+    main{ padding-top:74px; }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      min-height: 100svh;
+      display:grid;
+      align-items:end;
+      padding: clamp(38px, 5vw, 70px) 0;
+      overflow:hidden;
+    }
+    .hero-bg{ position:absolute; inset:0; z-index:0; }
+    .hero-bg img{ width:100%; height:100%; object-fit:cover; transform: scale(1.05); filter: saturate(1.05) contrast(1.05); }
+    .hero-bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 420px at 25% 20%, rgba(255,176,0,.18), transparent 60%),
+        radial-gradient(900px 520px at 80% 25%, rgba(70,245,181,.10), transparent 55%),
+        linear-gradient(180deg, rgba(7,10,14,.60), rgba(7,10,14,.92) 72%, rgba(7,10,14,1));
+      pointer-events:none;
+    }
+
+    .hero-grid{
+      position:relative; z-index:1;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: clamp(18px, 3vw, 46px);
+      align-items:end;
+    }
+    @media (max-width: 920px){ .hero-grid{ grid-template-columns:1fr; } }
+
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size:13px;
+      letter-spacing:.02em;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.92), rgba(255,176,0,.82));
+      box-shadow: 0 0 0 6px rgba(255,176,0,.10);
+    }
+
+    h1{ font-size: var(--h1); line-height:1.02; margin: 18px 0 14px; letter-spacing: -0.045em; font-weight: 500; max-width: 18ch; }
+    .lead{ font-size: var(--p); line-height: 1.55; color: rgba(233,237,242,.78); max-width: 66ch; margin:0; }
+    .hero-actions{ display:flex; gap:12px; margin-top:22px; flex-wrap: wrap; }
+
+    .scrollhint{ margin-top:26px; display:flex; align-items:center; gap:12px; color: rgba(168,176,189,.85); font-size:13px; }
+    .mouse{ width:22px; height:34px; border-radius:999px; border:1px solid rgba(255,255,255,.18); position:relative; }
+    .mouse::after{
+      content:"";
+      width:4px; height:4px; border-radius:999px;
+      background: rgba(255,255,255,.7);
+      position:absolute; left:50%; top:8px;
+      transform: translateX(-50%);
+      animation: wheel 1.35s ease-in-out infinite;
+      opacity:.8;
+    }
+    @keyframes wheel{
+      0%{ transform: translate(-50%, 0); opacity:.8; }
+      60%{ transform: translate(-50%, 10px); opacity:.35; }
+      100%{ transform: translate(-50%, 0); opacity:.8; }
+    }
+
+    .hero-card{
+      position:relative;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,13,18,.42);
+      backdrop-filter: var(--blur);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      min-height: 420px;
+    }
+    .hero-card .media{ position:absolute; inset:0; opacity:.72; }
+    .hero-card .media img{ width:100%; height:100%; object-fit: cover; transform: scale(1.06); filter: contrast(1.05) saturate(1.02); }
+    .hero-card .overlay{ position:absolute; inset:0; background: radial-gradient(700px 380px at 30% 15%, rgba(255,176,0,.22), transparent 60%), linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.62)); }
+    .hero-card .content{
+      position:absolute; inset:16px;
+      border-radius: calc(var(--radius) - 10px);
+      border: 1px solid rgba(255,255,255,.09);
+      padding:16px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .meta{ display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:12px; letter-spacing: .10em; text-transform: uppercase; color: rgba(255,255,255,.72); }
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      backdrop-filter: var(--blur);
+      white-space:nowrap;
+    }
+    .bd{ font-family:"Noto Sans Bengali", Inter, sans-serif; text-transform:none; letter-spacing:.02em; opacity:.95; }
+
+    .hero-metrics{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    .metric{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,13,18,.54);
+      backdrop-filter: var(--blur);
+      padding:12px;
+    }
+    .metric .k{ color: rgba(255,255,255,.72); font-size:12px; letter-spacing: .10em; text-transform: uppercase; }
+    .metric .v{ margin-top:6px; font-weight:500; letter-spacing:-0.02em; font-size:18px; }
+    .metric .v span{ color: rgba(255,176,0,.96); }
+
+    /* Sections */
+    section{ padding: clamp(66px, 8vw, 124px) 0; border-top: 1px solid var(--line2); }
+    .section-head{ display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:end; margin-bottom:34px; }
+    @media (max-width: 900px){ .section-head{ grid-template-columns:1fr; } }
+    h2{ font-size: var(--h2); line-height:1.08; margin:0; letter-spacing:-0.03em; font-weight:500; }
+    .sub{ margin:0; color: var(--muted); line-height:1.6; font-size: var(--p); max-width: 70ch; }
+    .fine{ color: var(--muted2); font-size:13px; letter-spacing:0.02em; line-height:1.6; }
+
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card{
+      grid-column: span 4;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 18px 18px 16px;
+      min-height: 170px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(600px 140px at 30% 0%, rgba(255,176,0,.12), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .card h3{ margin: 6px 0 8px; font-size: var(--h3); letter-spacing: -0.02em; font-weight: 500; position:relative; }
+    .card p{ margin:0; color: var(--muted); line-height:1.55; font-size:14.5px; position:relative; max-width: 56ch; }
+    .icon{
+      width:34px; height:34px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      display:grid; place-items:center;
+      color: rgba(255,255,255,.85);
+      position:relative;
+    }
+    .icon svg{ width:18px; height:18px; opacity:.9; }
+    @media (max-width: 980px){ .card{ grid-column: span 6; } }
+    @media (max-width: 620px){ .card{ grid-column: span 12; } }
+
+    /* Pinned story */
+    .cinema-wrap{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+    }
+    .cinema-inner{ display:grid; grid-template-columns: 1fr 1fr; min-height: 78vh; }
+    @media (max-width: 900px){ .cinema-inner{ grid-template-columns:1fr; min-height:auto; } }
+    .cinema-left{
+      padding: clamp(18px, 3vw, 34px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    }
+    @media (max-width: 900px){ .cinema-left{ border-right:none; border-bottom:1px solid rgba(255,255,255,.08);} }
+    .step{ padding:18px 0; border-top: 1px solid rgba(255,255,255,.07); opacity:.55; transform: translateY(6px); }
+    .step:first-child{ border-top:none; padding-top: 8px; }
+    .step strong{ display:block; font-weight:500; letter-spacing:-0.02em; margin-bottom:8px; color: rgba(255,255,255,.92); }
+    .step span{ display:block; color: var(--muted); line-height:1.6; font-size:14.5px; max-width: 58ch; }
+
+    .cinema-right{ position:relative; overflow:hidden; background: #0a0d12; }
+    .shots-media{ position:absolute; inset:0; }
+    .shot-img{ position:absolute; inset:0; opacity:0; transform: scale(1.04); }
+    .shot-img img{ width:100%; height:100%; object-fit:cover; filter: saturate(1.06) contrast(1.06); }
+    .shots-media::after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 520px at 70% 20%, rgba(255,176,0,.15), transparent 60%),
+        radial-gradient(800px 520px at 25% 70%, rgba(70,245,181,.10), transparent 58%),
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.72));
+      pointer-events:none;
+    }
+    .shot-panel{
+      position:absolute; inset: 0;
+      display:grid; align-items:end;
+      padding: clamp(18px, 3vw, 34px);
+      opacity:0;
+      transform: translateY(18px) scale(.99);
+    }
+    .shot-panel .label{ display:flex; gap:10px; align-items:center; color: rgba(255,255,255,.78); font-size:12px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom:10px; }
+    .shot-panel .panel{ border-radius: 18px; border: 1px solid rgba(255,255,255,.10); background: rgba(10,13,18,.54); backdrop-filter: var(--blur); padding: 16px; max-width: 560px; }
+    .shot-panel .panel b{ font-weight:500; letter-spacing:-0.02em; }
+    .shot-panel .panel p{ margin:8px 0 0; color: var(--muted); line-height:1.6; font-size:14.5px; }
+
+    /* Calculator */
+    .calc-layout{ display:grid; grid-template-columns: 1.05fr .95fr; gap:18px; align-items:start; }
+    @media (max-width: 940px){ .calc-layout{ grid-template-columns:1fr; } }
+    .calc-sticky{ position: sticky; top: 96px; }
+    @media (max-width: 940px){ .calc-sticky{ position:relative; top:auto; } }
+
+    .calc-card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(900px 460px at 30% 0%, rgba(255,176,0,.16), transparent 60%),
+        radial-gradient(900px 460px at 80% 45%, rgba(70,245,181,.10), transparent 58%),
+        rgba(255,255,255,.03);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .calc-inner{ padding: clamp(18px, 3vw, 26px); }
+
+    .form{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:14px; }
+    @media (max-width: 560px){ .form{ grid-template-columns:1fr; } }
+    label{ display:block; color: rgba(255,255,255,.78); font-size:12px; letter-spacing:.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .field{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,13,18,.40);
+      padding: 10px 12px;
+      color: var(--ink);
+      outline:none;
+      transition:.2s ease;
+    }
+    .field:focus{ border-color: rgba(255,176,0,.40); box-shadow: 0 0 0 6px rgba(255,176,0,.10); }
+    .rowSpan2{ grid-column: span 2; }
+    @media (max-width: 560px){ .rowSpan2{ grid-column:auto; } }
+
+    .calc-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+
+    .results{
+      margin-top:16px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top:16px;
+      display:grid;
+      gap:10px;
+    }
+    .rgrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width: 560px){ .rgrid{ grid-template-columns:1fr; } }
+    .pill{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(10,13,18,.44);
+      backdrop-filter: var(--blur);
+      padding: 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .pill::after{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(520px 120px at 30% 0%, rgba(255,176,0,.10), transparent 60%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .pill .k{ color: rgba(255,255,255,.72); font-size:12px; letter-spacing:.10em; text-transform: uppercase; position:relative; }
+    .pill .v{ margin-top:7px; font-weight:500; letter-spacing:-0.02em; font-size:20px; position:relative; }
+    .pill .v.gold{ color: rgba(255,176,0,.98); }
+
+    .disclaimer{ margin-top: 10px; color: var(--muted2); font-size: 12.5px; line-height: 1.6; }
+
+    /* Footer CTA */
+    .cta{ padding-bottom: clamp(80px, 8vw, 120px); }
+    .cta-box{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(900px 420px at 30% 0%, rgba(255,176,0,.16), transparent 60%),
+        radial-gradient(900px 420px at 80% 40%, rgba(70,245,181,.10), transparent 55%),
+        rgba(255,255,255,.03);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cta-inner{
+      padding: clamp(20px, 4vw, 44px);
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:center;
+    }
+    @media (max-width: 920px){ .cta-inner{ grid-template-columns:1fr; } }
+    .cta-actions{ display:flex; gap:12px; justify-content:flex-end; flex-wrap:wrap; }
+    @media (max-width: 920px){ .cta-actions{ justify-content:flex-start; } }
+
+    footer{ border-top: 1px solid var(--line2); padding: 28px 0 44px; color: var(--muted2); font-size:13px; }
+    .foot{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+
+    .reveal{ opacity:0; transform: translateY(14px); }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .reveal{ opacity:1 !important; transform:none !important; }
+      html:focus-within{ scroll-behavior:auto; }
+    }
+
+    /* Hide advanced fields by default; toggled by segment */
+    .hidden{ display:none !important; }
+  </style>
+</head>
+
+<body>
+  <div class="pattern" aria-hidden="true"></div>
+
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="Netso Home">
+        <img src="assets/netso-logo.png" alt="Netso logo" width="34" height="34" />
+        <div>
+          <b>Netso</b>
+          <small data-i18n="nav.subtitle">Income Infrastructure</small>
+        </div>
+      </a>
+
+      <nav class="navlinks" aria-label="Primary">
+        <a href="#story" data-i18n="nav.story">Story</a>
+        <a href="#capabilities" data-i18n="nav.capabilities">Capabilities</a>
+        <a href="#industries" data-i18n="nav.industries">Industries</a>
+        <a href="#calculator" data-i18n="nav.calculator">Calculator</a>
+      </nav>
+
+      <div class="navcta">
+        <div class="lang" aria-label="Language toggle">
+          <button id="langEN" class="active" type="button">EN</button>
+          <button id="langBN" type="button" style="font-family:'Noto Sans Bengali', Inter, sans-serif;">বাংলা</button>
+        </div>
+        <a class="btn" href="#industries" data-i18n="cta.partner">Partner</a>
+        <a class="btn primary" href="#calculator" data-i18n="cta.calc">Calculate Rooftop Income</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-bg" aria-hidden="true">
+        <img src="assets/hero-rooftop-night.jpg" alt="" decoding="async" fetchpriority="high" />
+      </div>
+
+      <div class="container hero-grid">
+        <div>
+          <div class="kicker reveal">
+            <span class="dot" aria-hidden="true"></span>
+            <span data-i18n="hero.kicker">Asset-first solar • Net metering • Bangladesh-native execution</span>
+          </div>
+
+          <h1 class="reveal" data-i18n="hero.h1">
+            Your rooftop can earn you money.<br/>We build the infrastructure to make it happen.
+          </h1>
+
+          <p class="lead reveal" data-i18n="hero.lead">
+            Solar pergolas designed to generate power, income, and long-term asset value — including design,
+            engineering, financing facilitation, installation, grid integration, and maintenance.
+          </p>
+
+          <div class="hero-actions reveal">
+            <a class="btn primary" href="#calculator" data-i18n="hero.primary">Calculate Your Rooftop Income</a>
+            <a class="btn" href="#assessment" data-i18n="hero.secondary">Book a Free Site Assessment</a>
+          </div>
+
+          <div class="scrollhint reveal" aria-hidden="true">
+            <div class="mouse"></div>
+            <div data-i18n="hero.scroll">Scroll to see how income infrastructure works</div>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="media" aria-hidden="true">
+            <img src="assets/pergola-sunset-roof.jpg" alt="" loading="lazy" decoding="async" />
+          </div>
+          <div class="overlay" aria-hidden="true"></div>
+
+          <div class="content">
+            <div class="meta">
+              <span class="chip" data-i18n="hero.chip1">Dhaka • Chattogram • Gazipur</span>
+              <span class="chip bd" data-i18n="hero.chip2">রুফটপ → আয়</span>
+            </div>
+
+            <div class="hero-metrics" aria-hidden="true">
+              <div class="metric">
+                <div class="k" data-i18n="hero.m1k">POSITIONING</div>
+                <div class="v" data-i18n="hero.m1v">Returns, not <span>kilowatts</span></div>
+              </div>
+              <div class="metric">
+                <div class="k" data-i18n="hero.m2k">DELIVERY</div>
+                <div class="v" data-i18n="hero.m2v">Design → Grid → <span>Cashflow</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section id="story" aria-label="Story">
+      <div class="container">
+        <div class="section-head">
+          <div><h2 class="reveal">Netso is income infrastructure deployment.</h2></div>
+          <p class="sub reveal">
+            We install architectural solar pergolas that improve rooftop usability and generate recurring value via
+            SREDA net metering or power offtake — built for Bangladesh's rules, roofs, and realities.
+          </p>
+        </div>
+
+        <div class="cinema-wrap">
+          <div class="cinema-inner" id="cinemaPin">
+            <div class="cinema-left">
+              <div class="fine reveal">CHAPTERS</div>
+
+              <div class="step" data-step="0">
+                <strong>01 — Treat the roof like an asset</strong>
+                <span>Flat rooftops are underutilized. Netso converts them into productive infrastructure with measurable yield.</span>
+              </div>
+
+              <div class="step" data-step="1">
+                <strong>02 — Pergola = shade + space + power</strong>
+                <span>A pergola isn't just panels on steel. It's a usable shaded space with clean geometry and improved property value.</span>
+              </div>
+
+              <div class="step" data-step="2">
+                <strong>03 — Bangladesh-native execution</strong>
+                <span>Net metering approvals, utility coordination, structural safety, factory-scale loads, and O&M — handled end-to-end.</span>
+              </div>
+
+              <div class="fine reveal" style="margin-top:18px">
+                ROI clarity first — "contact us" comes after the numbers make sense.
+              </div>
+            </div>
+
+            <div class="cinema-right">
+              <div class="shots-media" aria-hidden="true">
+                <div class="shot-img" data-img="0"><img src="assets/pergola-sunset-roof.jpg" alt="" loading="lazy" decoding="async" /></div>
+                <div class="shot-img" data-img="1"><img src="assets/pergola-under-night.jpg" alt="" loading="lazy" decoding="async" /></div>
+                <div class="shot-img" data-img="2"><img src="assets/exec-rooftop-phone.jpg" alt="" loading="lazy" decoding="async" /></div>
+              </div>
+
+              <div class="shot-panel" data-shot="0">
+                <div>
+                  <div class="label"><span class="dot" style="width:7px;height:7px;box-shadow:none"></span> Scene 01</div>
+                  <div class="panel">
+                    <b>Income-first framing.</b>
+                    <p>Capacity, monthly output, tariff value, and payback — presented like an asset model.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="shot-panel" data-shot="1">
+                <div>
+                  <div class="label"><span class="dot" style="width:7px;height:7px;box-shadow:none;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(70,245,181,.7))"></span> Scene 02</div>
+                  <div class="panel">
+                    <b>Pergola-grade architecture.</b>
+                    <p>Minimal, structural, intentional — it looks like infrastructure, not a retrofit.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="shot-panel" data-shot="2">
+                <div>
+                  <div class="label"><span class="dot" style="width:7px;height:7px;box-shadow:none;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(118,167,255,.7))"></span> Scene 03</div>
+                  <div class="panel">
+                    <b>Net metering reality (SREDA/BERC).</b>
+                    <p>Exports net against imports monthly at your category's retail tariffs. Credits may carry forward as kWh.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CAPABILITIES -->
+    <section id="capabilities" aria-label="Capabilities">
+      <div class="container">
+        <div class="section-head">
+          <div><h2 class="reveal">End-to-end delivery. One accountable owner.</h2></div>
+          <p class="sub reveal">
+            Netso isn't a panel seller. We deploy income-generating rooftop infrastructure across residential, commercial,
+            and industrial sites in Bangladesh.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V8l8-4 8 4v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 20v-8h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Design & engineering</h3>
+            <p>Pergola geometry, structural planning, and clean rooftop integration.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 5-9 5-9-5 9-5z" stroke="currentColor" stroke-width="2"/><path d="M3 12l9 5 9-5" stroke="currentColor" stroke-width="2"/><path d="M3 17l9 5 9-5" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3>Financing facilitation</h3>
+            <p>Bank/EMI models and B2B invoicing flows with paperwork support.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Grid integration</h3>
+            <p>Net metering readiness, utility coordination, and commissioning discipline.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Compliance & safety</h3>
+            <p>Structural safety, rooftop constraints, and real estate compliance realities.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6 19V5h12v14" stroke="currentColor" stroke-width="2"/><path d="M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Operations & maintenance</h3>
+            <p>Preventive maintenance and performance checks to protect long-term yield.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 15l3-3 2 2 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>ROI clarity</h3>
+            <p>A calculator-first funnel: capacity, output, monthly bill value, payback estimate.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDUSTRIES -->
+    <section id="industries" aria-label="Industries">
+      <div class="container">
+        <div class="section-head">
+          <div><h2 class="reveal">Built for the rooftops Bangladesh actually has.</h2></div>
+          <p class="sub reveal">
+            Residential rooftops, garments and factories, warehouses and logistics, and revenue-positive real estate developments.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card reveal" style="grid-column: span 6; min-height: 210px;">
+            <div class="fine">RESIDENTIAL</div>
+            <h3>Urban homeowners (flat rooftops)</h3>
+            <p>Turn unused roof into shaded usable space + monthly bill value via net metering.</p>
+          </article>
+
+          <article class="card reveal" style="grid-column: span 6; min-height: 210px;">
+            <div class="fine">GARMENTS / FACTORIES</div>
+            <h3>Factory & warehouse owners</h3>
+            <p>Designed for scale: structural planning, higher loads, and long-horizon yield.</p>
+          </article>
+
+          <article class="card reveal" style="grid-column: span 6; min-height: 210px;">
+            <div class="fine">COMMERCIAL</div>
+            <h3>Commercial buildings</h3>
+            <p>Add a revenue-positive infrastructure layer to your building's balance sheet.</p>
+          </article>
+
+          <article class="card reveal" style="grid-column: span 6; min-height: 210px;">
+            <div class="fine">DEVELOPERS</div>
+            <h3>Real estate developers</h3>
+            <p>Integrate income infrastructure as a premium amenity — and a monetizable asset.</p>
+          </article>
+        </div>
+
+        <div id="assessment" style="margin-top:14px"></div>
+
+        <div class="fine reveal" style="margin-top:16px">
+          Free site assessment available in Dhaka/nearby zones. For factories/developers, ask for a portfolio deployment plan.
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section id="calculator" aria-label="Rooftop Income Calculator">
+      <div class="container">
+        <div class="section-head">
+          <div><h2 class="reveal" data-i18n="calc.h2">Calculate your rooftop income.</h2></div>
+          <p class="sub reveal" data-i18n="calc.sub">
+            This models SREDA net-metering as bill value using BERC retail tariffs (slabs / TOU).
+            Conservative by design. Verify your category and latest tariffs via your utility bill / BERC updates.
+          </p>
+        </div>
+
+        <div class="calc-layout">
+          <div>
+            <div class="grid">
+              <article class="card reveal" style="grid-column: span 12; min-height:auto;">
+                <div class="fine">TARIFF BASIS (SREDA)</div>
+                <p>
+                  Exports are netted against imports monthly at your consumer category's retail tariffs.
+                  There's no separate buyback rate. Excess typically carries forward as kWh credit.
+                </p>
+              </article>
+
+              <article class="card reveal" style="grid-column: span 12; min-height:auto;">
+                <div class="fine">DEMAND CHARGES</div>
+                <p>
+                  Demand charges (kVA) are not included in savings (they may not reduce 1:1 with solar).
+                  This calculator focuses on energy (kWh) value.
+                </p>
+              </article>
+
+              <article class="card reveal" style="grid-column: span 12; min-height:auto;">
+                <div class="fine">WHAT YOU'RE BUYING</div>
+                <p>
+                  Not panels. An income-grade rooftop asset: pergola architecture + approvals + grid + long-term O&M.
+                </p>
+              </article>
+            </div>
+          </div>
+
+          <div class="calc-sticky">
+            <div class="calc-card reveal">
+              <div class="calc-inner">
+                <div class="kicker" style="display:inline-flex; margin-bottom:12px;">
+                  <span class="dot" aria-hidden="true"></span>
+                  <span data-i18n="calc.kicker">Rooftop Income Model — Bangladesh</span>
+                </div>
+
+                <div class="form" aria-label="Calculator form">
+                  <div>
+                    <label for="segment" data-i18n="calc.segment">Tariff category</label>
+                    <select id="segment" class="field">
+                      <option value="res">Residential (LT-A)</option>
+                      <option value="com">Commercial (LT-E)</option>
+                      <option value="indSmall">Industrial Small (LT-C1)</option>
+                      <option value="indMTH">Industrial Medium/High (MT/HT, avg)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="model" data-i18n="calc.model">Model</label>
+                    <select id="model" class="field">
+                      <option value="net">Net metering (bill value)</option>
+                      <option value="offtake">Power offtake (cash rate)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="roofArea" data-i18n="calc.roof">Rooftop area (sqft)</label>
+                    <input id="roofArea" class="field" type="number" inputmode="numeric" value="2000" min="200" />
+                  </div>
+
+                  <div>
+                    <label for="util" data-i18n="calc.util">Usable roof (%)</label>
+                    <input id="util" class="field" type="number" inputmode="numeric" value="70" min="30" max="95" />
+                  </div>
+
+                  <div>
+                    <label for="usageKwh" data-i18n="calc.usage">Your monthly grid use (kWh)</label>
+                    <input id="usageKwh" class="field" type="number" inputmode="numeric" value="250" min="20" />
+                  </div>
+
+                  <div>
+                    <label for="kwhPerKw" data-i18n="calc.kwhkw">kWh per kW / month</label>
+                    <input id="kwhPerKw" class="field" type="number" inputmode="numeric" value="120" min="80" max="170" />
+                  </div>
+
+                  <!-- TOU fields (Commercial/Industrial small only) -->
+                  <div id="touWrap1" class="hidden">
+                    <label for="peakShare" data-i18n="calc.peakShare">Peak share of your use (%)</label>
+                    <input id="peakShare" class="field" type="number" inputmode="numeric" value="30" min="0" max="100" />
+                  </div>
+
+                  <div id="touWrap2" class="hidden">
+                    <label for="solarPeakCredit" data-i18n="calc.solarPeak">Solar credited as peak (%)</label>
+                    <input id="solarPeakCredit" class="field" type="number" inputmode="numeric" value="0" min="0" max="100" />
+                  </div>
+
+                  <!-- Avg tariff for MT/HT (varies) -->
+                  <div id="avgTariffWrap" class="hidden">
+                    <label for="avgTariff" data-i18n="calc.avgTariff">Average tariff (BDT/kWh)</label>
+                    <input id="avgTariff" class="field" type="number" inputmode="decimal" value="11.0" min="1" step="0.1" />
+                  </div>
+
+                  <!-- Offtake rate if not net metering -->
+                  <div id="offtakeWrap" class="hidden">
+                    <label for="offtakeRate" data-i18n="calc.offtake">Offtake rate (BDT/kWh)</label>
+                    <input id="offtakeRate" class="field" type="number" inputmode="decimal" value="10.0" min="1" step="0.1" />
+                  </div>
+
+                  <div>
+                    <label for="costPerKw" data-i18n="calc.cost">Cost per kW (BDT)</label>
+                    <input id="costPerKw" class="field" type="number" inputmode="numeric" value="135000" min="60000" step="1000" />
+                  </div>
+
+                  <div class="rowSpan2">
+                    <label for="notes" data-i18n="calc.notes">Notes (optional)</label>
+                    <input id="notes" class="field" type="text" placeholder="e.g., Dhaka, partial shade, top floor" />
+                  </div>
+                </div>
+
+                <div class="calc-actions">
+                  <button class="btn primary" id="btnCalc" type="button" data-i18n="calc.btn">Calculate</button>
+                  <a class="btn" href="tel:+8801791222777" data-i18n="calc.call">Call</a>
+                  <a class="btn" id="btnWhatsApp" href="#" data-i18n="calc.wa">Send on WhatsApp</a>
+                </div>
+
+                <div class="results" aria-label="Calculator results">
+                  <div class="rgrid">
+                    <div class="pill">
+                      <div class="k" data-i18n="r.kw.k">Suggested capacity</div>
+                      <div class="v"><span id="rKw">—</span> kW</div>
+                    </div>
+                    <div class="pill">
+                      <div class="k" data-i18n="r.kwh.k">Monthly generation</div>
+                      <div class="v"><span id="rKwh">—</span> kWh</div>
+                    </div>
+                    <div class="pill">
+                      <div class="k" data-i18n="r.value.k">Monthly value</div>
+                      <div class="v gold"><span id="rMonthly">—</span></div>
+                    </div>
+                    <div class="pill">
+                      <div class="k" data-i18n="r.payback.k">Simple payback</div>
+                      <div class="v"><span id="rPayback">—</span></div>
+                    </div>
+                    <div class="pill">
+                      <div class="k" data-i18n="r.eff.k">Effective value</div>
+                      <div class="v"><span id="rEff">—</span></div>
+                    </div>
+                    <div class="pill">
+                      <div class="k" data-i18n="r.excess.k">Excess export</div>
+                      <div class="v"><span id="rExcess">—</span> kWh</div>
+                    </div>
+                  </div>
+
+                  <div class="disclaimer" data-i18n="calc.disclaimer">
+                    Based on BERC slabs/TOU (early 2024 values). Verify via your utility bill / BERC updates.
+                    Excess export is shown as kWh credit; cash payout depends on policy and agreements.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fine reveal" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <img src="assets/netso-technician.jpg" alt="Netso team member at a rooftop project" width="36" height="36"
+                   style="border-radius:999px; border:1px solid rgba(255,255,255,.12); object-fit:cover;" loading="lazy" decoding="async">
+              <span>WhatsApp: <a href="https://wa.me/8801791222777" target="_blank" rel="noopener" style="color: rgba(255,176,0,.92)">+8801791222777</a></span>
+              <span>•</span>
+              <span>Email: <a href="mailto:hello@netso.bd" style="color: rgba(70,245,181,.9)">hello@netso.bd</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="cta" aria-label="Final CTA">
+      <div class="container">
+        <div class="cta-box">
+          <div class="cta-inner">
+            <div>
+              <h2 class="reveal" data-i18n="final.h2">Deploy rooftop income infrastructure—properly.</h2>
+              <p class="reveal" style="margin:0; color: var(--muted); line-height:1.6; font-size: var(--p); max-width: 70ch;" data-i18n="final.p">
+                If you're a factory, warehouse, or developer, partner with Netso for a repeatable deployment system:
+                engineering discipline, approvals, and long-term maintenance.
+              </p>
+              <p class="fine reveal" style="margin-top:10px;" data-i18n="final.loc">
+                Dhaka, Bangladesh • Net metering-ready • Pergola-based architecture
+              </p>
+            </div>
+
+            <div class="cta-actions">
+              <a class="btn primary reveal" href="#calculator" data-i18n="final.primary">Calculate Rooftop Income</a>
+              <a class="btn reveal" href="#top" data-i18n="final.top">Back to top</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer aria-label="Footer">
+      <div class="container foot">
+        <div>© <span id="year"></span> Netso. <span data-i18n="foot.rights">All rights reserved.</span></div>
+        <div data-i18n="foot.tag">Infrastructure-grade • ROI-first • Bangladesh-native</div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // -----------------------------
+    // i18n (key UI only; EN-first)
+    // -----------------------------
+    const I18N = {
+      en: {
+        "nav.subtitle":"Income Infrastructure",
+        "nav.story":"Story","nav.capabilities":"Capabilities","nav.industries":"Industries","nav.calculator":"Calculator",
+        "cta.partner":"Partner","cta.calc":"Calculate Rooftop Income",
+        "hero.kicker":"Asset-first solar • Net metering • Bangladesh-native execution",
+        "hero.h1":"Your rooftop can earn you money.<br/>We build the infrastructure to make it happen.",
+        "hero.lead":"Solar pergolas designed to generate power, income, and long-term asset value — including design, engineering, financing facilitation, installation, grid integration, and maintenance.",
+        "hero.primary":"Calculate Your Rooftop Income","hero.secondary":"Book a Free Site Assessment",
+        "hero.scroll":"Scroll to see how income infrastructure works",
+        "hero.chip1":"Dhaka • Chattogram • Gazipur",
+        "hero.chip2":"রুফটপ → আয়",
+        "hero.m1k":"POSITIONING","hero.m1v":"Returns, not <span>kilowatts</span>",
+        "hero.m2k":"DELIVERY","hero.m2v":"Design → Grid → <span>Cashflow</span>",
+
+        "calc.h2":"Calculate your rooftop income.",
+        "calc.sub":"This models SREDA net-metering as bill value using BERC retail tariffs (slabs / TOU). Conservative by design. Verify your category and latest tariffs via your utility bill / BERC updates.",
+        "calc.kicker":"Rooftop Income Model — Bangladesh",
+        "calc.segment":"Tariff category",
+        "calc.model":"Model",
+        "calc.roof":"Rooftop area (sqft)",
+        "calc.util":"Usable roof (%)",
+        "calc.usage":"Your monthly grid use (kWh)",
+        "calc.kwhkw":"kWh per kW / month",
+        "calc.peakShare":"Peak share of your use (%)",
+        "calc.solarPeak":"Solar credited as peak (%)",
+        "calc.avgTariff":"Average tariff (BDT/kWh)",
+        "calc.offtake":"Offtake rate (BDT/kWh)",
+        "calc.cost":"Cost per kW (BDT)",
+        "calc.notes":"Notes (optional)",
+        "calc.btn":"Calculate",
+        "calc.call":"Call",
+        "calc.wa":"Send on WhatsApp",
+
+        "r.kw.k":"Suggested capacity",
+        "r.kwh.k":"Monthly generation",
+        "r.value.k":"Monthly value",
+        "r.payback.k":"Simple payback",
+        "r.eff.k":"Effective value",
+        "r.excess.k":"Excess export",
+        "calc.disclaimer":"Based on BERC slabs/TOU (early 2024 values). Verify via your utility bill / BERC updates. Excess export is shown as kWh credit; cash payout depends on policy and agreements.",
+
+        "final.h2":"Deploy rooftop income infrastructure—properly.",
+        "final.p":"If you're a factory, warehouse, or developer, partner with Netso for a repeatable deployment system: engineering discipline, approvals, and long-term maintenance.",
+        "final.loc":"Dhaka, Bangladesh • Net metering-ready • Pergola-based architecture",
+        "final.primary":"Calculate Rooftop Income",
+        "final.top":"Back to top",
+
+        "foot.rights":"All rights reserved.",
+        "foot.tag":"Infrastructure-grade • ROI-first • Bangladesh-native"
+      },
+      bn: {
+        "nav.subtitle":"ইনকাম ইনফ্রাস্ট্রাকচার",
+        "nav.story":"স্টোরি","nav.capabilities":"সেবা","nav.industries":"ইন্ডাস্ট্রি","nav.calculator":"ক্যালকুলেটর",
+        "cta.partner":"পার্টনার","cta.calc":"ছাদের আয় হিসাব করুন",
+        "hero.kicker":"অ্যাসেট-ফার্স্ট সোলার • নেট মিটারিং • বাংলাদেশে এক্সিকিউশন",
+        "hero.h1":"আপনার ছাদ আয় করতে পারে।<br/>আমরা সেটাকে বাস্তবে রূপ দিই।",
+        "hero.lead":"পাওয়ার, আয় এবং দীর্ঘমেয়াদি অ্যাসেট ভ্যালুর জন্য ডিজাইন করা সোলার পার্গোলা — ডিজাইন, ইঞ্জিনিয়ারিং, ফাইন্যান্সিং সহায়তা, ইনস্টলেশন, গ্রিড ইন্টিগ্রেশন এবং মেইনটেন্যান্সসহ।",
+        "hero.primary":"ছাদের আয় হিসাব করুন","hero.secondary":"ফ্রি সাইট অ্যাসেসমেন্ট বুক করুন",
+        "hero.scroll":"স্ক্রল করে দেখুন কীভাবে ইনকাম ইনফ্রাস্ট্রাকচার কাজ করে",
+        "hero.chip1":"ঢাকা • চট্টগ্রাম • গাজীপুর",
+        "hero.chip2":"রুফটপ → আয়",
+        "hero.m1k":"পজিশনিং","hero.m1v":"কিলোওয়াট নয়, <span>রিটার্ন</span>",
+        "hero.m2k":"ডেলিভারি","hero.m2v":"ডিজাইন → গ্রিড → <span>ক্যাশফ্লো</span>",
+
+        "calc.h2":"আপনার ছাদের আয় হিসাব করুন।",
+        "calc.sub":"এটি SREDA নেট-মিটারিংকে BERC রিটেইল ট্যারিফ (স্ল্যাব/TOU) অনুযায়ী বিল ভ্যালু হিসেবে মডেল করে। কনজারভেটিভ। আপনার বিল/BERC আপডেট দেখে নিশ্চিত করুন।",
+        "calc.kicker":"রুফটপ ইনকাম মডেল — বাংলাদেশ",
+        "calc.segment":"ট্যারিফ ক্যাটাগরি",
+        "calc.model":"মডেল",
+        "calc.roof":"ছাদের আয়তন (sqft)",
+        "calc.util":"ব্যবহারযোগ্য ছাদ (%)",
+        "calc.usage":"আপনার মাসিক ব্যবহার (kWh)",
+        "calc.kwhkw":"প্রতি kW মাসিক kWh",
+        "calc.peakShare":"পিক আওয়ার ব্যবহার (%)",
+        "calc.solarPeak":"সোলার পিক ক্রেডিট (%)",
+        "calc.avgTariff":"এভারেজ ট্যারিফ (BDT/kWh)",
+        "calc.offtake":"অফটেক রেট (BDT/kWh)",
+        "calc.cost":"প্রতি kW খরচ (BDT)",
+        "calc.notes":"নোট (ঐচ্ছিক)",
+        "calc.btn":"হিসাব করুন",
+        "calc.call":"কল",
+        "calc.wa":"WhatsApp-এ পাঠান",
+
+        "r.kw.k":"প্রস্তাবিত ক্যাপাসিটি",
+        "r.kwh.k":"মাসিক জেনারেশন",
+        "r.value.k":"মাসিক ভ্যালু",
+        "r.payback.k":"সিম্পল পে-ব্যাক",
+        "r.eff.k":"ইফেক্টিভ ভ্যালু",
+        "r.excess.k":"অতিরিক্ত এক্সপোর্ট",
+        "calc.disclaimer":"BERC (early 2024) স্ল্যাব/TOU অনুযায়ী। আপনার বিল/BERC আপডেট দেখে নিশ্চিত করুন। অতিরিক্ত এক্সপোর্ট kWh ক্রেডিট হিসেবে দেখানো—ক্যাশ পেআউট পলিসি/এগ্রিমেন্টের ওপর নির্ভর করে।",
+
+        "final.h2":"রুফটপ ইনকাম ইনফ্রাস্ট্রাকচার — প্রপারভাবে ডিপ্লয় করুন।",
+        "final.p":"আপনি যদি ফ্যাক্টরি, ওয়্যারহাউস বা ডেভেলপার হন—Netso-এর সাথে পার্টনার করুন: ইঞ্জিনিয়ারিং ডিসিপ্লিন, অ্যাপ্রুভাল, এবং লং-টার্ম মেইনটেন্যান্সসহ।",
+        "final.loc":"ঢাকা, বাংলাদেশ • নেট মিটারিং-রেডি • পার্গোলা আর্কিটেকচার",
+        "final.primary":"ছাদের আয় হিসাব করুন",
+        "final.top":"উপরে যান",
+
+        "foot.rights":"সর্বস্বত্ব সংরক্ষিত।",
+        "foot.tag":"ইনফ্রাস্ট্রাকচার-গ্রেড • ROI-ফার্স্ট • বাংলাদেশে বিল্ট"
+      }
+    };
+
+    function setLang(lang){
+      document.documentElement.setAttribute('data-lang', lang);
+      document.documentElement.lang = lang === 'bn' ? 'bn' : 'en';
+      document.getElementById('langEN').classList.toggle('active', lang === 'en');
+      document.getElementById('langBN').classList.toggle('active', lang === 'bn');
+
+      const dict = I18N[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const k = el.getAttribute('data-i18n');
+        if (dict && dict[k] != null) el.innerHTML = dict[k];
+      });
+
+      // Update select labels
+      const seg = document.getElementById('segment');
+      const segLabels = {
+        en: {res:"Residential (LT-A)", com:"Commercial (LT-E)", indSmall:"Industrial Small (LT-C1)", indMTH:"Industrial Medium/High (MT/HT, avg)"},
+        bn: {res:"রেসিডেনশিয়াল (LT-A)", com:"কমার্শিয়াল (LT-E)", indSmall:"ইন্ডাস্ট্রিয়াল স্মল (LT-C1)", indMTH:"ইন্ডাস্ট্রিয়াল (MT/HT, এভারেজ)"}
+      };
+      [...seg.options].forEach(opt=> opt.textContent = segLabels[lang]?.[opt.value] || opt.textContent);
+
+      const model = document.getElementById('model');
+      const modelLabels = {
+        en: {net:"Net metering (bill value)", offtake:"Power offtake (cash rate)"},
+        bn: {net:"নেট মিটারিং (বিল ভ্যালু)", offtake:"পাওয়ার অফটেক (ক্যাশ রেট)"}
+      };
+      [...model.options].forEach(opt=> opt.textContent = modelLabels[lang]?.[opt.value] || opt.textContent);
+
+      calculate(true);
+    }
+    document.getElementById('langEN').addEventListener('click', ()=>setLang('en'));
+    document.getElementById('langBN').addEventListener('click', ()=>setLang('bn'));
+
+    // -----------------------------
+    // Motion
+    // -----------------------------
+    gsap.registerPlugin(ScrollTrigger);
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReduced) {
+      ScrollTrigger.batch(".reveal", {
+        start: "top 85%",
+        onEnter: (batch) => gsap.to(batch, {
+          opacity: 1, y: 0,
+          duration: 0.9,
+          ease: "power2.out",
+          stagger: 0.08
+        })
+      });
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+    }
+
+    // Pinned story (steps + panels + images)
+    (function cinema(){
+      const pin = document.getElementById('cinemaPin');
+      const steps = gsap.utils.toArray('.step');
+      const panels = gsap.utils.toArray('.shot-panel');
+      const imgs = gsap.utils.toArray('.shot-img');
+
+      if (!pin || prefersReduced) {
+        if (panels[0]) { panels[0].style.opacity = 1; panels[0].style.transform = 'none'; }
+        if (imgs[0]) { imgs[0].style.opacity = 1; imgs[0].style.transform = 'none'; }
+        steps.forEach((s,i)=>{ if(i===0){ s.style.opacity=1; s.style.transform='none'; }});
+        return;
+      }
+
+      gsap.set(panels, { opacity: 0, y: 18, scale: 0.99 });
+      gsap.set(imgs, { opacity: 0, scale: 1.04 });
+      gsap.set(steps, { opacity: 0.55, y: 6 });
+
+      gsap.set(panels[0], { opacity: 1, y: 0, scale: 1 });
+      gsap.set(imgs[0], { opacity: 1 });
+      gsap.set(steps[0], { opacity: 1, y: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pin,
+          start: "top top",
+          end: "+=2600",
+          scrub: true,
+          pin: true,
+          anticipatePin: 1
+        }
+      });
+
+      function cut(i, at){
+        const prev = Math.max(0, i-1);
+        tl.to(panels[prev], { opacity: 0, y: -10, scale: 0.995, duration: 0.35, ease:"power2.inOut" }, at);
+        tl.to(imgs[prev], { opacity: 0, duration: 0.35, ease:"power2.inOut" }, at);
+        tl.to(steps[prev], { opacity: 0.55, y: 6, duration: 0.35, ease:"power2.inOut" }, at);
+
+        tl.to(imgs[i], { opacity: 1, duration: 0.55, ease:"power2.out" }, at + 0.08);
+        tl.to(panels[i], { opacity: 1, y: 0, scale: 1, duration: 0.55, ease:"power2.out" }, at + 0.10);
+        tl.to(steps[i], { opacity: 1, y: 0, duration: 0.55, ease:"power2.out" }, at + 0.10);
+      }
+
+      cut(1, 0.9);
+      cut(2, 1.8);
+    })();
+
+    // -----------------------------
+    // Calculator: SREDA/BERC logic
+    // -----------------------------
+    const $ = (id)=>document.getElementById(id);
+
+    // Residential LT-A slabs (BDT/kWh) per your early-2024 values
+    const RES_SLABS = [
+      { upto: 50, rate: 4.63 },
+      { upto: 75, rate: 5.26 },
+      { upto: 200, rate: 7.20 },
+      { upto: 300, rate: 7.59 },
+      { upto: 400, rate: 8.02 },
+      { upto: 600, rate: 12.67 },
+      { upto: Infinity, rate: 14.61 }
+    ];
+
+    // TOU tariffs (BDT/kWh) per your early-2024 values
+    const TOU = {
+      com: { peak: 15.62, off: 11.71, demandPerKva: 90 },
+      indSmall: { peak: 12.95, off: 9.68, demandPerKva: 48 }
+    };
+
+    const WHATSAPP_NUMBER = "8801791222777";
+
+    const DEFAULTS = {
+      res: { roofArea: 2000, util: 70, usageKwh: 250, kwhPerKw: 120, costPerKw: 135000 },
+      com: { roofArea: 10000, util: 75, usageKwh: 6000, peakShare: 35, solarPeakCredit: 0, kwhPerKw: 120, costPerKw: 140000 },
+      indSmall: { roofArea: 20000, util: 80, usageKwh: 20000, peakShare: 30, solarPeakCredit: 0, kwhPerKw: 125, costPerKw: 145000 },
+      indMTH: { roofArea: 30000, util: 80, usageKwh: 40000, avgTariff: 11.0, kwhPerKw: 125, costPerKw: 145000 }
+    };
+
+    function lang(){ return document.documentElement.getAttribute('data-lang') || 'en'; }
+
+    function fmtNum(n, digits=0){
+      const locale = lang()==='bn' ? 'bn-BD' : 'en-BD';
+      return new Intl.NumberFormat(locale, { maximumFractionDigits: digits, minimumFractionDigits: digits }).format(n);
+    }
+    function fmtBDT(n){
+      const locale = lang()==='bn' ? 'bn-BD' : 'en-BD';
+      try{ return new Intl.NumberFormat(locale, { style:'currency', currency:'BDT', maximumFractionDigits:0 }).format(n); }
+      catch(e){ return `BDT ${Math.round(n).toLocaleString(locale)}`; }
+    }
+    function fmtBDTPerKwh(n){
+      const locale = lang()==='bn' ? 'bn-BD' : 'en-BD';
+      return `${new Intl.NumberFormat(locale, { maximumFractionDigits:2 }).format(n)} BDT/kWh`;
+    }
+
+    function slabCost(kwh){
+      let remaining = Math.max(0, kwh);
+      let prev = 0;
+      let cost = 0;
+      for (const s of RES_SLABS){
+        const cap = (s.upto === Infinity) ? remaining : Math.max(0, s.upto - prev);
+        const used = Math.min(remaining, cap);
+        cost += used * s.rate;
+        remaining -= used;
+        prev = s.upto;
+        if (remaining <= 1e-9) break;
+      }
+      return cost;
+    }
+
+    function updateSegmentUI(){
+      const seg = $('segment').value;
+      const m = $('model').value;
+
+      const isTOU = (seg === 'com' || seg === 'indSmall');
+      const isAvg = (seg === 'indMTH');
+
+      $('touWrap1').classList.toggle('hidden', !isTOU);
+      $('touWrap2').classList.toggle('hidden', !isTOU);
+
+      $('avgTariffWrap').classList.toggle('hidden', !isAvg);
+
+      $('offtakeWrap').classList.toggle('hidden', m !== 'offtake');
+
+      // Adjust usage defaults when switching segments (only if user hasn't touched much)
+      const d = DEFAULTS[seg];
+      if (!d) return;
+
+      $('roofArea').value = d.roofArea;
+      $('util').value = d.util;
+      $('usageKwh').value = d.usageKwh;
+      $('kwhPerKw').value = d.kwhPerKw;
+      $('costPerKw').value = d.costPerKw;
+
+      if (isTOU){
+        $('peakShare').value = d.peakShare;
+        $('solarPeakCredit').value = d.solarPeakCredit;
+      }
+      if (isAvg){
+        $('avgTariff').value = d.avgTariff;
+      }
+    }
+
+    function segmentLabel(seg){
+      const labels = {
+        en: { res:"Residential (LT-A)", com:"Commercial (LT-E)", indSmall:"Industrial Small (LT-C1)", indMTH:"Industrial (MT/HT avg)" },
+        bn: { res:"রেসিডেনশিয়াল (LT-A)", com:"কমার্শিয়াল (LT-E)", indSmall:"ইন্ডাস্ট্রিয়াল স্মল (LT-C1)", indMTH:"ইন্ডাস্ট্রিয়াল (MT/HT এভারেজ)" }
+      };
+      return labels[lang()]?.[seg] || seg;
+    }
+
+    function updateWhatsAppLink(payload){
+      const isBN = lang()==='bn';
+      const text = isBN
+        ? `Netso রুফটপ এস্টিমেট:\nক্যাটাগরি: ${payload.segLabel}\nমাসিক ব্যবহার: ${payload.usageKwh} kWh\nআনুমানিক সিস্টেম: ${payload.kw} kW\nমাসিক জেনারেশন: ${payload.genKwh} kWh\nমাসিক ভ্যালু: ${fmtBDT(payload.monthlyValue)}\nইফেক্টিভ ভ্যালু: ${fmtBDTPerKwh(payload.effRate)}\nঅতিরিক্ত এক্সপোর্ট: ${payload.excessKwh} kWh\nপে-ব্যাক: ${payload.paybackStr}\nনোট: ${$('notes').value || '—'}`
+        : `Netso rooftop estimate:\nCategory: ${payload.segLabel}\nMonthly use: ${payload.usageKwh} kWh\nEstimated system: ${payload.kw} kW\nMonthly generation: ${payload.genKwh} kWh\nMonthly value: ${fmtBDT(payload.monthlyValue)}\nEffective value: ${fmtBDTPerKwh(payload.effRate)}\nExcess export: ${payload.excessKwh} kWh\nPayback: ${payload.paybackStr}\nNotes: ${$('notes').value || '—'}`;
+
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      $('btnWhatsApp').href = url;
+      $('btnWhatsApp').target = "_blank";
+      $('btnWhatsApp').rel = "noopener";
+    }
+
+    function calculate(silent=false){
+      const seg = $('segment').value;
+      const model = $('model').value;
+
+      const roofArea = Math.max(0, parseFloat($('roofArea').value || 0));
+      const util = Math.min(95, Math.max(30, parseFloat($('util').value || 0)));
+      const usageKwh = Math.max(0, parseFloat($('usageKwh').value || 0));
+      const kwhPerKw = Math.max(60, parseFloat($('kwhPerKw').value || 0));
+      const costPerKw = Math.max(1, parseFloat($('costPerKw').value || 0));
+      const avgTariff = Math.max(1, parseFloat($('avgTariff').value || 0));
+      const offtakeRate = Math.max(1, parseFloat($('offtakeRate').value || 0));
+
+      // Capacity estimate (pergola, conservative)
+      const usableSqft = roofArea * (util/100);
+      const sqftPerKw = 110;
+      let kw = usableSqft / sqftPerKw;
+      kw = Math.max(1, Math.min(kw, 5000));
+      const kwD = Math.round(kw*10)/10;
+
+      const genKwh = Math.round(kw * kwhPerKw);
+
+      let monthlyValue = 0;
+      let excessKwh = Math.max(0, genKwh - usageKwh);
+
+      // value per kWh actually realized this month
+      let realizedKwh = Math.max(0, Math.min(genKwh, usageKwh));
+      let effRate = 0;
+
+      if (model === 'offtake'){
+        monthlyValue = genKwh * offtakeRate;
+        excessKwh = 0;
+        realizedKwh = genKwh;
+        effRate = offtakeRate;
+      } else {
+        // Net metering bill value
+        if (seg === 'res'){
+          const baseline = slabCost(usageKwh);
+          const post = slabCost(Math.max(0, usageKwh - genKwh));
+          monthlyValue = Math.max(0, baseline - post);
+          realizedKwh = Math.min(genKwh, usageKwh);
+          effRate = realizedKwh > 0 ? (monthlyValue / realizedKwh) : 0;
+
+          // excess export shown as kWh credit (carry forward)
+          excessKwh = Math.max(0, genKwh - usageKwh);
+        }
+        else if (seg === 'com' || seg === 'indSmall'){
+          const peakShare = Math.min(100, Math.max(0, parseFloat($('peakShare').value || 0))) / 100;
+          const solarPeakCredit = Math.min(100, Math.max(0, parseFloat($('solarPeakCredit').value || 0))) / 100;
+
+          const rates = (seg === 'com') ? TOU.com : TOU.indSmall;
+
+          const peakUse = usageKwh * peakShare;
+          const offUse = usageKwh - peakUse;
+
+          // allocation of solar to peak vs off (conservative default solarPeakCredit = 0)
+          const genPeak = genKwh * solarPeakCredit;
+          const genOff = genKwh - genPeak;
+
+          const usedPeak = Math.min(peakUse, genPeak);
+          const usedOff = Math.min(offUse, genOff);
+
+          monthlyValue = usedPeak * rates.peak + usedOff * rates.off;
+          realizedKwh = usedPeak + usedOff;
+          effRate = realizedKwh > 0 ? (monthlyValue / realizedKwh) : 0;
+
+          excessKwh = Math.max(0, genKwh - realizedKwh);
+        }
+        else if (seg === 'indMTH'){
+          // MT/HT schedules vary → avg tariff input
+          const used = Math.min(genKwh, usageKwh);
+          monthlyValue = used * avgTariff;
+          realizedKwh = used;
+          effRate = avgTariff;
+          excessKwh = Math.max(0, genKwh - used);
+        }
+      }
+
+      const totalCost = kw * costPerKw;
+      const annualValue = monthlyValue * 12;
+      const paybackYears = annualValue > 0 ? (totalCost / annualValue) : Infinity;
+
+      const paybackStr = Number.isFinite(paybackYears)
+        ? (paybackYears < 1
+            ? `${fmtNum(paybackYears*12, 1)} ${lang()==='bn'?'মাস':'months'}`
+            : `${fmtNum(paybackYears, 1)} ${lang()==='bn'?'বছর':'years'}`
+          )
+        : (lang()==='bn' ? '—' : '—');
+
+      const rKw = $('rKw'), rKwh = $('rKwh'), rMonthly = $('rMonthly'), rPayback = $('rPayback'), rEff = $('rEff'), rExcess = $('rExcess');
+
+      if (prefersReduced || silent){
+        rKw.textContent = fmtNum(kwD, 1);
+        rKwh.textContent = fmtNum(genKwh, 0);
+        rMonthly.textContent = fmtBDT(monthlyValue);
+        rPayback.textContent = paybackStr;
+        rEff.textContent = effRate > 0 ? fmtBDTPerKwh(effRate) : (lang()==='bn' ? '—' : '—');
+        rExcess.textContent = fmtNum(excessKwh, 0);
+      } else {
+        const state = {
+          kw: parseFloat(rKw.getAttribute('data-v') || 0),
+          kwh: parseFloat(rKwh.getAttribute('data-v') || 0),
+          monthly: parseFloat(rMonthly.getAttribute('data-v') || 0),
+          excess: parseFloat(rExcess.getAttribute('data-v') || 0)
+        };
+
+        gsap.to(state, {
+          kw: kwD,
+          kwh: genKwh,
+          monthly: monthlyValue,
+          excess: excessKwh,
+          duration: 0.7,
+          ease: "power2.out",
+          onUpdate: ()=>{
+            rKw.textContent = fmtNum(state.kw, 1);
+            rKwh.textContent = fmtNum(state.kwh, 0);
+            rMonthly.textContent = fmtBDT(state.monthly);
+            rExcess.textContent = fmtNum(state.excess, 0);
+          },
+          onComplete: ()=>{
+            rKw.setAttribute('data-v', String(kwD));
+            rKwh.setAttribute('data-v', String(genKwh));
+            rMonthly.setAttribute('data-v', String(monthlyValue));
+            rExcess.setAttribute('data-v', String(excessKwh));
+          }
+        });
+
+        rPayback.textContent = paybackStr;
+        rEff.textContent = effRate > 0 ? fmtBDTPerKwh(effRate) : (lang()==='bn' ? '—' : '—');
+      }
+
+      updateWhatsAppLink({
+        segLabel: segmentLabel(seg),
+        usageKwh: Math.round(usageKwh),
+        kw: kwD,
+        genKwh,
+        monthlyValue,
+        effRate,
+        excessKwh: Math.round(excessKwh),
+        paybackStr
+      });
+    }
+
+    function bind(){
+      $('segment').addEventListener('change', ()=>{ updateSegmentUI(); calculate(true); });
+      $('model').addEventListener('change', ()=>{ updateSegmentUI(); calculate(true); });
+      $('btnCalc').addEventListener('click', ()=>calculate());
+
+      ['roofArea','util','usageKwh','kwhPerKw','peakShare','solarPeakCredit','avgTariff','offtakeRate','costPerKw','notes'].forEach(id=>{
+        const el = $(id);
+        if (!el) return;
+        el.addEventListener('input', ()=>calculate(true));
+      });
+    }
+
+    bind();
+    updateSegmentUI();
+    calculate(true);
+  </script>
+</body>
+</html>
+    
+    <!-- Add these meta tags if missing -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e85d04'/%3E%3Cpath d='M30 30 L70 50 L30 70 Z' fill='white'/%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com ">
+    <link rel="preconnect" href="https://fonts.gstatic.com " crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300 ;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js "></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js "></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest "></script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --accent: #e85d04;
+            --accent-soft: #f48c06;
+            --border: #262626;
+            --border-light: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg '%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--text-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease, background 0.15s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            transform: scale(2.5);
+            background: var(--text-primary);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            mix-blend-mode: difference;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav.scrolled {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.625rem 1.25rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 2.5rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+        .hero-bg-gradient {
+            position: absolute;
+            top: 20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(232, 93, 4, 0.15) 0%, transparent 70%);
+            filter: blur(60px);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.3;
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title-line span {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .hero-title-accent {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-cta-primary {
+            padding: 1rem 2rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta-primary:hover {
+            background: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-cta-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta-secondary:hover {
+            border-color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: 4rem;
+            right: 2.5rem;
+            display: flex;
+            gap: 4rem;
+            z-index: 1;
+        }
+
+        .hero-stat {
+            text-align: right;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border: 1px solid var(--border);
+            opacity: 0.5;
+        }
+
+        .floating-shape-1 {
+            width: 300px;
+            height: 300px;
+            top: 20%;
+            left: 10%;
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-shape-2 {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            transform: rotate(45deg);
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .floating-shape-3 {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 30%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 8rem 0;
+        }
+
+        .services-grid {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding: 0 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-8px);
+        }
+
+        .service-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .service-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .service-tag {
+            padding: 0.375rem 0.875rem;
+            background: var(--bg-tertiary);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Work Section */
+        .work {
+            padding: 8rem 0;
+        }
+
+        .work-showcase {
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .work-item {
+            position: sticky;
+            top: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 2.5rem;
+        }
+
+        .work-item-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .work-visual {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        .work-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .work-item:hover .work-visual img {
+            transform: scale(1.05);
+        }
+
+        .work-visual-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.8), transparent);
+        }
+
+        .work-content {
+            padding: 2rem 0;
+        }
+
+        .work-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--bg-tertiary);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .work-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .work-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .work-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .work-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .work-meta-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .work-meta-value {
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        .work-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: gap 0.3s ease;
+        }
+
+        .work-link:hover {
+            gap: 1rem;
+        }
+
+        /* Bangladesh Pride Section */
+        .bangladesh {
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bangladesh-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.05;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    #006a4e 0px,
+                    #006a4e 40px,
+                    #f42a41 40px,
+                    #f42a41 80px
+                );
+        }
+
+        .bangladesh-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bangladesh-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .bangladesh-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+        }
+
+        .bangladesh-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .bangladesh-highlight {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .bangladesh-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .bangladesh-stat {
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .bangladesh-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--accent);
+        }
+
+        .bangladesh-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 8rem 0;
+        }
+
+        .process-timeline {
+            max-width: 1000px;
+            margin: 4rem auto 0;
+            padding: 0 2.5rem;
+            position: relative;
+        }
+
+        .process-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--border);
+            transform: translateX(-50%);
+        }
+
+        .process-line-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--accent);
+            height: 0%;
+            transition: height 0.1s linear;
+        }
+
+        .process-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .process-step:nth-child(even) .process-step-content {
+            grid-column: 2;
+        }
+
+        .process-step:nth-child(even) .process-step-visual {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .process-step-dot {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .process-step.active .process-step-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(232, 93, 4, 0.5);
+        }
+
+        .process-step-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--bg-tertiary);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .process-step-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .process-step-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 8rem 0;
+            overflow: hidden;
+        }
+
+        .testimonials-track {
+            display: flex;
+            gap: 2rem;
+            margin-top: 4rem;
+            padding: 0 2.5rem;
+            cursor: grab;
+        }
+
+        .testimonials-track:active {
+            cursor: grabbing;
+        }
+
+        .testimonial-card {
+            flex-shrink: 0;
+            width: 500px;
+            padding: 2.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-4px);
+        }
+
+        .testimonial-quote {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .testimonial-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .testimonial-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-secondary);
+        }
+
+        .cta-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-desc {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .cta-input:focus {
+            border-color: var(--accent);
+        }
+
+        .cta-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social-link {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .footer-social-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .footer-column h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+        }
+
+        .footer-link {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .footer-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .work-item-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .work-visual {
+                aspect-ratio: 16/9;
+            }
+
+            .bangladesh-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .process-step {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .process-step:nth-child(even) .process-step-content,
+            .process-step:nth-child(even) .process-step-visual {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .process-line {
+                left: 1rem;
+            }
+
+            .process-step-dot {
+                left: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 3rem;
+                justify-content: flex-start;
+                gap: 2rem;
+            }
+
+            .hero-stat {
+                text-align: left;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                width: 340px;
+            }
+
+            .cta-form {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .cursor, .cursor-dot {
+                display: none;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Scroll Velocity Skew */
+        .velocity-skew {
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <div class="nav-logo-icon">
+                    <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
+                </div>
+                Netso
+            </div>
+            <div class="loader-bar">
+                <div class="loader-progress" id="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">
+                <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
+            </div>
+            Netso
+        </a>
+        <div class="nav-links">
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#process" class="nav-link">Process</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-cta">Start Project</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-grid"></div>
+            <div class="hero-bg-gradient"></div>
+        </div>
+        
+        <div class="floating-shapes">
+            <div class="floating-shape floating-shape-1"></div>
+            <div class="floating-shape floating-shape-2"></div>
+            <div class="floating-shape floating-shape-3"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Available for projects
+            </div>
+            
+            <h1 class="hero-title font-display">
+                <span class="hero-title-line"><span>Digital experiences</span></span>
+                <span class="hero-title-line"><span>crafted in <span class="hero-title-accent">Bangladesh</span></span></span>
+                <span class="hero-title-line"><span>for the world</span></span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                We build transformative digital products that merge strategic thinking with exceptional design. From Dhaka to global markets.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="#work" class="hero-cta-primary">
+                    View our work
+                    <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                </a>
+                <a href="#contact" class="hero-cta-secondary">
+                    Start a project
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="150">0</div>
+                <div class="hero-stat-label">Projects Delivered</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="50">0</div>
+                <div class="hero-stat-label">Global Clients</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="8">0</div>
+                <div class="hero-stat-label">Years Active</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <p class="section-label">What We Do</p>
+            <h2 class="section-title">Services built for<br>modern challenges</h2>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="smartphone" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Mobile Development</h3>
+                <p class="service-desc">Native and cross-platform applications that deliver seamless experiences across iOS and Android ecosystems.</p>
+                <div class="service-tags">
+                    <span class="service-tag">iOS</span>
+                    <span class="service-tag">Android</span>
+                    <span class="service-tag">Flutter</span>
+                    <span class="service-tag">React Native</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="globe" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Web Platforms</h3>
+                <p class="service-desc">High-performance web applications and marketing sites with cutting-edge technologies and exceptional UX.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Next.js</span>
+                    <span class="service-tag">React</span>
+                    <span class="service-tag">Node.js</span>
+                    <span class="service-tag">AWS</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="palette" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Brand & Design</h3>
+                <p class="service-desc">Strategic brand identity and visual systems that communicate value and create lasting impressions.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Identity</span>
+                    <span class="service-tag">UI/UX</span>
+                    <span class="service-tag">Motion</span>
+                    <span class="service-tag">Strategy</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="cpu" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">AI Integration</h3>
+                <p class="service-desc">Intelligent solutions powered by machine learning and LLMs to automate and enhance business operations.</p>
+                <div class="service-tags">
+                    <span class="service-tag">LLMs</span>
+                    <span class="service-tag">ML</span>
+                    <span class="service-tag">Automation</span>
+                    <span class="service-tag">Analytics</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="shopping-cart" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">E-Commerce</h3>
+                <p class="service-desc">End-to-end commerce solutions with payment integration, inventory management, and conversion optimization.</p>
+                <div class="service-tags">
+                    <span class="service-tag">Shopify</span>
+                    <span class="service-tag">Custom</span>
+                    <span class="service-tag">bKash</span>
+                    <span class="service-tag">Stripe</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i data-lucide="shield-check" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h3 class="service-title">Enterprise Solutions</h3>
+                <p class="service-desc">Scalable systems for large organizations with security, compliance, and performance at their core.</p>
+                <div class="service-tags">
+                    <span class="service-tag">ERP</span>
+                    <span class="service-tag">CRM</span>
+                    <span class="service-tag">Cloud</span>
+                    <span class="service-tag">Security</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section class="work" id="work">
+        <div class="section-header">
+            <p class="section-label">Selected Work</p>
+            <h2 class="section-title">Projects that define<br>our craft</h2>
+        </div>
+        
+        <div class="work-showcase">
+            <div class="work-item" style="background: var(--bg-primary);">
+                <div class="work-item-inner">
+                    <div class="work-visual">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop " alt="Fintech Platform">
+                        <div class="work-visual-overlay"></div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-number">01</div>
+                        <h3 class="work-title">Nagad Digital</h3>
+                        <p class="work-desc">Complete redesign and platform engineering for one of Bangladesh's largest mobile financial services, serving 50M+ users with seamless transaction experiences.</p>
+                        <div class="work-meta">
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Industry</span>
+                                <span class="work-meta-value">Fintech</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Services</span>
+                                <span class="work-meta-value">UX, Engineering</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Year</span>
+                                <span class="work-meta-value">2024</span>
+                            </div>
+                        </div>
+                        <a href="#" class="work-link">
+                            View case study
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="work-item" style="background: var(--bg-secondary);">
+                <div class="work-item-inner">
+                    <div class="work-visual">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&h=800&fit=crop " alt="Healthcare Platform">
+                        <div class="work-visual-overlay"></div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-number">02</div>
+                        <h3 class="work-title">Pulse Health</h3>
+                        <p class="work-desc">Telemedicine platform connecting patients with specialists across Bangladesh, featuring AI-powered symptom checking and real-time consultation.</p>
+                        <div class="work-meta">
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Industry</span>
+                                <span class="work-meta-value">Healthcare</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Services</span>
+                                <span class="work-meta-value">Full Stack, AI</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Year</span>
+                                <span class="work-meta-value">2024</span>
+                            </div>
+                        </div>
+                        <a href="#" class="work-link">
+                            View case study
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="work-item" style="background: var(--bg-primary);">
+                <div class="work-item-inner">
+                    <div class="work-visual">
+                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop " alt="E-commerce Platform">
+                        <div class="work-visual-overlay"></div>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-number">03</div>
+                        <h3 class="work-title">Chaldal Global</h3>
+                        <p class="work-desc">Expansion of Bangladesh's leading grocery platform into international markets with localized experiences and supply chain optimization.</p>
+                        <div class="work-meta">
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Industry</span>
+                                <span class="work-meta-value">E-Commerce</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Services</span>
+                                <span class="work-meta-value">Strategy, Engineering</span>
+                            </div>
+                            <div class="work-meta-item">
+                                <span class="work-meta-label">Year</span>
+                                <span class="work-meta-value">2023</span>
+                            </div>
+                        </div>
+                        <a href="#" class="work-link">
+                            View case study
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bangladesh Pride Section -->
+    <section class="bangladesh" id="about">
+        <div class="bangladesh-bg"></div>
+        <div class="bangladesh-content">
+            <div class="section-header">
+                <p class="section-label">Our Origin</p>
+                <h2 class="section-title">Proudly built in<br>Bangladesh</h2>
+            </div>
+            
+            <div class="bangladesh-grid">
+                <div class="bangladesh-text">
+                    <p>From our headquarters in <span class="bangladesh-highlight">Dhaka's innovation district</span>, we're part of a rapidly evolving tech ecosystem that's transforming how the world sees Bangladesh.</p>
+                    <p>We combine <span class="bangladesh-highlight">global standards</span> with deep local insight—understanding the unique challenges and opportunities of emerging markets while delivering work that competes on any stage.</p>
+                    <p>Our team represents the best of Bangladeshi talent: engineers trained at BUET, designers shaped by local art traditions, strategists who understand both Silicon Valley and Sonargaon.</p>
+                </div>
+                
+                <div class="bangladesh-stats">
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="650">0</div>
+                        <div class="bangladesh-stat-label">Million Population</div>
+                    </div>
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="7">0</div>
+                        <div class="bangladesh-stat-label">% GDP Growth</div>
+                    </div>
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="200">0</div>
+                        <div class="bangladesh-stat-label">Million Internet Users</div>
+                    </div>
+                    <div class="bangladesh-stat">
+                        <div class="bangladesh-stat-value" data-count="15">0</div>
+                        <div class="bangladesh-stat-label">Unicorn Potential</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <div class="section-header">
+            <p class="section-label">How We Work</p>
+            <h2 class="section-title">A proven process for<br>exceptional outcomes</h2>
+        </div>
+        
+        <div class="process-timeline">
+            <div class="process-line">
+                <div class="process-line-progress" id="process-progress"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">01</div>
+                    <h3 class="process-step-title">Discovery & Strategy</h3>
+                    <p class="process-step-desc">Deep immersion into your business, users, and market. We define success metrics, map user journeys, and establish the strategic foundation that guides every decision.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">02</div>
+                    <h3 class="process-step-title">Design & Prototyping</h3>
+                    <p class="process-step-desc">Rapid iteration from wireframes to high-fidelity designs. We build interactive prototypes for user testing, ensuring the solution resonates before a single line of production code.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">03</div>
+                    <h3 class="process-step-title">Engineering & Build</h3>
+                    <p class="process-step-desc">Clean, scalable architecture with modern frameworks. Our engineering team prioritizes performance, security, and maintainability—building systems that grow with your ambition.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+            
+            <div class="process-step">
+                <div class="process-step-dot"></div>
+                <div class="process-step-content">
+                    <div class="process-step-number">04</div>
+                    <h3 class="process-step-title">Launch & Optimize</h3>
+                    <p class="process-step-desc">Measured deployment with comprehensive monitoring. We analyze real user behavior, iterate based on data, and continuously improve the experience post-launch.</p>
+                </div>
+                <div class="process-step-visual"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="section-header">
+            <p class="section-label">Testimonials</p>
+            <h2 class="section-title">Words from those<br>we've worked with</h2>
+        </div>
+        
+        <div class="testimonials-track" id="testimonials-track">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Netso transformed our digital presence completely. Their understanding of both local context and global standards resulted in a platform that outperforms our international competitors."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">TK</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Tanvir Khan</span>
+                        <span class="testimonial-role">CEO, Nagad</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The team's technical depth is matched only by their design sensibility. They built our telemedicine platform in record time without compromising on quality or user experience."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SR</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Dr. Samira Rahman</span>
+                        <span class="testimonial-role">Founder, Pulse Health</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Working with a Bangladeshi team that operates at this level of professionalism has been refreshing. They delivered our expansion platform ahead of schedule and under budget."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">WA</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Waseem Alim</span>
+                        <span class="testimonial-role">CEO, Chaldal</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Netso's AI integration expertise helped us automate 60% of our customer service operations while improving satisfaction scores. Exceptional technical and strategic partners."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">FH</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Farhana Haque</span>
+                        <span class="testimonial-role">CTO, Pathao</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-bg">
+            <div class="cta-grid"></div>
+        </div>
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to build<br>something exceptional?</h2>
+            <p class="cta-desc">Let's discuss how we can transform your digital presence. From strategy to launch, we're your partners in building products that matter.</p>
+            <form class="cta-form" data-netlify="true" onsubmit="handleSubmit(event)">
+                <input type="email" class="cta-input" placeholder="Enter your email" required>
+                <button type="submit" class="cta-button">
+                    Get in touch
+                    <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="nav-logo-icon">
+                        <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
+                    </div>
+                    Netso
+                </div>
+                <p class="footer-tagline">Digital excellence from Bangladesh. Building transformative products for global markets since 2016.</p>
+                <div class="footer-social">
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="twitter" style="width: 18px; height: 18px;"></i>
+                    </a>
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="linkedin" style="width: 18px; height: 18px;"></i>
+                    </a>
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="github" style="width: 18px; height: 18px;"></i>
+                    </a>
+                    <a href="#" class="footer-social-link">
+                        <i data-lucide="dribbble" style="width: 18px; height: 18px;"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Services</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Mobile Development</a>
+                    <a href="#" class="footer-link">Web Platforms</a>
+                    <a href="#" class="footer-link">Brand & Design</a>
+                    <a href="#" class="footer-link">AI Integration</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">Careers</a>
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Legal</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Netso Digital. All rights reserved.</p>
+            <div class="footer-location">
+                <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
+                Dhaka, Bangladesh
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Loader
+        const loader = document.getElementById('loader');
+        const loaderProgress = document.getElementById('loader-progress');
+        let progress = 0;
+
+        const loadInterval = setInterval(() => {
+            progress += Math.random() * 30;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    initAnimations();
+                }, 500);
+            }
+            loaderProgress.style.width = progress + '%';
+        }, 200);
+
+        // Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // GSAP ScrollTrigger integration with Lenis
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        if (window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.left = mouseX - 2 + 'px';
+                cursorDot.style.top = mouseY - 2 + 'px';
+            });
+
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.1;
+                cursorY += (mouseY - cursorY) * 0.1;
+                cursor.style.left = cursorX - 10 + 'px';
+                cursor.style.top = cursorY - 10 + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hover effects
+            const hoverElements = document.querySelectorAll('a, button, .service-card, .testimonial-card');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        let lastScroll = 0;
+
+        lenis.on('scroll', ({ scroll }) => {
+            if (scroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+            lastScroll = scroll;
+        });
+
+        // Smooth scroll to sections
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    lenis.scrollTo(target, { offset: -80 });
+                }
+            });
+        });
+
+        // Main animations
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero entrance animations
+            const heroTl = gsap.timeline();
+            
+            heroTl.to('.hero-badge', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            })
+            .to('.hero-title-line span', {
+                y: 0,
+                duration: 1,
+                stagger: 0.1,
+                ease: 'power3.out'
+            }, '-=0.4')
+            .to('.hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, '-=0.6')
+            .to('.hero-cta', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, '-=0.6')
+            .to('.hero-stat', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out',
+                onComplete: animateCounters
+            }, '-=0.4');
+
+            // Hero parallax
+            gsap.to('.hero-bg-gradient', {
+                y: 200,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            gsap.to('.floating-shape', {
+                y: -100,
+                rotation: 20,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // Services cards animation
+            gsap.from('.service-card', {
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.services-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Work items sticky animation
+            const workItems = document.querySelectorAll('.work-item');
+            workItems.forEach((item, i) => {
+                gsap.from(item.querySelector('.work-visual'), {
+                    scale: 0.9,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 60%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+
+                gsap.from(item.querySelector('.work-content'), {
+                    x: i % 2 === 0 ? 50 : -50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 60%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+
+            // Bangladesh stats animation
+            gsap.from('.bangladesh-stat', {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.bangladesh-stats',
+                    start: 'top 80%',
+                    onEnter: animateBangladeshCounters
+                }
+            });
+
+            // Process timeline animation
+            const processSteps = document.querySelectorAll('.process-step');
+            const processProgress = document.getElementById('process-progress');
+
+            ScrollTrigger.create({
+                trigger: '.process-timeline',
+                start: 'top 60%',
+                end: 'bottom 40%',
+                onUpdate: (self) => {
+                    processProgress.style.height = (self.progress * 100) + '%';
+                    
+                    processSteps.forEach((step, i) => {
+                        const stepProgress = (i + 1) / processSteps.length;
+                        if (self.progress >= stepProgress - 0.2) {
+                            step.classList.add('active');
+                        } else {
+                            step.classList.remove('active');
+                        }
+                    });
+                }
+            });
+
+            gsap.from('.process-step', {
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.process-timeline',
+                    start: 'top 70%'
+                }
+            });
+
+            // Testimonials drag
+            const track = document.getElementById('testimonials-track');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.style.cursor = 'grabbing';
+                startX = e.pageX - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX) * 2;
+                track.scrollLeft = scrollLeft - walk;
+            });
+
+            // CTA animation
+            gsap.from('.cta-content', {
+                y: 60,
+                opacity: 0,
+                duration: 1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.cta',
+                    start: 'top 70%'
+                }
+            });
+
+            // Section headers animation
+            gsap.utils.toArray('.section-header').forEach(header => {
+                gsap.from(header.children, {
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: header,
+                        start: 'top 80%'
+                    }
+                });
+            });
+
+            // Velocity skew effect
+            let currentSkew = 0;
+            let targetSkew = 0;
+
+            lenis.on('scroll', ({ velocity }) => {
+                targetSkew = Math.max(-5, Math.min(5, velocity * 0.02));
+            });
+
+            function updateSkew() {
+                currentSkew += (targetSkew - currentSkew) * 0.1;
+                targetSkew *= 0.95;
+                
+                document.querySelectorAll('.velocity-skew').forEach(el => {
+                    el.style.transform = `skewY(${currentSkew}deg)`;
+                });
+                
+                requestAnimationFrame(updateSkew);
+            }
+            updateSkew();
+        }
+
+        // Counter animation
+        function animateCounters() {
+            document.querySelectorAll('.hero-stat-value[data-count]').forEach(counter => {
+                const target = parseInt(counter.dataset.count);
+                const duration = 2000;
+                const start = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeProgress = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(easeProgress * target);
+                    
+                    counter.textContent = current + (target > 100 ? '+' : '');
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                requestAnimationFrame(update);
+            });
+        }
+
+        function animateBangladeshCounters() {
+            document.querySelectorAll('.bangladesh-stat-value[data-count]').forEach(counter => {
+                const target = parseInt(counter.dataset.count);
+                const duration = 2000;
+                const start = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeProgress = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(easeProgress * target);
+                    
+                    counter.textContent = current + (target > 100 ? 'M+' : target > 10 ? '%' : '+');
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                requestAnimationFrame(update);
+            });
+        }
+
+        // Form handling
+        function handleSubmit(e) {
+            e.preventDefault();
+            const button = e.target.querySelector('.cta-button');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span>Message sent!</span>';
+            button.style.background = '#22c55e';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+                e.target.reset();
+            }, 3000);
+        }
+
+        // Prefers reduced motion
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            lenis.destroy();
+        }
+    </script>
+</body>
+</html>
+
+----
+
+comment on this

@@ -234,7 +234,7 @@ const MobileHero = ({
           aria-hidden="true"
           className="h-full w-full object-cover object-center"
           decoding="async"
-          fetchPriority="high"
+          fetchpriority="high"
           fallbackSrc={heroBackgroundFallback}
           fallbackSources={heroBackgroundJpegSources}
           loading="eager"
@@ -396,7 +396,7 @@ export const Hero = () => {
             aria-hidden="true"
             className="h-full w-full object-cover object-center"
             decoding="async"
-            fetchPriority="high"
+            fetchpriority="high"
             fallbackSrc={heroBackgroundFallback}
             fallbackSources={heroBackgroundJpegSources}
             loading="eager"

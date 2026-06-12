@@ -74,7 +74,7 @@ const Products = () => {
 
       <section className="py-24 md:py-32">
         <div className="container-tight grid gap-6 md:grid-cols-2">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60">
+          <div className="relative aspect-[4/3] sm:aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60">
             <img
               src={t3}
               alt="Daytime rooftop solar canopy"
@@ -84,7 +84,7 @@ const Products = () => {
               loading="lazy"
             />
           </div>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60">
+          <div className="relative aspect-[4/3] sm:aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60">
             <img
               src={t4}
               alt="Lifestyle rooftop scene under a solar canopy"

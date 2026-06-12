@@ -1,0 +1,5 @@
+import{e as c}from"./index-wkPQcxQ3.js";import{R as t}from"./vendor-react-CX5SUctX.js";import{S as o}from"./vendor-arco-Bqg-s5Cj.js";/**
+ * @license
+ * Copyright 2025 AionUi (aionui.com)
+ * SPDX-License-Identifier: Apache-2.0
+ */const l=c("aion-select","[&_.arco-select-view]:rounded-[4px]","[&_.arco-select-view]:border","[&_.arco-select-view]:border-solid","[&_.arco-select-view]:border-border-2","[&_.arco-select-view]:shadow-none","[&_.arco-select-view]:transition-colors","[&_.arco-select-view:hover]:border-[var(--color-primary)]","[&_.arco-select-view:focus-within]:border-[var(--color-primary)]","[&_.arco-select-view-disabled]:bg-[var(--color-bg-2)]","[&_.arco-select-view-disabled]:opacity-80"),p=()=>{if(typeof document<"u"&&document.body)return document.body},m=e=>{if(e)return e==="middle"?"default":e},u=t.forwardRef(({className:e,getPopupContainer:a,size:i="middle",...n},s)=>{const d=m(i);return t.createElement(o,{ref:s,size:d,className:c(l,e),getPopupContainer:a||p,...n})}),r=u;r.displayName="AionSelect";r.Option=o.Option;r.OptGroup=o.OptGroup;export{r as A};
