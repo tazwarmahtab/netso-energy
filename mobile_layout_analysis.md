@@ -6,7 +6,7 @@ This audit confirms the current codebase is mobile-responsive, production-build 
 ## What was verified
 - `npm run build` completed successfully.
 - `.env` exists and contains the required `VITE_` Supabase and site configuration placeholders.
-- `od` (Open Design CLI) is present at `/Users/tazwarmahtab/.local/bin/od`, but direct invocation currently hits a permission issue when it tries to create `/Applications/Open Design.app/Contents/Resources/app/prebundled/.od/projects`.
+- `od` (Open Design CLI) is present at `/Users/tazwarmahtab/.local/bin/od` and is now responsive; `od help` works after confirming the daemon runtime folder is writable.
 - `taste-skill` is installed at `~/.gemini/antigravity-cli/brain/fa0cc8fe-dd61-492f-877b-f2506545b3a7/scratch/taste-skill`.
 
 ## Mobile strengths in the repo
@@ -39,10 +39,9 @@ This audit confirms the current codebase is mobile-responsive, production-build 
 - Scroll and lazy-loading helpers are also mobile-aware through `useIsMobile()` in `src/components/ui/lazy-section.tsx`.
 
 ## Recommendations and next steps
-1. Fix the Open Design CLI permission issue if you want to use `od` interactively for design exports.
-   - The current block is: `EPERM: operation not permitted, mkdir '/Applications/Open Design.app/Contents/Resources/app/prebundled/.od/projects'`.
+1. `od` is now usable; the local CLI can start and the runtime folder is writable, so you can proceed with design exports or artifact generation.
 2. Optionally run the site locally at `http://127.0.0.1:8080/` to verify the live mobile rendering.
-3. If you want, I can continue by generating a polished design review using `taste-skill` and `od` once the permission issue is fixed.
+3. I created a design review artifact at `design-review/taste-skill-mobile-ux-audit.md` using `od` and the active project context.
 
 ## Conclusion
-The current repository is in a strong mobile-ready state. The production build passes, the mobile layout updates are implemented, and the supply-chain tools are available. The only remaining gap is the Open Design CLI permission configuration if you want to use that workflow.
+The current repository is in a strong mobile-ready state. The production build passes, the mobile layout updates are implemented, and the Open Design workflow is now working. The audit artifact is available for export and stakeholder review.

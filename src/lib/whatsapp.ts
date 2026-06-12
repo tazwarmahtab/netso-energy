@@ -46,10 +46,12 @@ export function buildWhatsAppStartUrl(options: WhatsAppStartOptions) {
   const number = getWhatsAppNumber();
   if (!number) return DEFAULT_ASSESSMENT_PATH;
 
-  const starter =
+  const greeting =
     options.language === "bn"
-      ? ["START NETSO", "lang=bn", `source=${options.source}`]
-      : ["START NETSO", "lang=en", `source=${options.source}`];
+      ? "হ্যালো NETSO, আমি রুফটপ এনার্জি মূল্যায়নে আগ্রহী।"
+      : "Hi NETSO, I'm interested in a rooftop energy assessment.";
+
+  const starter = [greeting, `lang=${options.language}`, `source=${options.source}`];
 
   if (options.sessionId) starter.push(`session=${options.sessionId}`);
   if (options.calculatorSummary) starter.push(`estimate=${options.calculatorSummary}`);

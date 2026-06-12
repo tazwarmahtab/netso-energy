@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { StartAssessmentLink } from "@/components/AssessmentCtas";
 
 import { ResponsiveImage } from "@/components/ui/responsive-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
