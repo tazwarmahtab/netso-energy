@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import { SEO } from "@/components/SEO";
 import { Hero } from "@/components/home/Hero";
+import { WireTicker } from "@/components/home/WireTicker";
 import { LazySection } from "@/components/ui/lazy-section";
 import { SectionFadeTransition } from "@/components/ui/section-fade-transition";
 
@@ -24,6 +25,14 @@ const loadConversionBandSection = () =>
 const loadCalculatorSection = () =>
   import("@/components/home/HeroCalculator").then((module) => ({
     default: module.HeroCalculator,
+  }));
+const loadRecentProjectsSection = () =>
+  import("@/components/home/RecentProjects").then((module) => ({
+    default: module.RecentProjects,
+  }));
+const loadStatsShowcaseSection = () =>
+  import("@/components/home/StatsShowcase").then((module) => ({
+    default: module.StatsShowcase,
   }));
 const loadProductSection = () =>
   import("@/components/home/ProductSection").then((module) => ({
@@ -51,6 +60,8 @@ const LazySystemSection = lazy(loadSystemSection);
 const LazyValueStackSection = lazy(loadValueStackSection);
 const LazyConversionBandSection = lazy(loadConversionBandSection);
 const LazyCalculatorSection = lazy(loadCalculatorSection);
+const LazyRecentProjectsSection = lazy(loadRecentProjectsSection);
+const LazyStatsShowcaseSection = lazy(loadStatsShowcaseSection);
 const LazyProductSection = lazy(loadProductSection);
 const LazyTransformationSection = lazy(loadTransformationSection);
 const LazyMissionSection = lazy(loadMissionSection);
@@ -62,6 +73,7 @@ const Index = () => {
     <div className="relative">
       <SEO path="/" />
       <Hero />
+      <WireTicker />
       <div className="theme-light relative z-0 bg-background text-foreground">
         <SectionFadeTransition darkTop />
         <LazySection
@@ -90,6 +102,13 @@ const Index = () => {
           eagerOnIdle
           minHeight={700}
           mobileMinHeight={520}
+          preload={loadStatsShowcaseSection}
+        />
+        <LazySection
+          component={LazyStatsShowcaseSection}
+          eagerOnIdle
+          minHeight={600}
+          mobileMinHeight={400}
           preload={loadCalculatorSection}
         />
         <SectionFadeTransition className="-mt-px" />
@@ -109,6 +128,12 @@ const Index = () => {
           component={LazyProductSection}
           minHeight={1180}
           mobileMinHeight={720}
+          preload={loadRecentProjectsSection}
+        />
+        <LazySection
+          component={LazyRecentProjectsSection}
+          minHeight={800}
+          mobileMinHeight={600}
           preload={loadTransformationSection}
         />
         <LazySection

@@ -75,9 +75,9 @@ export const ProblemSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="ivory-panel relative mt-24 hidden overflow-hidden rounded-[2rem] md:block"
+          className="ivory-panel relative mt-12 md:mt-24 overflow-hidden rounded-[2rem]"
         >
-          <div className="relative aspect-[16/9] lg:aspect-[21/9]">
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]">
             <ResponsiveImage
               alt="Dhaka rooftops aerial view"
               className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.9] saturate-[0.96]"
@@ -93,17 +93,17 @@ export const ProblemSection = () => {
             <div className="absolute inset-y-0 left-0 z-10 w-full max-w-[30rem] bg-gradient-to-r from-background/18 via-background/8 to-transparent" />
 
             <motion.div
-              className="pointer-events-none absolute inset-y-0 z-20 w-40 bg-primary/12 blur-[1px]"
+              className="pointer-events-none absolute inset-y-0 z-20 w-40 bg-primary/12 blur-[1px] hidden md:block"
               style={{
                 x: lightX,
                 opacity: lightOpacity,
               }}
             />
 
-            <div className="absolute bottom-8 left-8 z-30 max-w-md md:bottom-10 md:left-10">
-              <div className="readability-panel-light rounded-[1.5rem] p-5 md:p-6">
+            <div className="absolute bottom-4 left-4 right-4 z-30 max-w-md sm:bottom-8 sm:left-8 sm:right-auto md:bottom-10 md:left-10">
+              <div className="readability-panel-light rounded-[1.5rem] p-4 sm:p-5 md:p-6">
                 <p className="eyebrow mb-2 text-primary/85">{copy.problem.imageEyebrow}</p>
-                <p className="text-2xl font-display text-balance text-foreground md:text-[2rem]">
+                <p className="text-xl sm:text-2xl font-display text-balance text-foreground md:text-[2rem]">
                   {copy.problem.imageBody}
                 </p>
               </div>
