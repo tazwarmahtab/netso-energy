@@ -266,7 +266,7 @@ const MobileHero = ({
       </div>
 
       <div className="container-tight relative z-10 flex h-full flex-col justify-between pb-8 pt-4">
-        <div className="readability-mask-dark max-w-[21rem]">
+        <div className="max-w-[21rem]">
           <p className="eyebrow mb-4 text-white/80">{copy.hero.eyebrow}</p>
           <h1 className="max-w-[10ch] font-editorial text-[clamp(2.75rem,11vw,4.3rem)] leading-[0.92] tracking-[-0.04em] text-white text-shadow-hero">
             {renderHeadline(copy.hero.headline)}
