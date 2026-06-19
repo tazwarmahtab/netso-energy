@@ -337,6 +337,53 @@ function verifyWebhook(url: URL): Response {
   });
 }
 
+function timingSafeEqualHex(a: string, b: string): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+
+  return mismatch === 0;
+}
+
+async function verifyRequestSignature(request: Request, rawBody: string): Promise<boolean> {
+  const appSecret = Deno.env.get("WHATSAPP_APP_SECRET");
+  if (!appSecret) {
+    return false;
+  }
+
+  const signatureHeader = request.headers.get("X-Hub-Signature-256");
+  if (!signatureHeader) {
+    return false;
+  }
+
+  const expectedPrefix = "sha256=";
+  if (!signatureHeader.startsWith(expectedPrefix)) {
+    return false;
+  }
+
+  const providedSignature = signatureHeader.slice(expectedPrefix.length).toLowerCase();
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(appSecret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const digest = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(rawBody));
+  const computedSignature = Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+
+  return timingSafeEqualHex(computedSignature, providedSignature);
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -351,9 +398,15 @@ Deno.serve(async (request) => {
   }
 
   const rawBody = await request.text();
+        codex/implement-request-signature-verification
   const isSignatureValid = await verifyRequestSignature(request, rawBody);
   if (!isSignatureValid) {
     return unauthorizedSignature();
+
+  const isValidSignature = await verifyRequestSignature(request, rawBody);
+  if (!isValidSignature) {
+    return forbidden("Webhook signature verification failed.");
+         main
   }
 
   let parsedBody: unknown;

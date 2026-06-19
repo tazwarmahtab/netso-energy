@@ -13,9 +13,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['aeonikPro', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['featureDeck', 'Georgia', 'serif'],
-        mono: ['socialMono', 'ui-monospace', 'monospace'],
+        // Satoshi as primary font
+        sans: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Satoshi', 'Georgia', 'serif'], // Satoshi for general headings
+        editorial: ['"Playfair Display"', 'Georgia', 'serif'], // High-contrast serif for hero titles only
+        mono: ['Satoshi Mono', 'ui-monospace', 'monospace'],
       },
       spacing: {
         '1': '0.25rem',  // 4px base
@@ -33,49 +35,50 @@ export default {
         '45': '11.25rem',// 180px
       },
       colors: {
+        // Light theme palette - inspired by netsoenergy.com
         border: "var(--border)",
-        input: "var(--input)",
-        ring: "var(--ring)",
+        input: "rgba(0, 0, 0, 0.04)",
+        ring: "var(--accent)",
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
-          glow: "var(--primary-glow)",
+          DEFAULT: "var(--accent)",
+          foreground: "var(--background)",
+          glow: "#e0d4ff", // Lighter purple glow
         },
         secondary: {
-          DEFAULT: "var(--secondary)",
-          foreground: "var(--secondary-foreground)",
+          DEFAULT: "var(--surface)", // Pure white surface for secondary
+          foreground: "#1a1a1a",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+          DEFAULT: "#f66f00", // Orange
+          foreground: "#ffffff",
         },
         muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          DEFAULT: "var(--surface)", // Surface for muted elements
+          foreground: "var(--text-muted)", // Muted grey text
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "#c8b2ff", // Purple/lavender accent
+          foreground: "var(--background)",
         },
         popover: {
-          DEFAULT: "var(--popover)",
-          foreground: "var(--popover-foreground)",
+          DEFAULT: "#ffffff", // Surface for popover
+          foreground: "#1a1a1a",
         },
         card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
+          DEFAULT: "#ffffff", // Surface for cards
+          foreground: "#1a1a1a",
         },
         sidebar: {
-          DEFAULT: "var(--sidebar)",
-          foreground: "var(--sidebar-foreground)",
-          primary: "var(--sidebar-primary)",
-          "primary-foreground": "var(--sidebar-primary-foreground)",
-          accent: "var(--sidebar-accent)",
-          "accent-foreground": "var(--sidebar-accent-foreground)",
-          border: "var(--sidebar-border)",
-          ring: "var(--sidebar-ring)",
+          DEFAULT: "var(--background)",
+          foreground: "var(--foreground)",
+          primary: "var(--accent)",
+          "primary-foreground": "var(--background)",
+          accent: "var(--surface)",
+          "accent-foreground": "var(--foreground)",
+          border: "var(--border)",
+          ring: "var(--accent)",
         },
       },
       borderRadius: {

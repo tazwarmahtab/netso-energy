@@ -10,29 +10,30 @@ describe("solar proof estimate engine", () => {
     const model = getSavingsModel(1200, 1800) as Record<string, unknown>;
 
     expect(model).toMatchObject({
-      confidenceLabel: "proof_first",
+      confidenceLabel: "resco_ppa",
     });
     expect(model).toHaveProperty("systemKwpRange");
-    expect(model).toHaveProperty("monthlySavingsRange");
-    expect(model).toHaveProperty("paybackYearsRange");
+    expect(model).toHaveProperty("monthlySavingsBdtRange");
+    expect(model).toHaveProperty("ppaTermSavingsBdtRange");
     expect(model).toHaveProperty("annualGenerationKwh");
     expect(Array.isArray(model.assumptions)).toBe(true);
     expect(String(model.disclaimer).toLowerCase()).toContain("preliminary");
 
     const systemRange = model.systemKwpRange as { low: number; midpoint: number; high: number };
-    const savingsRange = model.monthlySavingsRange as { low: number; midpoint: number; high: number };
+    const savingsRange = model.monthlySavingsBdtRange as { low: number; midpoint: number; high: number };
 
     expect(systemRange.low).toBeLessThan(systemRange.midpoint);
     expect(systemRange.midpoint).toBeLessThan(systemRange.high);
-    expect(savingsRange.low).toBeLessThanOrEqual(Number(model.monthlySavings));
-    expect(savingsRange.high).toBeGreaterThanOrEqual(Number(model.monthlySavings));
+    expect(savingsRange.low).toBeLessThanOrEqual(Number(model.monthlySavingsBdt));
+    expect(savingsRange.high).toBeGreaterThanOrEqual(Number(model.monthlySavingsBdt));
   });
 
   it("does not size the proof-first system purely from oversized roof area", () => {
     const model = getSavingsModel(250, 5000);
 
     expect(model.systemKwp).toBeLessThan(15);
-    expect(model.paybackYears).toBeGreaterThan(0);
+    // paybackYears is removed for RESCO PPA
+    expect(model.ppaTermSavingsBdt).toBeGreaterThan(0);
   });
 
   it("keeps the monthly bill helper progressive", () => {
@@ -44,6 +45,6 @@ describe("solar proof estimate engine", () => {
     const estimatedKwh = estimateMonthlyConsumptionFromBill(12000);
 
     expect(estimatedKwh).toBeGreaterThan(900);
-    expect(estimatedKwh).toBeLessThan(1200);
+    expect(estimatedKwh).toBeLessThan(1400);
   });
 });

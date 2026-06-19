@@ -21,6 +21,7 @@ import { isSupabaseBrowserConfigured } from "@/lib/supabase-client";
 import {
   estimateMonthlyConsumptionFromBill,
   getSavingsModel,
+  type RescoSavingsModel,
 } from "@/lib/solar-engine";
 import { useSiteCopy } from "@/lib/site-copy";
 import { cn } from "@/lib/utils";
@@ -93,10 +94,11 @@ export function SolarCalculatorFunnel() {
     contactBody: isBn
       ? "আপনার তথ্য দিন এবং হোয়াটসঅ্যাপে চালিয়ে যান, যাতে NETSO আপনার ছাদের প্রেক্ষাপট ও পরের ধাপের উপযোগিতা রিভিউ করতে পারে।"
       : "Enter your details and continue on WhatsApp so NETSO can review your rooftop context and next-step fit.",
-    monthlySavings: isBn ? "মাসিক সেভিংস" : "Monthly savings",
-    payback: isBn ? "পে-ব্যাক সময়" : "Payback time",
-    systemSize: isBn ? "সিস্টেম সাইজ" : "System size",
-    annualGeneration: isBn ? "২০ বছরের পরিকল্পিত ভ্যালু" : "20-year planning value",
+    monthlySavings: isBn ? "মাসিক সেভিংস" : "Monthly Savings",
+    systemSize: isBn ? "সিস্টেম সাইজ" : "System Size",
+    twentyYearValue: isBn ? "২০ বছরের পরিকল্পিত ভ্যালু" : "20-Year PPA Savings",
+    annualGeneration: isBn ? "বার্ষিক উৎপাদন" : "Annual Generation",
+    co2Saved: isBn ? "CO₂ সাশ্রয়" : "CO₂ Offset",
     assumptions: isBn ? "হিসাবের অনুমানসমূহ" : "Estimate assumptions",
     continueWhatsApp: copy.common.continueWhatsApp,
     name: isBn ? "পূর্ণ নাম" : "Full name",
@@ -118,7 +120,29 @@ export function SolarCalculatorFunnel() {
     () => estimateMonthlyConsumptionFromBill(bill),
     [bill],
   );
-  const model = useMemo(() => getSavingsModel(estimatedMonthlyKwh, area), [area, estimatedMonthlyKwh]);
+
+  const model = useMemo(() => {
+    try {
+      return getSavingsModel(estimatedMonthlyKwh, area) as RescoSavingsModel;
+    } catch (err) {
+      console.error("Error in getSavingsModel:", err);
+      // return a safe fallback to prevent rendering crashes while debugging
+      return {
+        systemKwp: 0,
+        systemKwpRange: { low: 0, midpoint: 0, high: 0 },
+        monthlySavingsBdt: 0,
+        monthlySavingsBdtRange: { low: 0, midpoint: 0, high: 0 },
+        annualSavingsBdt: 0,
+        ppaTermSavingsBdt: 0,
+        ppaTermSavingsBdtRange: { low: 0, midpoint: 0, high: 0 },
+        co2SavedTonnes: 0,
+        annualGenerationKwh: 0,
+        confidenceLabel: "resco_ppa",
+        assumptions: [],
+        disclaimer: ""
+      } as RescoSavingsModel;
+    }
+  }, [area, estimatedMonthlyKwh]);
 
   const manualWhatsAppDetails = useMemo(() => {
     const details = [
@@ -155,7 +179,7 @@ export function SolarCalculatorFunnel() {
       const calculatorSummary = [
         `bill=${bill}`,
         `roof=${area}`,
-        `savings=${model.monthlySavingsRange.low}-${model.monthlySavingsRange.high}`,
+        `savings=${model.monthlySavingsBdtRange.low}-${model.monthlySavingsBdtRange.high}`,
       ].join(",");
 
       if (!isSupabaseBrowserConfigured()) {
@@ -340,22 +364,26 @@ export function SolarCalculatorFunnel() {
               <div className="mt-8 space-y-4">
                 <ResultCard
                   label={labels.monthlySavings}
-                  value={`৳${model.monthlySavingsRange.low.toLocaleString()} - ৳${model.monthlySavingsRange.high.toLocaleString()}`}
+                  value={`৳${model.monthlySavingsBdtRange.low.toLocaleString()} - ৳${model.monthlySavingsBdtRange.high.toLocaleString()}`}
                   accent
                 />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <ResultCard
-                    label={labels.payback}
-                    value={`${model.paybackYearsRange.low} - ${model.paybackYearsRange.high} ${isBn ? "বছর" : "yrs"}`}
-                  />
-                  <ResultCard
                     label={labels.systemSize}
                     value={`${model.systemKwpRange.low} - ${model.systemKwpRange.high} kWp`}
                   />
+                  <ResultCard
+                    label={labels.annualGeneration}
+                    value={`${model.annualGenerationKwh.toLocaleString()} kWh`}
+                  />
                 </div>
                 <ResultCard
-                  label={labels.annualGeneration}
-                  value={`৳${model.twentyYearProfitRange.low.toLocaleString()} - ৳${model.twentyYearProfitRange.high.toLocaleString()}`}
+                  label={labels.twentyYearValue}
+                  value={`৳${model.ppaTermSavingsBdtRange.low.toLocaleString()} - ৳${model.ppaTermSavingsBdtRange.high.toLocaleString()}`}
+                />
+                 <ResultCard
+                  label={labels.co2Saved}
+                  value={`${model.co2SavedTonnes.toLocaleString()} ${isBn ? "টন" : "tonnes"}`}
                 />
                 <div className="rounded-[22px] border border-border/70 bg-secondary/24 p-5">
                   <div className="mb-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">

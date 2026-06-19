@@ -1,3 +1,7 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,9 +10,9 @@
 
 /*
  * NETSO ENERGY design system.
- * Based on godaylight design system - dark theme with purple accent.
+ * Based on netsoenergy.com - light theme with purple accent.
  * Primary accent: #c8b2ff (purple/lavender)
- * Fonts: aeonikPro (body), featureDeck (display), socialMono (code)
+ * Fonts: Satoshi (all)
  * Spacing: 4px base grid
  */
 
@@ -27,33 +31,35 @@
   --anim-easing-magnetic: cubic-bezier(0.33, 1, 0.68, 1);
   --anim-easing-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* godaylight dark palette */
-  --background: #1c1c1c;
-  --surface: #111111;
-  --foreground: #ffffff;
-  --text-muted: #514e4a;
+  /* Light theme palette - inspired by netsoenergy.com */
+  --background: #fcfcfc;
+  --surface: #ffffff;
+  --foreground: #1a1a1a;
+  --text-muted: #6b7280;
   --accent: #c8b2ff;
-  --accent-glow: #d4c4ff;
+  --accent-glow: #e0d4ff;
   --danger: #f66f00;
   --warning: #0a0804;
   --info: #321f61;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.12);
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.04);
   --ring: var(--accent);
-  --nav-surface: rgba(19, 19, 19, 0.66);
-  --nav-surface-strong: rgba(18, 18, 18, 0.86);
-  --nav-expanded: rgba(16, 16, 16, 0.9);
-  --nav-border-strong: rgba(255, 255, 255, 0.11);
-  --nav-segment: rgba(255, 255, 255, 0.04);
-  --nav-brand: rgba(255, 255, 255, 0.045);
-  --nav-pill: rgba(255, 255, 255, 0.05);
-  --nav-pill-strong: rgba(255, 255, 255, 0.08);
-  --nav-dropdown: rgba(17, 17, 17, 0.9);
-  --nav-dropdown-muted: rgba(255, 255, 255, 0.045);
-  --nav-mobile: rgba(16, 16, 16, 0.95);
-  --hero-overlay: rgba(0, 0, 0, 0.24);
-  --hero-overlay-soft: rgba(0, 0, 0, 0.18);
-  --hero-overlay-strong: rgba(0, 0, 0, 0.48);
+
+  /* Navigation tokens - light */
+  --nav-surface: rgba(255, 255, 255, 0.66);
+  --nav-surface-strong: rgba(255, 255, 255, 0.86);
+  --nav-expanded: rgba(255, 255, 255, 0.9);
+  --nav-border-strong: rgba(0, 0, 0, 0.11);
+  --nav-segment: rgba(0, 0, 0, 0.04);
+  --nav-brand: rgba(0, 0, 0, 0.045);
+  --nav-pill: rgba(0, 0, 0, 0.05);
+  --nav-pill-strong: rgba(0, 0, 0, 0.08);
+  --nav-dropdown: rgba(255, 255, 255, 0.9);
+  --nav-dropdown-muted: rgba(0, 0, 0, 0.045);
+  --nav-mobile: rgba(255, 255, 255, 0.95);
+  --hero-overlay: rgba(255, 255, 255, 0.24);
+  --hero-overlay-soft: rgba(255, 255, 255, 0.18);
+  --hero-overlay-strong: rgba(255, 255, 255, 0.48);
 
   /* Component tokens */
   --card: var(--surface);
@@ -90,83 +96,29 @@
 
 /* Section-scoped theming utilities */
 .theme-dark {
+  /* Available for toggle — currently not default */
   --background: #1c1c1c;
   --foreground: #ffffff;
-  --card: #111111;
-  --card-foreground: #ffffff;
-  --muted: #111111;
-  --muted-foreground: #514e4a;
-  --border: rgba(255, 255, 255, 0.06);
-  --input: rgba(255, 255, 255, 0.08);
-  --primary: #c8b2ff;
-  --primary-foreground: #1c1c1c;
-  --nav-surface: rgba(19, 19, 19, 0.66);
-  --nav-surface-strong: rgba(18, 18, 18, 0.86);
-  --nav-expanded: rgba(16, 16, 16, 0.9);
-  --nav-border-strong: rgba(255, 255, 255, 0.11);
-  --nav-segment: rgba(255, 255, 255, 0.04);
-  --nav-brand: rgba(255, 255, 255, 0.045);
-  --nav-pill: rgba(255, 255, 255, 0.05);
-  --nav-pill-strong: rgba(255, 255, 255, 0.08);
-  --nav-dropdown: rgba(17, 17, 17, 0.9);
-  --nav-dropdown-muted: rgba(255, 255, 255, 0.045);
-  --nav-mobile: rgba(16, 16, 16, 0.95);
-  --hero-overlay: rgba(0, 0, 0, 0.24);
-  --hero-overlay-soft: rgba(0, 0, 0, 0.18);
-  --hero-overlay-strong: rgba(0, 0, 0, 0.48);
-  background-color: var(--background);
-  color: var(--foreground);
+  --surface: #111111;
+  --border: rgba(255, 255, 255, 0.08);
+  --text-muted: #514e4a;
   color-scheme: dark;
 }
 
 .theme-light {
-  --background: #f4ede3;
-  --foreground: #18130d;
-  --surface: #fffaf2;
-  --card: #fffaf2;
-  --card-foreground: #18130d;
-  --popover: #fffaf2;
-  --popover-foreground: #18130d;
-  --secondary: #ede2d2;
-  --secondary-foreground: #18130d;
-  --muted: #efe4d4;
-  --muted-foreground: #726657;
-  --text-muted: #726657;
+  --background: #fcfcfc;
+  --foreground: #1a1a1a;
+  --surface: #ffffff;
   --border: rgba(0, 0, 0, 0.08);
-  --input: rgba(0, 0, 0, 0.08);
-  --ring: #c8b2ff;
-  --primary: #c8b2ff;
-  --primary-foreground: #1c1c1c;
-  --destructive-foreground: #ffffff;
+  --text-muted: #6b7280;
   background-color: var(--background);
   color: var(--foreground);
   color-scheme: light;
 }
 
-/* Font faces - godaylight fonts */
-@font-face {
-  font-family: "aeonikPro";
-  src: url("/fonts/aeonikPro-400.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "socialMono";
-  src: url("/fonts/socialMono-400.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "featureDeck";
-  src: url("/fonts/featureDeck-700.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "featureDeck";
-  src: url("/fonts/featureDeck-700.woff2") format("woff2");
-  font-weight: 700;
-  font-display: swap;
+/* Default to light */
+html {
+  color-scheme: light;
 }
 
 @layer base {
@@ -177,14 +129,14 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: "aeonikPro", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
   }
 
   h1, h2, h3, h4, h5 {
-    font-family: "featureDeck", Georgia, serif;
+    font-family: "Satoshi", Georgia, serif;
     letter-spacing: -0.02em;
     font-weight: 700;
   }
@@ -203,39 +155,39 @@ select {
   }
 
   .display-2xl {
-    font-family: "featureDeck", Georgia, serif;
+    font-family: "Satoshi", Georgia, serif;
     font-weight: 700;
-    letter-spacing: -0.045em;
-    line-height: 0.92;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
     font-size: clamp(3.5rem, 9vw, 8.5rem);
   }
   .display-xl {
-    font-family: "featureDeck", Georgia, serif;
+    font-family: "Satoshi", Georgia, serif;
     font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 0.95;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
     font-size: clamp(2.75rem, 7vw, 6.5rem);
   }
   .display-lg {
-    font-family: "featureDeck", Georgia, serif;
+    font-family: "Satoshi", Georgia, serif;
     font-weight: 700;
-    letter-spacing: -0.035em;
-    line-height: 1;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
     font-size: clamp(2.25rem, 5.5vw, 4.5rem);
   }
   .display-md {
-    font-family: "featureDeck", Georgia, serif;
+    font-family: "Satoshi", Georgia, serif;
     font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    letter-spacing: -0.035em;
+    line-height: 1;
     font-size: clamp(1.75rem, 3.5vw, 2.75rem);
   }
 
   .display-text {
-    font-family: "featureDeck", Georgia, serif;
+    font-family: "Satoshi", Georgia, serif;
     font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 0.94;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
     font-size: clamp(2.75rem, 6vw, 6rem);
   }
 
@@ -266,7 +218,7 @@ select {
   .nav-shell {
     background-color: var(--nav-surface);
     border: 1px solid var(--nav-border-strong);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.06);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
   }
@@ -274,7 +226,7 @@ select {
   .nav-frame {
     background-color: var(--nav-surface);
     border: 1px solid var(--nav-border-strong);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.045);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
   }
@@ -285,24 +237,24 @@ select {
 
   .nav-frame-strong {
     background-color: var(--nav-surface-strong);
-    border-color: rgba(255, 255, 255, 0.09);
+    border-color: rgba(0, 0, 0, 0.09);
   }
 
   .nav-brand {
     background-color: var(--nav-brand);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
   }
 
   .nav-desktop-list,
   .nav-mobile-trigger {
     background-color: var(--nav-pill);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(0, 0, 0, 0.07);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
   }
 
   .nav-desktop-trigger {
-    color: rgba(255, 255, 255, 0.64);
+    color: rgba(0, 0, 0, 0.64);
   }
 
   .nav-desktop-trigger:hover,
@@ -317,8 +269,8 @@ select {
   .nav-dropdown,
   .nav-mobile-panel {
     background-color: var(--nav-dropdown);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
   }
@@ -326,7 +278,7 @@ select {
   .nav-dropdown-link,
   .nav-mobile-row {
     background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .nav-dropdown-link:hover,
@@ -334,7 +286,7 @@ select {
   .nav-mobile-row:hover,
   .nav-mobile-row:focus-visible {
     background-color: var(--nav-dropdown-muted);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
     outline: none;
   }
 
@@ -363,27 +315,27 @@ select {
   .nav-shell-expanded {
     background-color: var(--nav-expanded);
     border: 1px solid var(--nav-border-strong);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
   }
 
   .nav-segment {
     background-color: var(--nav-segment);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
   }
 
   .hero-surface {
     background-color: var(--hero-overlay);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .text-shadow-soft {
-    text-shadow: 0 14px 36px rgba(0, 0, 0, 0.32), 0 3px 12px rgba(0, 0, 0, 0.24);
+    text-shadow: 0 14px 36px rgba(0, 0, 0, 0.06), 0 3px 12px rgba(0, 0, 0, 0.04);
   }
 
   .text-shadow-hero {
-    text-shadow: 0 10px 24px rgba(0, 0, 0, 0.24), 0 2px 8px rgba(0, 0, 0, 0.18);
+    text-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
   .readability-mask-dark {
@@ -397,8 +349,8 @@ select {
     inset: -1.75rem -2.4rem -1.8rem -1.4rem;
     border-radius: 2.5rem;
     background:
-      radial-gradient(circle at 22% 34%, rgba(8, 8, 8, 0.84) 0%, rgba(8, 8, 8, 0.72) 24%, rgba(8, 8, 8, 0.46) 46%, rgba(8, 8, 8, 0.16) 68%, transparent 84%),
-      linear-gradient(90deg, rgba(8, 8, 8, 0.44) 0%, rgba(8, 8, 8, 0.18) 52%, transparent 100%);
+      radial-gradient(circle at 22% 34%, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.72) 24%, rgba(255, 255, 255, 0.46) 46%, rgba(255, 255, 255, 0.16) 68%, transparent 84%),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.44) 0%, rgba(255, 255, 255, 0.18) 52%, transparent 100%);
     filter: blur(18px);
     opacity: 0.98;
     pointer-events: none;
@@ -408,25 +360,25 @@ select {
   .readability-panel-dark {
     background:
       radial-gradient(circle at top, rgba(200, 178, 255, 0.12), transparent 58%),
-      linear-gradient(145deg, rgba(7, 7, 7, 0.74), rgba(7, 7, 7, 0.42));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      linear-gradient(145deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.42));
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
   }
 
   .readability-panel-light {
     background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.24), transparent 64%),
-      linear-gradient(145deg, rgba(244, 237, 227, 0.9), rgba(244, 237, 227, 0.72));
-    border: 1px solid rgba(24, 19, 13, 0.06);
-    box-shadow: 0 22px 64px rgba(38, 25, 15, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      radial-gradient(circle at top, rgba(200, 178, 255, 0.12), transparent 58%),
+      linear-gradient(145deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.42));
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 22px 64px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
   .readability-spotlight {
-    background: radial-gradient(circle at center, rgba(7, 7, 7, 0.78) 0%, rgba(7, 7, 7, 0.58) 26%, rgba(7, 7, 7, 0.32) 48%, rgba(7, 7, 7, 0.12) 66%, transparent 80%);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.58) 26%, rgba(255, 255, 255, 0.32) 48%, rgba(255, 255, 255, 0.12) 66%, transparent 80%);
     filter: blur(20px);
   }
 
@@ -443,9 +395,10 @@ select {
   .text-balance { text-wrap: balance; }
   .text-pretty { text-wrap: pretty; }
 
-  /* 21st.dev / Civic Energy Synthesis */
   .glass-card {
-    @apply bg-card border border-border rounded-lg;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
   }
 
   .ivory-panel {
@@ -466,13 +419,13 @@ select {
 
   .bg-structural-grid {
     background-size: 60px 60px;
-    background-image: 
+    background-image:
       linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
   }
-  
+
   .dark .bg-structural-grid {
-    background-image: 
+    background-image:
       linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
   }
@@ -666,8 +619,8 @@ select {
 @layer utilities {
   .bg-grid-subtle {
     background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
   }
 }
