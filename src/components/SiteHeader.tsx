@@ -106,9 +106,8 @@ export const SiteHeader = () => {
             <Link
               to="/"
               className={cn(
-                "inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border backdrop-blur-[18px] transition-[width,height,transform,box-shadow,background-color,border-color] duration-500 hover:scale-[1.03]",
-                isCompact ? "h-12 w-12" : "h-14 w-14",
-                surfaceClassName,
+                "inline-flex shrink-0 items-center justify-center transition-transform duration-500 hover:scale-[1.03]",
+                isCompact ? "h-10 w-10" : "h-12 w-12",
               )}
               aria-label={`${copy.common.brand} home`}
             >
@@ -121,10 +120,7 @@ export const SiteHeader = () => {
                   event.currentTarget.onerror = null;
                   event.currentTarget.src = headerLogoPng;
                 }}
-                className={cn(
-                  "scale-[1.8] object-contain transition-[width,height] duration-500",
-                  isCompact ? "size-[3.35rem]" : "size-[4rem]",
-                )}
+                className="size-full object-cover"
               />
             </Link>
 
@@ -317,10 +313,7 @@ export const SiteHeader = () => {
         <div className="grid w-full grid-cols-[3rem_minmax(0,1fr)_3rem] items-center gap-3 lg:hidden">
           <Link
             to="/"
-            className={cn(
-              "inline-flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border backdrop-blur-[18px] transition-[transform,box-shadow,background-color,border-color] duration-500 hover:scale-[1.03]",
-              surfaceClassName,
-            )}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center transition-transform duration-500 hover:scale-[1.03]"
             aria-label={`${copy.common.brand} home`}
           >
             <img
@@ -332,9 +325,7 @@ export const SiteHeader = () => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = headerLogoPng;
               }}
-              className={cn(
-                "size-[3.35rem] scale-[1.8] object-contain transition-[width,height] duration-500",
-              )}
+              className="size-full object-contain"
             />
           </Link>
 

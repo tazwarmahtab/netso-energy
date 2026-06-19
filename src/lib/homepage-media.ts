@@ -8,7 +8,7 @@ import heroBackground960 from "@/assets/generated/home/hero-background-960.jpg";
 import heroBackground640Avif from "@/assets/generated/home/hero-background-640.avif";
 import heroBackground960Avif from "@/assets/generated/home/hero-background-960.avif";
 import heroBackground1440Avif from "@/assets/generated/home/hero-background-1440.avif";
-import logoPng from "@/assets/new/logo-optimized.png";
+import logoTransparentPng from "@/assets/new/logo-transparent.png";
 import logo160Avif from "@/assets/generated/home/logo-160.avif";
 import logo224Avif from "@/assets/generated/home/logo-224.avif";
 import problemRooftops from "@/assets/custom/problem-urban-rooftops-optimized.jpg";
@@ -55,5 +55,5 @@ export const problemRooftopsJpegSources = [
 export const problemRooftopsFallback = problemRooftops;
 
 export const headerLogoAvif = logo224Avif;
-export const headerLogoPng = logoPng;
+export const headerLogoPng = logoTransparentPng;
 export const mobileHeaderLogoAvif = logo160Avif;

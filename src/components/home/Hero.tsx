@@ -120,7 +120,7 @@ const HeroOverlay = ({
               </motion.div>
 
               <motion.h1
-                className="text-shadow-hero max-w-[8.8ch] font-display leading-[0.89] tracking-[-0.055em] text-white"
+                className="text-shadow-hero max-w-[8.8ch] font-editorial leading-[0.89] tracking-[-0.055em] text-white"
                 style={{ fontSize: headlineSize }}
                 initial={false}
                 animate={{
@@ -227,76 +227,61 @@ const MobileHero = ({
   }, [mobileVideoArmed, prefersReducedMotion]);
 
   return (
-    <section className="theme-dark relative overflow-hidden bg-background pt-4 sm:pt-5">
-      <div className="absolute inset-0 -z-10">
-        <ResponsiveImage
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover object-center"
-          decoding="async"
-          fetchPriority="high"
-          fallbackSrc={heroBackgroundFallback}
-          fallbackSources={heroBackgroundJpegSources}
-          loading="eager"
-          sizes="100vw"
-          sources={heroBackgroundAvifSources}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,14,0.12)_0%,rgba(5,8,14,0.52)_45%,rgba(5,8,14,0.9)_100%)]" />
+    <section className="theme-dark relative overflow-hidden bg-background pt-4 sm:pt-5 h-[calc(100svh-4.6rem)]">
+      {/* Full-screen Background Video / Image */}
+      <div className="absolute inset-0 -z-10 bg-black">
+        {mobileVideoArmed && !prefersReducedMotion ? (
+          <video
+            ref={videoRef}
+            src={heroVideo}
+            poster={heroPosterMobileFallback}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            aria-hidden="true"
+            className="h-full w-full object-cover object-[center_30%]"
+          />
+        ) : (
+          <ResponsiveImage
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-[center_30%]"
+            decoding="async"
+            fallbackSrc={heroPosterFallback}
+            fallbackSources={heroPosterJpegSources}
+            loading="eager"
+            sizes="100vw"
+            modernType="image/jpeg"
+            sources={heroPosterJpegSources}
+          />
+        )}
+        
+        {/* Deep gradient overlay to ensure text is readable */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.25)_40%,rgba(0,0,0,0.85)_100%)]" />
       </div>
 
-      <div className="container-tight relative z-10 flex min-h-[calc(100svh-4.6rem)] flex-col gap-4">
-        <div className="readability-mask-dark max-w-[21rem] pt-1">
-          <p className="eyebrow mb-5 text-white/76">{copy.hero.eyebrow}</p>
-          <h1 className="max-w-[9.4ch] font-display text-[clamp(2.75rem,11vw,4.3rem)] leading-[0.9] tracking-[-0.06em] text-white">
+      <div className="container-tight relative z-10 flex h-full flex-col justify-between pb-8 pt-4">
+        <div className="readability-mask-dark max-w-[21rem]">
+          <p className="eyebrow mb-4 text-white/80">{copy.hero.eyebrow}</p>
+          <h1 className="max-w-[10ch] font-editorial text-[clamp(2.75rem,11vw,4.3rem)] leading-[0.92] tracking-[-0.04em] text-white text-shadow-hero">
             {renderHeadline(copy.hero.headline)}
           </h1>
         </div>
 
-        <div className="-mx-4 mt-2 overflow-hidden rounded-t-[2.2rem] border border-white/12 border-b-0 bg-black/22 shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
-          <div className="relative min-h-[56svh] overflow-hidden sm:min-h-[57svh]">
-            {mobileVideoArmed && !prefersReducedMotion ? (
-              <video
-                ref={videoRef}
-                src={heroVideo}
-                poster={heroPosterMobileFallback}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                controls={false}
-                disablePictureInPicture
-                disableRemotePlayback
-                aria-hidden="true"
-                className="h-full w-full object-cover object-[center_30%]"
-              />
-            ) : (
-              <ResponsiveImage
-                alt=""
-                aria-hidden="true"
-                className="h-full w-full object-cover object-[center_30%]"
-                decoding="async"
-                fallbackSrc={heroPosterFallback}
-                fallbackSources={heroPosterJpegSources}
-                loading="eager"
-                sizes="100vw"
-                modernType="image/jpeg"
-                sources={heroPosterJpegSources}
-              />
-            )}
-
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,8,15,0.02)_0%,rgba(4,8,15,0.12)_38%,rgba(4,8,15,0.72)_100%)]" />
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <div className="readability-panel-dark rounded-[1.45rem] p-5">
-                <p className="eyebrow text-white/56">{copy.hero.cardEyebrow}</p>
-                <p className="mt-3 max-w-[15ch] text-[1.5rem] font-medium leading-[1.08] tracking-[-0.03em] text-white">
-                  {copy.hero.cardTitle}
-                </p>
-                <p className="mt-3 max-w-[28ch] text-[0.92rem] leading-6 text-white/72">
-                  {copy.hero.cardBody}
-                </p>
-              </div>
-            </div>
+        <div className="w-full">
+          <div className="readability-panel-dark rounded-[1.45rem] p-5 border border-white/10 backdrop-blur-md bg-black/40">
+            <p className="eyebrow text-white/70">{copy.hero.cardEyebrow}</p>
+            <p className="mt-2 max-w-[18ch] text-[1.35rem] font-medium leading-[1.15] tracking-[-0.03em] text-white">
+              {copy.hero.cardTitle}
+            </p>
+            <p className="mt-2 max-w-[32ch] text-[0.92rem] leading-6 text-white/80">
+              {copy.hero.cardBody}
+            </p>
           </div>
         </div>
       </div>
@@ -396,7 +381,7 @@ export const Hero = () => {
             aria-hidden="true"
             className="h-full w-full object-cover object-center"
             decoding="async"
-            fetchPriority="high"
+            fetchpriority="high"
             fallbackSrc={heroBackgroundFallback}
             fallbackSources={heroBackgroundJpegSources}
             loading="eager"
