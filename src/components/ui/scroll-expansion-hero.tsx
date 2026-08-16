@@ -102,7 +102,9 @@ const ScrollExpandMedia = ({
   const [scrollProgress, setScrollProgress] = useState<number>(
     prefersReducedMotion ? 1 : 0,
   );
-  const [isMobileState, setIsMobileState] = useState<boolean>(false);
+  const [isMobileState, setIsMobileState] = useState<boolean>(() =>
+    typeof window !== "undefined" && window.innerWidth < 768,
+  );
 
   useEffect(() => {
     const checkIfMobile = () => {
