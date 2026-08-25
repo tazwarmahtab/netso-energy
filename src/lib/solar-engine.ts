@@ -1,37 +1,38 @@
-// Netso Energy RESCO PPA Savings Engine
-// Based on C&I (Commercial & Industrial) MT-2 tariff structure and PPA model.
+import { getSolarAssumption, getSolarAssumptionSnapshot, type SolarAssumptionSnapshot } from "@/lib/solar-assumptions";
 
-const C_AND_I_CONSTANTS = {
-  // From GROUND_TRUTH_CONSTANTS.md (CGS 12-Month Audit)
-  gridVariableRateBdt: 12.98, // BDT/kWh
-  netsoPpaRateBdt: 10.00, // BDT/kWh
+export type EstimateBand = { low: number; midpoint: number; high: number };
+export type ConfidenceLevel = "high" | "medium" | "low";
 
-  // From GROUND_TRUTH_CONSTANTS.md (Generation Physics)
-  annualYieldPerKwp: {
-    low: 1350,  // Conservative yield
-    midpoint: 1445, // Baseline (80kW * 1445.4 = 115,632 kWh/yr)
-    high: 1550, // Optimistic yield
-  },
-
-  // Engineering assumptions for calculator
-  roofUtilisationFactor: 0.65, // Accommodates setbacks, shading, access paths
-  sqftPerKwp: 100, // Standard for commercial rooftops
-  capexBdtPerKwp: 55000, // For Netso's internal payback, not customer-facing
-
-  // Other constants
-  co2KgPerKwh: 0.58, // Bangladesh grid emission factor
-  ppaEscalationRate: 0.03, // 3%
-  ppaEscalationInterval: 3, // Every 3 years
-  ppaTermYears: 20,
+export type SolarAssessmentInput = {
+  facilityType: "factory" | "commercial" | "school" | "hospital" | "hotel" | "warehouse" | "other";
+  location?: string;
+  monthlyConsumptionKwh?: number;
+  monthlyBillBdt?: number;
+  sanctionedLoadKw?: number;
+  usableRoofAreaM2?: number;
+  ppaInterest?: boolean;
+  existingSolarKwp?: number;
+  generatorHoursPerMonth?: number;
 };
 
-type EstimateBand = {
-  low: number;
-  midpoint: number;
-  high: number;
+export type SolarAssessmentResult = {
+  assumptionsVersion: string;
+  recommendedCapacityKwp: number;
+  annualGenerationKwh: number;
+  selfConsumptionKwh: number;
+  exportKwh: number;
+  annualPpaCostBdt?: number;
+  annualAvoidedCostBdt?: number;
+  annualSavingsBdt?: number;
+  twentyYearSavingsBdt?: number;
+  capexEstimateBdt?: number;
+  co2AvoidedTonnes: number;
+  confidence: ConfidenceLevel;
+  flags: string[];
+  disclaimer: string;
 };
 
-export type RescoSavingsModel = {
+export type RescoSavingsModel = SolarAssessmentResult & {
   systemKwp: number;
   systemKwpRange: EstimateBand;
   monthlySavingsBdt: number;
@@ -39,145 +40,134 @@ export type RescoSavingsModel = {
   annualSavingsBdt: number;
   ppaTermSavingsBdt: number;
   ppaTermSavingsBdtRange: EstimateBand;
-  co2SavedTonnes: number;
   annualGenerationKwh: number;
+  co2SavedTonnes: number;
   confidenceLabel: "resco_ppa";
   assumptions: string[];
-  disclaimer: string;
 };
 
-export const RESCO_PPA_ASSUMPTIONS = [
-  "Zero upfront CAPEX for the customer under the PPA model.",
-  "Savings are based on the difference between the BDT 12.98/kWh grid tariff and Netso's BDT 10.00/kWh PPA rate.",
-  "System size is estimated based on available roof space and your electricity consumption.",
-  "Annual generation is modeled on Dhaka's solar irradiance data for commercial rooftops.",
-  "CO2 savings are calculated using the Bangladesh grid's carbon intensity factor.",
-];
+const DEFAULT_YIELD = 1350;
+const CO2_KG_PER_KWH = 0.58;
+const ROOF_M2_PER_KWP = 8;
 
-function roundCurrency(value: number): number {
-  // Round to nearest 100 for display
-  return Math.round(value / 100) * 100;
+const round = (n: number, digits = 0) => Number(n.toFixed(digits));
+
+export function annualConsumptionFromMonthlyKwh(monthlyKwh: number): number {
+  return Math.max(0, monthlyKwh) * 12;
 }
 
-function roundOneDecimal(value: number): number {
-  return Number(value.toFixed(1));
+export function calculateExport(generationKwh: number, selfConsumedKwh: number): number {
+  return Math.max(0, generationKwh - selfConsumedKwh);
 }
 
-function sortAscending(values: [number, number, number]): [number, number, number] {
-  const sorted = [...values].sort((left, right) => left - right);
-  return [sorted[0], sorted[1], sorted[2]];
+function getYield(input: SolarAssessmentInput, assumptions: SolarAssumptionSnapshot): { value: number; confidence: ConfidenceLevel; flag?: string } {
+  const isCgsChattogram = input.location?.toLowerCase().includes("chattogram") && input.facilityType === "school";
+  if (isCgsChattogram) {
+    const benchmark = getSolarAssumption("yield.cgs.chattogram.p90", assumptions);
+    if (benchmark) return { value: benchmark.value, confidence: "high" };
+  }
+  return { value: DEFAULT_YIELD, confidence: "low", flag: "Site-specific solar yield requires engineering validation." };
 }
 
-function buildBand(values: [number, number, number], precision: "integer" | "decimal"): EstimateBand {
-  const [low, midpoint, high] = sortAscending(values);
-  const round = precision === "decimal" ? roundOneDecimal : roundCurrency;
+function getPpaRate(input: SolarAssessmentInput, assumptions: SolarAssumptionSnapshot): number | undefined {
+  if (!input.ppaInterest) return undefined;
+  if (input.facilityType === "school" || input.facilityType === "hospital") return getSolarAssumption("ppa.educational.target", assumptions)?.value;
+  if (input.facilityType === "commercial" || input.facilityType === "hotel") return getSolarAssumption("ppa.commercial.target", assumptions)?.value;
+  return getSolarAssumption("ppa.commercial.target", assumptions)?.value;
+}
 
+export function calculateSolarAssessment(input: SolarAssessmentInput, assumptions = getSolarAssumptionSnapshot()): SolarAssessmentResult {
+  const flags: string[] = [];
+  const monthlyKwh = input.monthlyConsumptionKwh;
+  if (!monthlyKwh) flags.push("Reliable consumption data is required for a higher-confidence estimate.");
+
+  const annualLoad = monthlyKwh ? annualConsumptionFromMonthlyKwh(monthlyKwh) : 0;
+  const { value: yieldKwhPerKwp, confidence: yieldConfidence, flag } = getYield(input, assumptions);
+  if (flag) flags.push(flag);
+
+  const roofLimit = input.usableRoofAreaM2 ? input.usableRoofAreaM2 / ROOF_M2_PER_KWP : Number.POSITIVE_INFINITY;
+  const loadLimit = input.sanctionedLoadKw ? input.sanctionedLoadKw : Number.POSITIVE_INFINITY;
+  const energyLimit = annualLoad ? annualLoad / yieldKwhPerKwp : Number.POSITIVE_INFINITY;
+  const existing = input.existingSolarKwp ?? 0;
+  const rawCapacity = Math.min(roofLimit, loadLimit, energyLimit);
+  const capacity = Math.max(0, Number.isFinite(rawCapacity) ? rawCapacity - existing : 0);
+  const generation = capacity * yieldKwhPerKwp;
+
+  // Without an interval load profile, use a deliberately conservative preliminary ratio.
+  const selfConsumptionRatio = annualLoad > 0 ? 0.75 : 0;
+  const selfConsumed = Math.min(generation, generation * selfConsumptionRatio);
+  const export = calculateExport(generation, selfConsumed);
+  const ppaRate = getPpaRate(input, assumptions);
+
+  let annualPpaCost: number | undefined;
+  let annualAvoidedCost: number | undefined;
+  let annualSavings: number | undefined;
+  let twentyYearSavings: number | undefined;
+  if (ppaRate !== undefined) {
+    annualPpaCost = selfConsumed * ppaRate;
+    if (input.monthlyBillBdt && monthlyKwh) {
+      const effectiveRetail = input.monthlyBillBdt / monthlyKwh;
+      annualAvoidedCost = selfConsumed * effectiveRetail;
+      annualSavings = Math.max(0, annualAvoidedCost - annualPpaCost);
+      twentyYearSavings = annualSavings * 20;
+    } else {
+      flags.push("PPA savings require a validated retail tariff or bill-plus-consumption profile.");
+    }
+  }
+
+  const capex = getSolarAssumption("capex.underwriting", assumptions)?.value;
   return {
-    low: round(low),
-    midpoint: round(midpoint),
-    high: round(high),
+    assumptionsVersion: assumptions.version,
+    recommendedCapacityKwp: round(capacity, 1),
+    annualGenerationKwh: round(generation),
+    selfConsumptionKwh: round(selfConsumed),
+    exportKwh: round(export),
+    annualPpaCostBdt: annualPpaCost !== undefined ? round(annualPpaCost) : undefined,
+    annualAvoidedCostBdt: annualAvoidedCost !== undefined ? round(annualAvoidedCost) : undefined,
+    annualSavingsBdt: annualSavings !== undefined ? round(annualSavings) : undefined,
+    twentyYearSavingsBdt: twentyYearSavings !== undefined ? round(twentyYearSavings) : undefined,
+    capexEstimateBdt: capex ? round(capacity * capex) : undefined,
+    co2AvoidedTonnes: round((selfConsumed * CO2_KG_PER_KWH) / 1000, 1),
+    confidence: yieldConfidence === "high" && !!monthlyKwh ? "high" : monthlyKwh ? "medium" : "low",
+    flags,
+    disclaimer: "Preliminary estimate only. Final capacity, generation, savings, tariff, export treatment and project feasibility require site, structural, electrical, regulatory and commercial validation.",
   };
 }
 
+// Backward-compatible helper used by the existing calculator while the UI migrates.
 export function estimateMonthlyConsumptionFromBill(monthlyBillBdt: number): number {
-  // Simplified for C&I - using the true variable rate from ground truth
-  const estimatedKwh = monthlyBillBdt / C_AND_I_CONSTANTS.gridVariableRateBdt;
-  return roundOneDecimal(estimatedKwh);
+  return round(Math.max(0, monthlyBillBdt) / 12.98, 1);
 }
-
 
 export function getSavingsModel(monthlyKwh: number, rooftopSqft: number): RescoSavingsModel {
-  const safeMonthlyKwh = Math.max(monthlyKwh, 100); // Min 100 kWh for C&I
-  const safeRooftopSqft = Math.max(rooftopSqft, 500); // Min 500 sqft
-  const annualLoadKwh = safeMonthlyKwh * 12;
-
-  // Max system size based on available roof space
-  const roofLimitKwp =
-    (safeRooftopSqft * C_AND_I_CONSTANTS.roofUtilisationFactor) / C_AND_I_CONSTANTS.sqftPerKwp;
-
-  // Recommended system size is capped by either roof space or annual consumption
-  const lowSystem = Math.min(
-    roofLimitKwp * 0.8, // Conservative roof use
-    annualLoadKwh / C_AND_I_CONSTANTS.annualYieldPerKwp.high, // Optimistic yield to meet load
-  );
-  const midpointSystem = Math.min(
-    roofLimitKwp,
-    annualLoadKwh / C_AND_I_CONSTANTS.annualYieldPerKwp.midpoint,
-  );
-  const highSystem = Math.min(
-    roofLimitKwp * 1.1, // Slight over-provisioning potential
-    annualLoadKwh / C_AND_I_CONSTANTS.annualYieldPerKwp.low, // Conservative yield
-  );
-
-  const systemKwpRange = buildBand([lowSystem, midpointSystem, highSystem], "decimal");
-
-  const lowAnnualGeneration = systemKwpRange.low * C_AND_I_CONSTANTS.annualYieldPerKwp.low;
-  const midpointAnnualGeneration =
-    systemKwpRange.midpoint * C_AND_I_CONSTANTS.annualYieldPerKwp.midpoint;
-  const highAnnualGeneration = systemKwpRange.high * C_AND_I_CONSTANTS.annualYieldPerKwp.high;
-
-  const savingsMargin = C_AND_I_CONSTANTS.gridVariableRateBdt - C_AND_I_CONSTANTS.netsoPpaRateBdt;
-
-  const lowAnnualSavings = lowAnnualGeneration * savingsMargin;
-  const midpointAnnualSavings = midpointAnnualGeneration * savingsMargin;
-  const highAnnualSavings = highAnnualGeneration * savingsMargin;
-
-  const monthlySavingsBdtRange = buildBand(
-    [lowAnnualSavings / 12, midpointAnnualSavings / 12, highAnnualSavings / 12],
-    "integer",
-  );
-
-  // Calculate 20-year savings with 3% triennial PPA escalation
-  const calculateLifetimeSavings = (annualGen: number) => {
-    let totalSavings = 0;
-    let currentPpaRate = C_AND_I_CONSTANTS.netsoPpaRateBdt;
-    
-    for (let year = 1; year <= C_AND_I_CONSTANTS.ppaTermYears; year++) {
-      // Degrade generation by 0.5% each year (from GROUND TRUTH)
-      const degradedGen = annualGen * Math.pow(1 - 0.005, year - 1);
-      
-      // Escalate PPA rate by 3% every 3 years
-      if (year > 1 && (year - 1) % C_AND_I_CONSTANTS.ppaEscalationInterval === 0) {
-        currentPpaRate = currentPpaRate * (1 + C_AND_I_CONSTANTS.ppaEscalationRate);
-      }
-      
-      // Assume grid rate stays constant at 12.98 (conservative)
-      const yearSavings = degradedGen * (C_AND_I_CONSTANTS.gridVariableRateBdt - currentPpaRate);
-      totalSavings += yearSavings;
-    }
-    return totalSavings;
-  };
-
-  const ppaTermSavingsBdtRange = buildBand(
-    [
-      calculateLifetimeSavings(lowAnnualGeneration),
-      calculateLifetimeSavings(midpointAnnualGeneration),
-      calculateLifetimeSavings(highAnnualGeneration)
-    ],
-    "integer",
-  );
-
-
+  const result = calculateSolarAssessment({
+    facilityType: "factory",
+    monthlyConsumptionKwh: monthlyKwh,
+    usableRoofAreaM2: Math.max(0, rooftopSqft) * 0.092903,
+    ppaInterest: true,
+  });
+  const system = result.recommendedCapacityKwp;
+  const generation = result.annualGenerationKwh;
+  const annualSavings = result.annualSavingsBdt ?? 0;
+  const band = { low: round(system * 0.9, 1), midpoint: system, high: round(system * 1.1, 1) };
+  const savingsBand = { low: round(annualSavings * 0.9 / 12, -2), midpoint: round(annualSavings / 12, -2), high: round(annualSavings * 1.1 / 12, -2) };
+  const lifetime = annualSavings * 20;
   return {
-    systemKwp: systemKwpRange.midpoint,
-    systemKwpRange,
-    monthlySavingsBdt: monthlySavingsBdtRange.midpoint,
-    monthlySavingsBdtRange,
-    annualSavingsBdt: roundCurrency(midpointAnnualSavings),
-    ppaTermSavingsBdt: ppaTermSavingsBdtRange.midpoint,
-    ppaTermSavingsBdtRange,
-    co2SavedTonnes: roundOneDecimal((midpointAnnualGeneration * C_AND_I_CONSTANTS.co2KgPerKwh) / 1000),
-    annualGenerationKwh: roundCurrency(midpointAnnualGeneration),
+    ...result,
+    systemKwp: system,
+    systemKwpRange: band,
+    monthlySavingsBdt: round(annualSavings / 12, -2),
+    monthlySavingsBdtRange: savingsBand,
+    annualSavingsBdt: annualSavings,
+    ppaTermSavingsBdt: round(lifetime),
+    ppaTermSavingsBdtRange: { low: round(lifetime * 0.9), midpoint: round(lifetime), high: round(lifetime * 1.1) },
+    annualGenerationKwh: generation,
+    co2SavedTonnes: result.co2AvoidedTonnes,
     confidenceLabel: "resco_ppa",
-    assumptions: RESCO_PPA_ASSUMPTIONS,
-    disclaimer:
-      "Preliminary estimate for a Commercial & Industrial PPA model. Actual savings depend on final system design, consumption patterns, and grid tariffs.",
+    assumptions: result.flags.length ? result.flags : ["PPA economics are preliminary and use the governed Netso assumption snapshot."],
   };
 }
 
-// BPDB bill calculation is no longer needed for a PPA model, as savings are a direct rate arbitrage.
-// The functions calculateMonthlyBill and the TARIFF_SLABS can be removed.
 export function calculateMonthlyBill(monthlyKwh: number): number {
-  const bill = monthlyKwh * C_AND_I_CONSTANTS.gridVariableRateBdt;
-  return roundCurrency(bill);
+  return round(monthlyKwh * 12.98, -2);
 }
