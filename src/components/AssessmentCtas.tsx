@@ -37,6 +37,7 @@ export function StartAssessmentLink({
           calculatorSummary: calculatorSummary ?? null,
         })
       }
+      rel="noopener noreferrer"
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-medium text-primary-foreground transition-all duration-300 hover:brightness-110",
         className,
