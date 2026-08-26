@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{caption}
+\usepackage{tabularx}
 
 \pgfplotsset{compat=1.18}
 \definecolor{netsogreen}{HTML}{1B4D3E}
@@ -52,9 +53,12 @@ Client historical billing data is audited from 12 consecutive months of MT-2 uti
 C_{\text{grid}} = F_{\text{demand}} + (Q_{\text{grid}} \times R_{\text{var}})
 \label{eq:tariff_decomp}
 \end{equation}
-where $Q_{\text{grid}} = 118,000\text{ kWh/year}$, $C_{\text{grid}} = \text{BDT } 1,748,056\text{/year}$, and $F_{\text{demand}} = \text{BDT } 216,000\text{/year}$ ($\text{BDT } 18,000\text{/month}$). The true variable utility rate $R_{\text{var}}$ is:
+where $Q_{\text{grid}} = 118{,}000\text{ kWh/yr}$, $C_{\text{grid}} = \text{BDT } 1{,}748{,}056\text{/yr}$, and $F_{\text{demand}} = \text{BDT } 216{,}000\text{/yr}$. The true variable rate $R_{\text{var}}$ is:
 \begin{equation}
-R_{\text{var}} = \frac{C_{\text{grid}} - F_{\text{demand}}}{Q_{\text{grid}}} = \frac{1,748,056 - 216,000}{118,000} = \text{BDT } 12.98\text{/kWh}
+R_{\text{var}}
+  = \frac{C_{\text{grid}} - F_{\text{demand}}}{Q_{\text{grid}}}
+  = \frac{1{,}748{,}056 - 216{,}000}{118{,}000}
+  = \text{BDT } 12.98\text{/kWh}
 \label{eq:true_var}
 \end{equation}
 
@@ -71,13 +75,14 @@ S_{\text{margin}} = \frac{R_{\text{var}} - R_{\text{ppa}}}{R_{\text{var}}} = \fr
 \subsection{Project Capitalization and Debt Service Mechanics}
 Capital expenditure (CAPEX) per kilowatt $K$ is modeled across two distinct cost environments:
 \begin{itemize}
-    \item \textbf{Scenario A (Baseline):} $K_A = \text{BDT } 55,000\text{/kW}$, comprising EPC hard cost of BDT~40,000/kW and developer margin/contingency of BDT~15,000/kW. Total CAPEX is $I_A = \text{BDT } 4,400,000$ \cite{gt_constants}.
-    \item \textbf{Scenario B (Policy Upside):} Under the FY2026--27 National Budget statutory schedule reducing import duties on PV modules, inverters, and racking to 0\%, $K_B = \text{BDT } 40,000\text{/kW}$ ($I_B = \text{BDT } 3,200,000$), with EPC hard cost of BDT~32,000/kW and developer margin of BDT~8,000/kW \cite{gt_constants}.
+    \item \textbf{Scenario A (Baseline):} $K_A = \text{BDT } 55{,}000\text{/kW}$, EPC hard cost of BDT~40,000/kW plus developer margin of BDT~15,000/kW. Total CAPEX: $I_A = \text{BDT } 4{,}400{,}000$ \cite{gt_constants}.
+    \item \textbf{Scenario B (Policy Upside):} The FY2026--27 National Budget eliminates import duties on PV modules, inverters, and racking. $K_B = \text{BDT } 40{,}000\text{/kW}$ ($I_B = \text{BDT } 3{,}200{,}000$) \cite{gt_constants}.
 \end{itemize}
 
 Financing is modeled via concessional IDCOL facility parameters: debt ratio $d = 0.80$ (80\%), equity ratio $e = 0.20$ (20\%), interest rate $r = 0.06$ (6.0\% p.a.), and tenor $n = 10\text{ years}$. Annual debt service $A_{\text{debt}}$ is calculated via standard annuity amortization:
 \begin{equation}
-A_{\text{debt}} = (d \cdot I) \times \frac{r(1+r)^n}{(1+r)^n - 1}
+A_{\text{debt}} = (d \cdot I) \times
+  \frac{r\,(1+r)^{n}}{(1+r)^{n} - 1}
 \label{eq:debt_service}
 \end{equation}
 
@@ -101,10 +106,10 @@ Application of Equation~\eqref{eq:generation} to the 80~kWp array yields an annu
 
 \begin{table}[htbp]
 \centering
-\small
+\footnotesize
 \caption{Techno-Economic and Capitalization Comparison (80~kWp System)}
 \label{tab:comparison}
-\begin{tabular}{lrrr}
+\begin{tabular}{@{}l*{3}{r}@{}}
 \toprule
 \textbf{Parameter / Metric} & \textbf{Scenario A (Baseline)} & \textbf{Scenario B (Policy Upside)} & \textbf{Delta ($\Delta$)} \\
 \midrule
@@ -196,7 +201,7 @@ Table~\ref{tab:stress_test} evaluates project sensitivity across operational and
 \small
 \caption{Beringia Revenue-Share Structure Sensitivity and Downside Stress Test}
 \label{tab:stress_test}
-\begin{tabular}{lp{6.2cm}rr}
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X rr@{}}
 \toprule
 \textbf{Scenario} & \textbf{Mechanism \& Impact} & \textbf{Netso Profit (Yr 1)} & \textbf{Investor Return Impact} \\
 \midrule
@@ -206,7 +211,7 @@ Table~\ref{tab:stress_test} evaluates project sensitivity across operational and
 \textbf{Year 5 Buyback} & Early buyout exercised at 1.2$\times$ remaining unrecovered value & N/A & Target exit at BDT 5.67M \\
 \textbf{Default Year 3} & CGS payment default; 6-mo bank guarantee + escrow drawn & Asset retained & Net loss capped at BDT 546k \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section{Discussion}
