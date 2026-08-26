@@ -1,39 +1,30 @@
-import { defineConfig, devices } from "playwright/test";
-
-const port = Number(process.env.PLAYWRIGHT_PORT || 4199);
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${port}`;
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./tests/smoke",
+  testDir: './tests',
   fullyParallel: true,
-  reporter: process.env.CI ? "dot" : "list",
+  forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  timeout: 30_000,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
   use: {
-    baseURL,
-    trace: "retain-on-failure",
+    baseURL: 'http://127.0.0.1:4173',
+    trace: 'on-first-retry',
   },
-  webServer: process.env.PLAYWRIGHT_BASE_URL
-    ? undefined
-    : {
-        command: `HOST=127.0.0.1 PORT=${port} node scripts/serve-dist.mjs`,
-        reuseExistingServer: false,
-        timeout: 60_000,
-        url: baseURL,
-      },
   projects: [
     {
-      name: "desktop",
-      use: {
-        ...devices["Desktop Chrome"],
-        viewport: { width: 1440, height: 1100 },
-      },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: "mobile",
-      use: {
-        ...devices["Pixel 7"],
-      },
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
     },
   ],
+  webServer: {
+    command: 'npm run preview:dist',
+    url: 'http://127.0.0.1:4173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
 });

@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, ReactNode, FormEvent, useEffect, useMemo, useState } from "react";
+import { cloneElement, isValidElement, ReactNode, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ import {
 import { isSupabaseBrowserConfigured } from "@/lib/supabase-client";
 import { useSiteCopy } from "@/lib/site-copy";
 import { buildWhatsAppStartUrl, isWhatsAppConfigured } from "@/lib/whatsapp";
+import { cn } from "@/lib/utils";
 
 type FallbackFormState = Omit<FeasibilityFormValues, "monthlyBillAmount"> & {
   monthlyBillAmount: string;
@@ -62,6 +63,8 @@ const Feasibility = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submittedSession, setSubmittedSession] =
     useState<StartAssessmentSessionResponse["session"] | null>(null);
+  const [submissionAttempted, setSubmissionAttempted] = useState(false);
+  const firstErrorRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setValues((current) => ({ ...current, preferredLanguage: language }));
@@ -103,8 +106,18 @@ const Feasibility = () => {
               "বিল্ডিং স্টাফের সমন্বয় লাগবে",
               "এখনও নিশ্চিত নই",
             ],
-            shading: ["বেশিরভাগ পরিষ্কার", "আংশিক ছায়াযুক্ত", "খুব বেশি ছায়াযুক্ত", "এখনও নিশ্চিত নই"],
-            timeline: ["১ মাসের মধ্যে", "৩ মাসের মধ্যে", "৬ মাসের মধ্যে", "শুধু খোঁজ নিচ্ছি"],
+            shading: [
+              "বেশিরভাগ পরিষ্কার",
+              "আংশিক ছায়াযুক্ত",
+              "খুব বেশি ছায়াযুক্ত",
+              "এখনও নিশ্চিত নই",
+            ],
+            timeline: [
+              "১ মাসের মধ্যে",
+              "৩ মাসের মধ্যে",
+              "৬ মাসের মধ্যে",
+              "শুধু খোঁজ নিচ্ছি",
+            ],
             goals: [
               "দিনের বিদ্যুৎ খরচ কমানো",
               "ব্যাকআপ প্রস্তুতি বাড়ানো",
@@ -135,18 +148,9 @@ const Feasibility = () => {
               billPhotoReady: "আপনার কাছে কি এখন বিলের ছবি আছে?",
               rooftopPhotosReady: "আপনার কাছে কি এখন ছাদের ছবি আছে?",
             },
-            errors: {
-              name: "দয়া করে আপনার নাম লিখুন।",
-              phone: "একটি বৈধ বাংলাদেশি নম্বর দিন (যেমন 01XXXXXXXXX)।",
-              generic: "দয়া করে হাইলাইট করা ফিল্ডগুলো ঠিক করুন।",
-              address: "দয়া করে পূর্ণ ঠিকানা লিখুন।",
-              district: "দয়া করে আপনার জেলা লিখুন।",
-              neighborhood: "দয়া করে আপনার এলাকা লিখুন।",
-              required: "দয়া করে এই ফিল্ডটি পূরণ করুন।",
-            },
-            success: "ফিজিবিলিটি রিকোয়েস্ট গ্রহণ করা হয়েছে।",
-            submittedNote:
-              "আপনি যে তথ্য দিয়েছেন সেখান থেকেই আমরা এগোবো, প্রয়োজন হলে বাকি তথ্য চাওয়া হবে।",
+            errors: copy.feasibility.validation,
+            success: copy.feasibility.successTitle,
+            submittedNote: copy.feasibility.successBody,
           }
         : {
             propertyTypes: [
@@ -182,7 +186,12 @@ const Feasibility = () => {
               "Not sure yet",
             ],
             shading: ["Mostly clear", "Partly shaded", "Heavily shaded", "Not sure yet"],
-            timeline: ["Within 1 month", "Within 3 months", "Within 6 months", "Just exploring"],
+            timeline: [
+              "Within 1 month",
+              "Within 3 months",
+              "Within 6 months",
+              "Just exploring",
+            ],
             goals: [
               "Reduce daytime electricity cost",
               "Improve backup readiness",
@@ -190,7 +199,7 @@ const Feasibility = () => {
               "Prepare for a future project",
             ],
             phase: [
-              { value: "unknown", label: "Don’t know" },
+              { value: "unknown", label: "Don't know" },
               { value: "single_phase", label: "Single phase" },
               { value: "three_phase", label: "Three phase" },
             ],
@@ -213,18 +222,9 @@ const Feasibility = () => {
               billPhotoReady: "Do you already have a bill photo?",
               rooftopPhotosReady: "Do you already have rooftop photos?",
             },
-            errors: {
-              name: "Please enter your name.",
-              phone: "Enter a valid Bangladesh number (e.g. 01XXXXXXXXX).",
-              generic: "Please fix the highlighted fields.",
-              address: "Please enter a full address.",
-              district: "Please enter your district.",
-              neighborhood: "Please enter your neighborhood.",
-              required: "Please complete this field.",
-            },
-            success: "Feasibility request received.",
-            submittedNote:
-              "We'll continue from the details you've shared and request anything missing if needed.",
+            errors: copy.feasibility.validation,
+            success: copy.feasibility.successTitle,
+            submittedNote: copy.feasibility.successBody,
           },
     [isBn],
   );
@@ -241,7 +241,8 @@ const Feasibility = () => {
     if (!bdPhoneRegex.test(values.phone.trim())) nextErrors.phone = options.errors.phone;
     if (values.address.trim().length < 5) nextErrors.address = options.errors.address;
     if (values.district.trim().length < 2) nextErrors.district = options.errors.district;
-    if (values.neighborhood.trim().length < 2) nextErrors.neighborhood = options.errors.neighborhood;
+    if (values.neighborhood.trim().length < 2)
+      nextErrors.neighborhood = options.errors.neighborhood;
 
     [
       "propertyType",
@@ -309,11 +310,23 @@ const Feasibility = () => {
     return details.filter((detail) => !detail.endsWith("="));
   };
 
+  const focusFirstError = () => {
+    if (firstErrorRef.current) {
+      firstErrorRef.current.focus();
+      firstErrorRef.current = null;
+    } else {
+      const firstError = document.querySelector('[aria-invalid="true"]') as HTMLElement;
+      firstError?.focus();
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setSubmissionAttempted(true);
 
     if (!validate()) {
       toast.error(options.errors.generic);
+      focusFirstError();
       return;
     }
 
@@ -346,8 +359,7 @@ const Feasibility = () => {
             ? Number(values.monthlyBillAmount)
             : undefined,
           servicePhase: values.servicePhase,
-          notes:
-            "Fallback web form submission.",
+          notes: "Fallback web form submission.",
         },
         evidence: buildEvidence(),
       });
@@ -379,6 +391,13 @@ const Feasibility = () => {
     }
   };
 
+  // Prevent duplicate submissions on page refresh
+  useEffect(() => {
+    if (submittedSession) {
+      sessionStorage.setItem("feasibility_submitted", "true");
+    }
+  }, [submittedSession]);
+
   if (submittedSession) {
     return (
       <>
@@ -397,36 +416,16 @@ const Feasibility = () => {
               <h1 className="display-text text-4xl text-balance md:text-6xl">
                 {copy.feasibility.successTitle}
               </h1>
-              <p className="mt-6 text-lg leading-8 text-muted-foreground">
+              <p className="mt-4 max-w-xl mx-auto text-lg leading-relaxed text-foreground/72">
                 {copy.feasibility.successBody}
               </p>
-              <p className="mt-4 text-sm text-muted-foreground">{options.submittedNote}</p>
-
-              <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                {whatsappConfigured ? (
-                  <StartAssessmentLink
-                    source="fallback-success"
-                    sessionId={submittedSession.id}
-                    className="w-full sm:w-auto"
-                  />
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSubmittedSession(null);
-                    setValues((current) => ({
-                      ...current,
-                      name: "",
-                      phone: "",
-                      address: "",
-                      district: "",
-                      neighborhood: "",
-                    }));
-                  }}
-                  className="rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary/40"
+              <div className="mt-8 flex items-center justify-center gap-4">
+                <StartAssessmentLink
+                  source="feasibility_success"
+                  className="w-full max-w-xs justify-center px-6 py-3 text-base shadow-[0_18px_36px_-24px_rgba(200,178,255,0.72)]"
                 >
-                  {copy.feasibility.submitAnother}
-                </button>
+                  {options.submitAnother}
+                </StartAssessmentLink>
               </div>
             </motion.div>
           </div>
@@ -438,404 +437,476 @@ const Feasibility = () => {
   return (
     <>
       <SEO path="/feasibility" />
-
-      <section className="relative pb-12 pt-40 md:pb-16 md:pt-52">
-        <div className="absolute inset-0 -z-10 bg-radial-glow opacity-45" />
+      <section className="flex min-h-[80vh] items-center pb-32 pt-40 md:pb-44 md:pt-52">
         <div className="container-tight">
-          <p className="eyebrow mb-6 text-primary/80">{copy.feasibility.eyebrow}</p>
-          <h1 className="display-text max-w-4xl text-5xl text-balance md:text-7xl">
-            {copy.feasibility.headline}
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">
-            {copy.feasibility.body}
-          </p>
-        </div>
-      </section>
-
-      <section className="pb-12">
-        <div className="container-tight grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="ivory-panel rounded-[2rem] p-8 md:p-10">
-            <p className="eyebrow mb-4 text-primary/80">{copy.feasibility.whatsappHeadline}</p>
-            <h2 className="font-display text-3xl tracking-[-0.04em] text-foreground">
-              {copy.common.startAssessment}
-            </h2>
-            <p className="mt-4 text-base leading-7 text-muted-foreground">
-              {copy.feasibility.whatsappBody}
-            </p>
-            <div className="mt-8">
-              <StartAssessmentLink source="fallback-page-top" />
-            </div>
-          </div>
-
-          <div className="ivory-panel rounded-[2rem] p-8 md:p-10">
-            <p className="eyebrow mb-4 text-primary/80">{copy.feasibility.fallbackHeadline}</p>
-            <p className="text-base leading-7 text-muted-foreground">
-              {copy.feasibility.fallbackBody}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="pb-32 md:pb-40">
-        <div className="container-tight max-w-5xl">
-          {!assessmentBackendConfigured ? (
-            <div className="ivory-panel rounded-[2rem] p-8 md:p-10">
-              <p className="eyebrow mb-4 text-primary/80">{copy.feasibility.fallbackHeadline}</p>
-              <h2 className="font-display text-3xl tracking-[-0.04em] text-foreground">
-                {isBn ? "হোয়াটসঅ্যাপে চালিয়ে যান" : "Continue on WhatsApp"}
-              </h2>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">
-                {isBn
-                  ? "ওয়েব ফলব্যাক ফর্মটি আপাতত উপলভ্য নয়। হোয়াটসঅ্যাপে চালিয়ে যান, NETSO সেখানেই পরের ইনটেক তথ্য সংগ্রহ করবে।"
-                  : "The web fallback form is temporarily unavailable. Continue on WhatsApp and NETSO will collect the next intake details there."}
-              </p>
-              {whatsappConfigured ? (
-                <div className="mt-8">
-                  <StartAssessmentLink source="fallback-form-unavailable" />
-                </div>
-              ) : null}
-            </div>
-          ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup label={options.labels.name} error={errors.name} htmlFor="name">
-                <input
-                  id="name"
-                  autoComplete="name"
-                  value={values.name}
-                  onChange={(event) => update("name", event.target.value)}
-                  className={inputCls(Boolean(errors.name))}
-                />
-              </FieldGroup>
-
-              <FieldGroup label={options.labels.phone} error={errors.phone} htmlFor="phone">
-                <input
-                  id="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  inputMode="tel"
-                  value={values.phone}
-                  onChange={(event) => update("phone", event.target.value)}
-                  className={inputCls(Boolean(errors.phone))}
-                />
-              </FieldGroup>
-            </div>
-
-            <FieldGroup label={options.labels.address} error={errors.address} htmlFor="address">
-              <input
-                id="address"
-                autoComplete="street-address"
-                value={values.address}
-                onChange={(event) => update("address", event.target.value)}
-                className={inputCls(Boolean(errors.address))}
-              />
-            </FieldGroup>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup label={options.labels.district} error={errors.district} htmlFor="district">
-                <input
-                  id="district"
-                  value={values.district}
-                  onChange={(event) => update("district", event.target.value)}
-                  className={inputCls(Boolean(errors.district))}
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                label={options.labels.neighborhood}
-                error={errors.neighborhood}
-                htmlFor="neighborhood"
-              >
-                <input
-                  id="neighborhood"
-                  value={values.neighborhood}
-                  onChange={(event) => update("neighborhood", event.target.value)}
-                  className={inputCls(Boolean(errors.neighborhood))}
-                />
-              </FieldGroup>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup
-                label={options.labels.propertyType}
-                error={errors.propertyType}
-                htmlFor="propertyType"
-              >
-                <select
-                  id="propertyType"
-                  value={values.propertyType}
-                  onChange={(event) => update("propertyType", event.target.value)}
-                  className={inputCls(Boolean(errors.propertyType))}
-                >
-                  <option value="" />
-                  {options.propertyTypes.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-
-              <FieldGroup
-                label={options.labels.ownershipStatus}
-                error={errors.ownershipStatus}
-                htmlFor="ownershipStatus"
-              >
-                <select
-                  id="ownershipStatus"
-                  value={values.ownershipStatus}
-                  onChange={(event) => update("ownershipStatus", event.target.value)}
-                  className={inputCls(Boolean(errors.ownershipStatus))}
-                >
-                  <option value="" />
-                  {options.ownership.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup
-                label={options.labels.monthlyBillRange}
-                error={errors.monthlyBillRange}
-                htmlFor="monthlyBillRange"
-              >
-                <select
-                  id="monthlyBillRange"
-                  value={values.monthlyBillRange}
-                  onChange={(event) => update("monthlyBillRange", event.target.value)}
-                  className={inputCls(Boolean(errors.monthlyBillRange))}
-                >
-                  <option value="" />
-                  {options.monthlyBill.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-
-              <FieldGroup label={options.labels.monthlyBillAmount} htmlFor="monthlyBillAmount">
-                <input
-                  id="monthlyBillAmount"
-                  type="number"
-                  min="0"
-                  inputMode="numeric"
-                  value={values.monthlyBillAmount}
-                  onChange={(event) => update("monthlyBillAmount", event.target.value)}
-                  className={inputCls(false)}
-                />
-              </FieldGroup>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup label={options.labels.roofSize} error={errors.roofSize} htmlFor="roofSize">
-                <select
-                  id="roofSize"
-                  value={values.roofSize}
-                  onChange={(event) => update("roofSize", event.target.value)}
-                  className={inputCls(Boolean(errors.roofSize))}
-                >
-                  <option value="" />
-                  {options.roofSize.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-
-              <FieldGroup
-                label={options.labels.servicePhase}
-                htmlFor="servicePhase"
-              >
-                <select
-                  id="servicePhase"
-                  value={values.servicePhase}
-                  onChange={(event) => update("servicePhase", event.target.value)}
-                  className={inputCls(false)}
-                >
-                  {options.phase.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup
-                label={options.labels.roofAccessReadiness}
-                error={errors.roofAccessReadiness}
-                htmlFor="roofAccessReadiness"
-              >
-                <select
-                  id="roofAccessReadiness"
-                  value={values.roofAccessReadiness}
-                  onChange={(event) => update("roofAccessReadiness", event.target.value)}
-                  className={inputCls(Boolean(errors.roofAccessReadiness))}
-                >
-                  <option value="" />
-                  {options.roofAccess.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-
-              <FieldGroup
-                label={options.labels.shadingStatus}
-                error={errors.shadingStatus}
-                htmlFor="shadingStatus"
-              >
-                <select
-                  id="shadingStatus"
-                  value={values.shadingStatus}
-                  onChange={(event) => update("shadingStatus", event.target.value)}
-                  className={inputCls(Boolean(errors.shadingStatus))}
-                >
-                  <option value="" />
-                  {options.shading.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup
-                label={options.labels.targetInstallTimeline}
-                error={errors.targetInstallTimeline}
-                htmlFor="targetInstallTimeline"
-              >
-                <select
-                  id="targetInstallTimeline"
-                  value={values.targetInstallTimeline}
-                  onChange={(event) => update("targetInstallTimeline", event.target.value)}
-                  className={inputCls(Boolean(errors.targetInstallTimeline))}
-                >
-                  <option value="" />
-                  {options.timeline.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-
-              <FieldGroup
-                label={options.labels.primaryGoal}
-                error={errors.primaryGoal}
-                htmlFor="primaryGoal"
-              >
-                <select
-                  id="primaryGoal"
-                  value={values.primaryGoal}
-                  onChange={(event) => update("primaryGoal", event.target.value)}
-                  className={inputCls(Boolean(errors.primaryGoal))}
-                >
-                  <option value="" />
-                  {options.goals.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </FieldGroup>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <FieldGroup label={options.labels.billPhotoReady} htmlFor="billPhotoReady">
-                <select
-                  id="billPhotoReady"
-                  value={values.billPhotoReady}
-                  onChange={(event) => update("billPhotoReady", event.target.value)}
-                  className={inputCls(false)}
-                >
-                  <option value="no">{isBn ? "না" : "No"}</option>
-                  <option value="yes">{isBn ? "হ্যাঁ" : "Yes"}</option>
-                </select>
-              </FieldGroup>
-
-              <FieldGroup label={options.labels.rooftopPhotosReady} htmlFor="rooftopPhotosReady">
-                <select
-                  id="rooftopPhotosReady"
-                  value={values.rooftopPhotosReady}
-                  onChange={(event) => update("rooftopPhotosReady", event.target.value)}
-                  className={inputCls(false)}
-                >
-                  <option value="no">{isBn ? "না" : "No"}</option>
-                  <option value="yes">{isBn ? "হ্যাঁ" : "Yes"}</option>
-                </select>
-              </FieldGroup>
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-sm font-medium text-primary-foreground transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+          <div className="mx-auto max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-10 md:mb-16 text-center"
             >
-              {submitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {language === "bn" ? "জমা দেওয়া হচ্ছে..." : "Submitting..."}
-                </>
-              ) : (
-                copy.feasibility.submit
-              )}
-            </button>
+              <p className="eyebrow mb-4 text-primary/80">{copy.feasibility.eyebrow}</p>
+              <h1 className="display-xl max-w-[11ch] text-balance text-foreground md:display-text">
+                {copy.feasibility.headline}
+              </h1>
+              <p className="mt-4 max-w-[30rem] mx-auto text-base leading-8 text-foreground/72 md:max-w-none md:text-xl md:leading-relaxed">
+                {copy.feasibility.body}
+              </p>
+            </motion.div>
 
-            <p className="text-xs leading-6 text-muted-foreground">
-              {isBn
-                ? "জমা দেওয়ার মাধ্যমে আপনি সম্মতি দিচ্ছেন যে NETSO আপনার ছাদ বিষয়ে যোগাযোগ করতে পারবে। আমরা কখনও আপনার তথ্য শেয়ার করি না।"
-                : "By submitting, you agree to be contacted by NETSO regarding your rooftop. We never share your details."}
-            </p>
-          </form>
-          )}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-[2rem] border border-border/60 bg-background p-6 md:p-10 shadow-sm"
+            >
+              <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6" noValidate>
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="text-sm font-medium text-foreground">
+                      {options.labels.name}
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      autoComplete="name"
+                      value={values.name}
+                      onChange={(e) => update("name", e.target.value)}
+                      className={inputCls(!!errors.name)}
+                      placeholder={options.labels.name}
+                      aria-invalid={!!errors.name}
+                      aria-describedby={errors.name ? "name-error" : undefined}
+                      disabled={submitting}
+                    />
+                    {errors.name && (
+                      <p id="name-error" className="text-sm text-destructive" role="alert">
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="text-sm font-medium text-foreground">
+                      {options.labels.phone}
+                    </label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      value={values.phone}
+                      onChange={(e) => update("phone", e.target.value.replace(/[^\d+]/g, ""))}
+                      className={inputCls(!!errors.phone)}
+                      placeholder="01XXXXXXXXX"
+                      aria-invalid={!!errors.phone}
+                      aria-describedby={errors.phone ? "phone-error" : undefined}
+                      disabled={submitting}
+                    />
+                    {errors.phone && (
+                      <p id="phone-error" className="text-sm text-destructive" role="alert">
+                        {errors.phone}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="address" className="text-sm font-medium text-foreground">
+                    {options.labels.address}
+                  </label>
+                  <input
+                    id="address"
+                    type="text"
+                    autoComplete="street-address"
+                    value={values.address}
+                    onChange={(e) => update("address", e.target.value)}
+                    className={inputCls(!!errors.address)}
+                    placeholder="House/road/block, area"
+                    aria-invalid={!!errors.address}
+                    aria-describedby={errors.address ? "address-error" : undefined}
+                    disabled={submitting}
+                  />
+                  {errors.address && (
+                    <p id="address-error" className="text-sm text-destructive" role="alert">
+                      {errors.address}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="district" className="text-sm font-medium text-foreground">
+                      {options.labels.district}
+                    </label>
+                    <input
+                      id="district"
+                      type="text"
+                      autoComplete="address-level2"
+                      value={values.district}
+                      onChange={(e) => update("district", e.target.value)}
+                      className={inputCls(!!errors.district)}
+                      placeholder="e.g. Dhaka"
+                      aria-invalid={!!errors.district}
+                      aria-describedby={errors.district ? "district-error" : undefined}
+                      disabled={submitting}
+                    />
+                    {errors.district && (
+                      <p id="district-error" className="text-sm text-destructive" role="alert">
+                        {errors.district}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="neighborhood" className="text-sm font-medium text-foreground">
+                      {options.labels.neighborhood}
+                    </label>
+                    <input
+                      id="neighborhood"
+                      type="text"
+                      autoComplete="address-level3"
+                      value={values.neighborhood}
+                      onChange={(e) => update("neighborhood", e.target.value)}
+                      className={inputCls(!!errors.neighborhood)}
+                      placeholder="e.g. Gulshan"
+                      aria-invalid={!!errors.neighborhood}
+                      aria-describedby={errors.neighborhood ? "neighborhood-error" : undefined}
+                      disabled={submitting}
+                    />
+                    {errors.neighborhood && (
+                      <p id="neighborhood-error" className="text-sm text-destructive" role="alert">
+                        {errors.neighborhood}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="propertyType" className="text-sm font-medium text-foreground">
+                      {options.labels.propertyType}
+                    </label>
+                    <select
+                      id="propertyType"
+                      value={values.propertyType}
+                      onChange={(e) => update("propertyType", e.target.value)}
+                      className={inputCls(!!errors.propertyType)}
+                      aria-invalid={!!errors.propertyType}
+                      aria-describedby={errors.propertyType ? "propertyType-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.propertyType}</option>
+                      {options.propertyTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.propertyType && (
+                      <p id="propertyType-error" className="text-sm text-destructive" role="alert">
+                        {errors.propertyType}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="ownershipStatus" className="text-sm font-medium text-foreground">
+                      {options.labels.ownershipStatus}
+                    </label>
+                    <select
+                      id="ownershipStatus"
+                      value={values.ownershipStatus}
+                      onChange={(e) => update("ownershipStatus", e.target.value)}
+                      className={inputCls(!!errors.ownershipStatus)}
+                      aria-invalid={!!errors.ownershipStatus}
+                      aria-describedby={errors.ownershipStatus ? "ownershipStatus-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.ownershipStatus}</option>
+                      {options.ownership.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.ownershipStatus && (
+                      <p id="ownershipStatus-error" className="text-sm text-destructive" role="alert">
+                        {errors.ownershipStatus}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="monthlyBillRange" className="text-sm font-medium text-foreground">
+                      {options.labels.monthlyBillRange}
+                    </label>
+                    <select
+                      id="monthlyBillRange"
+                      value={values.monthlyBillRange}
+                      onChange={(e) => update("monthlyBillRange", e.target.value)}
+                      className={inputCls(!!errors.monthlyBillRange)}
+                      aria-invalid={!!errors.monthlyBillRange}
+                      aria-describedby={errors.monthlyBillRange ? "monthlyBillRange-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.monthlyBillRange}</option>
+                      {options.monthlyBill.map((range) => (
+                        <option key={range} value={range}>
+                          {range}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.monthlyBillRange && (
+                      <p id="monthlyBillRange-error" className="text-sm text-destructive" role="alert">
+                        {errors.monthlyBillRange}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="monthlyBillAmount" className="text-sm font-medium text-foreground">
+                      {options.labels.monthlyBillAmount}
+                    </label>
+                    <input
+                      id="monthlyBillAmount"
+                      type="text"
+                      inputMode="numeric"
+                      value={values.monthlyBillAmount}
+                      onChange={(e) => update("monthlyBillAmount", e.target.value.replace(/[^\d]/g, ""))}
+                      className={inputCls(false)}
+                      placeholder="e.g. 5000"
+                      disabled={submitting}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="roofSize" className="text-sm font-medium text-foreground">
+                      {options.labels.roofSize}
+                    </label>
+                    <select
+                      id="roofSize"
+                      value={values.roofSize}
+                      onChange={(e) => update("roofSize", e.target.value)}
+                      className={inputCls(!!errors.roofSize)}
+                      aria-invalid={!!errors.roofSize}
+                      aria-describedby={errors.roofSize ? "roofSize-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.roofSize}</option>
+                      {options.roofSize.map((size) => (
+                        <option key={size} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.roofSize && (
+                      <p id="roofSize-error" className="text-sm text-destructive" role="alert">
+                        {errors.roofSize}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="roofAccessReadiness" className="text-sm font-medium text-foreground">
+                      {options.labels.roofAccessReadiness}
+                    </label>
+                    <select
+                      id="roofAccessReadiness"
+                      value={values.roofAccessReadiness}
+                      onChange={(e) => update("roofAccessReadiness", e.target.value)}
+                      className={inputCls(!!errors.roofAccessReadiness)}
+                      aria-invalid={!!errors.roofAccessReadiness}
+                      aria-describedby={errors.roofAccessReadiness ? "roofAccessReadiness-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.roofAccessReadiness}</option>
+                      {options.roofAccess.map((access) => (
+                        <option key={access} value={access}>
+                          {access}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.roofAccessReadiness && (
+                      <p id="roofAccessReadiness-error" className="text-sm text-destructive" role="alert">
+                        {errors.roofAccessReadiness}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="shadingStatus" className="text-sm font-medium text-foreground">
+                      {options.labels.shadingStatus}
+                    </label>
+                    <select
+                      id="shadingStatus"
+                      value={values.shadingStatus}
+                      onChange={(e) => update("shadingStatus", e.target.value)}
+                      className={inputCls(!!errors.shadingStatus)}
+                      aria-invalid={!!errors.shadingStatus}
+                      aria-describedby={errors.shadingStatus ? "shadingStatus-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.shadingStatus}</option>
+                      {options.shading.map((shading) => (
+                        <option key={shading} value={shading}>
+                          {shading}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.shadingStatus && (
+                      <p id="shadingStatus-error" className="text-sm text-destructive" role="alert">
+                        {errors.shadingStatus}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="targetInstallTimeline" className="text-sm font-medium text-foreground">
+                      {options.labels.targetInstallTimeline}
+                    </label>
+                    <select
+                      id="targetInstallTimeline"
+                      value={values.targetInstallTimeline}
+                      onChange={(e) => update("targetInstallTimeline", e.target.value)}
+                      className={inputCls(!!errors.targetInstallTimeline)}
+                      aria-invalid={!!errors.targetInstallTimeline}
+                      aria-describedby={errors.targetInstallTimeline ? "targetInstallTimeline-error" : undefined}
+                      disabled={submitting}
+                    >
+                      <option value="">{options.labels.targetInstallTimeline}</option>
+                      {options.timeline.map((timeline) => (
+                        <option key={timeline} value={timeline}>
+                          {timeline}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.targetInstallTimeline && (
+                      <p id="targetInstallTimeline-error" className="text-sm text-destructive" role="alert">
+                        {errors.targetInstallTimeline}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="primaryGoal" className="text-sm font-medium text-foreground">
+                    {options.labels.primaryGoal}
+                  </label>
+                  <select
+                    id="primaryGoal"
+                    value={values.primaryGoal}
+                    onChange={(e) => update("primaryGoal", e.target.value)}
+                    className={inputCls(!!errors.primaryGoal)}
+                    aria-invalid={!!errors.primaryGoal}
+                    aria-describedby={errors.primaryGoal ? "primaryGoal-error" : undefined}
+                    disabled={submitting}
+                  >
+                    <option value="">{options.labels.primaryGoal}</option>
+                    {options.goals.map((goal) => (
+                      <option key={goal} value={goal}>
+                        {goal}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.primaryGoal && (
+                    <p id="primaryGoal-error" className="text-sm text-destructive" role="alert">
+                      {errors.primaryGoal}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="servicePhase" className="text-sm font-medium text-foreground">
+                    {options.labels.servicePhase}
+                  </label>
+                  <select
+                    id="servicePhase"
+                    value={values.servicePhase}
+                    onChange={(e) => update("servicePhase", e.target.value)}
+                    className={inputCls(false)}
+                    disabled={submitting}
+                  >
+                    {options.phase.map((p) => (
+                      <option key={p.value} value={p.value}>
+                        {p.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2 md:gap-6 pt-4 border-t border-border/60">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        id="billPhotoReady"
+                        type="checkbox"
+                        checked={values.billPhotoReady === "yes"}
+                        onChange={(e) =>
+                          update("billPhotoReady", e.target.checked ? "yes" : "no")
+                        }
+                        className="h-4 w-4 rounded border-border text-primary focus:ring-primary/20"
+                        disabled={submitting}
+                      />
+                      <label htmlFor="billPhotoReady" className="text-sm font-medium text-foreground cursor-pointer">
+                        {options.labels.billPhotoReady}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        id="rooftopPhotosReady"
+                        type="checkbox"
+                        checked={values.rooftopPhotosReady === "yes"}
+                        onChange={(e) =>
+                          update("rooftopPhotosReady", e.target.checked ? "yes" : "no")
+                        }
+                        className="h-4 w-4 rounded border-border text-primary focus:ring-primary/20"
+                        disabled={submitting}
+                      />
+                      <label htmlFor="rooftopPhotosReady" className="text-sm font-medium text-foreground cursor-pointer">
+                        {options.labels.rooftopPhotosReady}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className={cn(
+                      "w-full rounded-2xl bg-primary px-6 py-4 text-base font-medium text-primary-foreground shadow-sun hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200",
+                      submitting && "cursor-wait",
+                    )}
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+                        {isBn ? "জমা দেওয়া হচ্ছে..." : "Submitting..."}
+                      </>
+                    ) : (
+                      options.submit
+                    )}
+                  </button>
+                </div>
+
+                <div className="pt-2 text-center text-sm text-muted-foreground">
+                  {options.errors.generic}
+                </div>
+              </form>
+            </motion.div>
+          </div>
         </div>
       </section>
     </>
-  );
-};
-
-const FieldGroup = ({
-  label,
-  error,
-  htmlFor,
-  children,
-}: {
-  label: string;
-  error?: string;
-  htmlFor: string;
-  children: ReactNode;
-}) => {
-  const describedBy = error ? `${htmlFor}-error` : undefined;
-  const enhancedChild = isValidElement(children)
-    ? cloneElement(children, {
-        "aria-describedby": describedBy,
-        "aria-invalid": error ? "true" : "false",
-      })
-    : children;
-
-  return (
-    <div>
-      <label htmlFor={htmlFor} className="mb-2 block text-sm font-medium text-foreground">
-        {label}
-      </label>
-      {enhancedChild}
-      {error ? (
-        <p id={`${htmlFor}-error`} className="mt-2 text-xs text-destructive">
-          {error}
-        </p>
-      ) : null}
-    </div>
   );
 };
 

@@ -502,6 +502,15 @@ const en: SiteCopy = {
       "Our team will review what you shared and continue the assessment from there.",
     submit: "Start feasibility review",
     submitAnother: "Submit another rooftop",
+    validation: {
+      name: "Please enter your name.",
+      phone: "Enter a valid Bangladesh number (e.g. 01XXXXXXXXX).",
+      generic: "Please fix the highlighted fields.",
+      address: "Please enter a full address.",
+      district: "Please enter your district.",
+      neighborhood: "Please enter your neighborhood.",
+      required: "Please complete this field.",
+    },
   },
 };
 
@@ -850,6 +859,15 @@ const bn: SiteCopy = {
       "আপনি যা শেয়ার করেছেন, আমাদের দল তা দেখে সেখান থেকে মূল্যায়ন চালিয়ে যাবে।",
     submit: "ফিজিবিলিটি রিভিউ শুরু করুন",
     submitAnother: "আরেকটি ছাদ জমা দিন",
+    validation: {
+      name: "দয়া করে আপনার নাম লিখুন।",
+      phone: "একটি বৈধ বাংলাদেশি নম্বর দিন (যেমন 01XXXXXXXXX)।",
+      generic: "দয়া করে হাইলাইট করা ফিল্ডগুলো ঠিক করুন।",
+      address: "দয়া করে পূর্ণ ঠিকানা লিখুন।",
+      district: "দয়া করে আপনার জেলা লিখুন।",
+      neighborhood: "দয়া করে আপনার এলাকা লিখুন।",
+      required: "দয়া করে এই ফিল্ডটি পূরণ করুন।",
+    },
   },
 };
 

@@ -85,21 +85,23 @@ export const SiteHeader = () => {
     >
       <div className="mx-auto flex max-w-[1240px] items-center justify-between lg:justify-center">
         <motion.div
-          layout
-          transition={{ layout: { duration: shouldAnimate ? 0.55 : 0, ease: [0.22, 1, 0.36, 1] } }}
+          initial={shouldAnimate ? { opacity: 0, x: -48, scale: 0.92 } : false}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{
+            duration: shouldAnimate ? 0.8 : 0,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className={cn(
             "hidden items-center justify-center lg:flex",
             isCompact ? "gap-2" : "gap-3",
           )}
         >
           <motion.div
-            layout
             initial={shouldAnimate ? { opacity: 0, x: -48, scale: 0.92 } : false}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{
               duration: shouldAnimate ? 0.8 : 0,
               ease: [0.22, 1, 0.36, 1],
-              layout: { duration: shouldAnimate ? 0.55 : 0, ease: [0.22, 1, 0.36, 1] },
             }}
             className="flex items-center gap-2"
           >
@@ -128,19 +130,20 @@ export const SiteHeader = () => {
               initial={false}
               animate={{
                 opacity: isCompact ? 0 : 1,
-                width: isCompact ? 0 : 176,
+                scaleX: isCompact ? 0 : 1,
                 x: isCompact ? -10 : 0,
               }}
               transition={{
                 duration: shouldAnimate ? 0.48 : 0,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="overflow-hidden"
+              className="overflow-hidden origin-left"
               aria-hidden={isCompact}
+              style={{ transformOrigin: "left center" }}
             >
               <div
                 className={cn(
-                  "flex h-14 items-center gap-2 whitespace-nowrap text-[0.78rem] font-medium uppercase tracking-[0.24em] transition-[height,opacity] duration-500",
+                  "flex h-14 items-center gap-2 whitespace-nowrap text-[0.78rem] font-medium uppercase tracking-[0.24em] transition-opacity duration-500",
                 )}
               >
                 <span className="text-white/48">{brandWordmark.split(" ")[0]}</span>
@@ -150,7 +153,6 @@ export const SiteHeader = () => {
           </motion.div>
 
           <motion.nav
-            layout
             aria-label="Primary"
             initial={shouldAnimate ? { opacity: 0, y: -14, scale: 0.96 } : false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -158,14 +160,22 @@ export const SiteHeader = () => {
               duration: shouldAnimate ? 0.82 : 0,
               ease: [0.22, 1, 0.36, 1],
               delay: shouldAnimate ? 0.04 : 0,
-              layout: { duration: shouldAnimate ? 0.55 : 0, ease: [0.22, 1, 0.36, 1] },
             }}
             className="min-w-0"
           >
             <motion.div
-              layout
+              initial={false}
+              animate={{
+                width: isCompact ? "44rem" : "52rem",
+                paddingLeft: isCompact ? "1.5rem" : "2rem",
+                paddingRight: isCompact ? "1.5rem" : "2rem",
+              }}
+              transition={{
+                duration: shouldAnimate ? 0.55 : 0,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className={cn(
-                "grid max-w-[calc(100vw-12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center rounded-full border backdrop-blur-[18px] transition-[width,padding,box-shadow,background-color,border-color] duration-500",
+                "grid max-w-[calc(100vw-12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center rounded-full border backdrop-blur-[18px] transition-[padding,box-shadow,background-color,border-color] duration-500",
                 isCompact ? "w-[44rem] px-1.5 py-1.5" : "w-[52rem] px-2 py-2",
                 surfaceClassName,
               )}
@@ -181,7 +191,7 @@ export const SiteHeader = () => {
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      "w-full rounded-full text-center text-white/72 transition-[padding,font-size,background-color,color] duration-500 hover:bg-white/[0.06] hover:text-white",
+                      "w-full rounded-full text-center text-white/72 transition-[transform,color] duration-500 hover:bg-white/[0.06] hover:text-white hover:scale-[1.02]",
                       isCompact ? "px-3 py-2 text-[0.8rem]" : "px-4 py-2.5 text-sm",
                       location.pathname === item.href && "bg-white/[0.08] text-white",
                     )}
@@ -193,7 +203,7 @@ export const SiteHeader = () => {
 
               <div
                 className={cn(
-                  "flex items-center justify-center transition-[gap,padding,transform] duration-500",
+                  "flex items-center justify-center transition-[gap,padding] duration-500",
                   isCompact ? "gap-1.5 px-1" : "gap-2 px-2",
                 )}
               >
@@ -232,7 +242,7 @@ export const SiteHeader = () => {
                     key={item.href}
                     to={item.href}
                     className={cn(
-                      "w-full rounded-full text-center text-white/72 transition-[padding,font-size,background-color,color] duration-500 hover:bg-white/[0.06] hover:text-white",
+                      "w-full rounded-full text-center text-white/72 transition-[transform,color] duration-500 hover:bg-white/[0.06] hover:text-white hover:scale-[1.02]",
                       isCompact ? "px-3 py-2 text-[0.8rem]" : "px-4 py-2.5 text-sm",
                       location.pathname === item.href && "bg-white/[0.08] text-white",
                     )}
@@ -245,14 +255,12 @@ export const SiteHeader = () => {
           </motion.nav>
 
           <motion.div
-            layout
             initial={shouldAnimate ? { opacity: 0, x: 48, scale: 0.92 } : false}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{
               duration: shouldAnimate ? 0.8 : 0,
               ease: [0.22, 1, 0.36, 1],
               delay: shouldAnimate ? 0.08 : 0,
-              layout: { duration: shouldAnimate ? 0.55 : 0, ease: [0.22, 1, 0.36, 1] },
             }}
             className="flex items-center justify-end"
           >
@@ -261,8 +269,8 @@ export const SiteHeader = () => {
               onClick={() => trackEvent("cta_start_assessment", { source: "header", language })}
               initial={false}
               animate={{
-                width: isCompact ? 48 : 200,
-                height: isCompact ? 48 : 56,
+                scaleX: isCompact ? 0.24 : 1,
+                scaleY: isCompact ? 0.86 : 1,
                 paddingLeft: isCompact ? 0 : 24,
                 paddingRight: isCompact ? 0 : 24,
               }}
@@ -272,12 +280,13 @@ export const SiteHeader = () => {
               }}
               className="inline-flex items-center justify-center overflow-hidden rounded-full bg-primary text-primary-foreground shadow-sun hover:brightness-110"
               aria-label="WhatsApp"
+              style={{ transformOrigin: "right center" }}
             >
               <motion.span
                 initial={false}
                 animate={{
                   opacity: isCompact ? 0 : 1,
-                  width: isCompact ? 0 : 92,
+                  scaleX: isCompact ? 0 : 1,
                   x: isCompact ? 14 : 0,
                 }}
                 transition={{
@@ -286,6 +295,7 @@ export const SiteHeader = () => {
                 }}
                 className="shrink-0 overflow-hidden whitespace-nowrap text-[0.92rem] font-medium"
                 aria-hidden={isCompact}
+                style={{ transformOrigin: "right center" }}
               >
                 WhatsApp
               </motion.span>
@@ -300,8 +310,8 @@ export const SiteHeader = () => {
               >
                 <ArrowUpRight
                   className={cn(
-                    "shrink-0 transition-[width,height] duration-500",
-                    isCompact ? "h-[18px] w-[18px]" : "h-5 w-5",
+                    "shrink-0 transition-transform duration-500",
+                    isCompact ? "scale-75" : "scale-100",
                   )}
                   strokeWidth={2.3}
                 />
