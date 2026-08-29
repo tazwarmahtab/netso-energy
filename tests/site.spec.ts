@@ -190,3 +190,33 @@ test('External links open in new tab', async ({ page }) => {
   const count = await externalLinks.count();
   expect(count).toBeGreaterThan(0);
 });
+
+test('Solar calculator property segment selector switches rates', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#savings-estimate', { waitUntil: 'networkidle' });
+
+  // Scroll to savings-estimate section to trigger lazy loading
+  const calculatorSection = page.locator('#savings-estimate');
+  await calculatorSection.scrollIntoViewIfNeeded();
+
+  // Find the segment toggle buttons within the calculator
+  const commercialBtn = page.getByRole('button', { name: /Commercial\/Factory|বাণিজ্যিক/i });
+  const commonServiceBtn = page.getByRole('button', { name: /Common Services|কমন সার্ভিস/i });
+  const residentialBtn = page.getByRole('button', { name: /Residential Flat|আবাসিক ফ্ল্যাট/i });
+
+  await expect(commercialBtn).toBeVisible({ timeout: 15000 });
+  await expect(commonServiceBtn).toBeVisible({ timeout: 15000 });
+  await expect(residentialBtn).toBeVisible({ timeout: 15000 });
+
+  // Switch to Common Services segment
+  await commonServiceBtn.click();
+
+  // Verify button receives active/selected style class
+  await expect(commonServiceBtn).toHaveClass(/bg-primary/);
+  await expect(commercialBtn).not.toHaveClass(/bg-primary/);
+
+  // Switch to Residential Flat segment
+  await residentialBtn.click();
+  await expect(residentialBtn).toHaveClass(/bg-primary/);
+  await expect(commonServiceBtn).not.toHaveClass(/bg-primary/);
+});

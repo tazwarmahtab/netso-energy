@@ -132,16 +132,24 @@ export function SolarCalculatorFunnel() {
   }, [area, estimatedMonthlyKwh, segment]);
 
   const manualWhatsAppDetails = useMemo(() => {
+    const segmentLabel =
+      segment === "residential_common_service"
+        ? (isBn ? "কমন সার্ভিস (পাম্প/লিফট)" : "Common Services")
+        : segment === "residential_multi_story"
+          ? (isBn ? "আবাসিক ফ্ল্যাট" : "Residential Flat")
+          : (isBn ? "বাণিজ্যিক/শিল্প" : "Commercial/Factory");
+
     const details = [
       `name=${formState.name.trim() || (isBn ? "দেওয়া হবে" : "to share in chat")}`,
       `phone=${formState.phone.trim() || (isBn ? "চ্যাটে শেয়ার" : "to share in chat")}`,
+      `type=${segmentLabel}`,
       `roof=${area}sqft`,
       `bill=${bill}bdt`,
       `address=${formState.address.trim() || (isBn ? "শেয়ারের অপেক্ষায়" : "to share in chat")}`,
     ];
 
     return details;
-  }, [area, bill, formState.address, formState.name, formState.phone, isBn]);
+  }, [area, bill, formState.address, formState.name, formState.phone, isBn, segment]);
 
   const validateContactStep = () => {
     const nextErrors: Partial<Record<keyof CalculatorFormState, string>> = {};
@@ -164,6 +172,7 @@ export function SolarCalculatorFunnel() {
 
     try {
       const calculatorSummary = [
+        `type=${segment}`,
         `bill=${bill}`,
         `roof=${area}`,
         `savings=${model.monthlySavingsBdtRange.low}-${model.monthlySavingsBdtRange.high}`,
@@ -195,6 +204,7 @@ export function SolarCalculatorFunnel() {
         {
           calculatorBillEstimate: bill,
           calculatorAreaEstimate: area,
+          propertySegment: segment,
           modelOutput: model,
         },
       );

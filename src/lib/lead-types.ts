@@ -4,6 +4,12 @@ import { estimateMonthlyConsumptionFromBill } from "@/lib/solar-engine";
 export const bdPhoneRegex = /^(?:\+?880|0)1[3-9]\d{8}$/;
 export const languageSchema = z.enum(["en", "bn"]);
 
+export const propertySegmentSchema = z.enum([
+  "c_and_i",
+  "residential_multi_story",
+  "residential_common_service",
+]);
+
 export const assessmentEntryPointSchema = z.enum([
   "web_feasibility",
   "calculator_handoff",
@@ -52,15 +58,16 @@ export const estimateRangeSchema = z
 export const modelOutputSchema = z.object({
   systemKwp: z.number().positive(),
   systemKwpRange: estimateRangeSchema,
-  monthlySavings: z.number().nonnegative(),
-  monthlySavingsRange: estimateRangeSchema,
-  paybackYears: z.number().positive(),
-  paybackYearsRange: estimateRangeSchema,
-  twentyYearProfit: z.number(),
-  twentyYearProfitRange: estimateRangeSchema,
-  co2Saved: z.number().nonnegative(),
+  monthlySavingsBdt: z.number().nonnegative(),
+  monthlySavingsBdtRange: estimateRangeSchema,
+  annualSavingsBdt: z.number().nonnegative(),
+  ppaTermSavingsBdt: z.number().nonnegative(),
+  ppaTermSavingsBdtRange: estimateRangeSchema,
+  co2SavedTonnes: z.number().nonnegative(),
   annualGenerationKwh: z.number().nonnegative(),
-  confidenceLabel: z.literal("proof_first"),
+  effectiveDisplacedRateBdt: z.number().positive(),
+  savingsMarginPct: z.number().nonnegative(),
+  confidenceLabel: z.literal("resco_ppa"),
   assumptions: z.array(z.string().trim().min(1)).min(1),
   disclaimer: z.string().trim().min(1),
 });
@@ -69,6 +76,7 @@ export const calculatorContextSchema = z.object({
   estimatedMonthlyBillBdt: z.number().positive(),
   estimatedMonthlyConsumptionKwh: z.number().positive().optional(),
   rooftopAreaSqft: z.number().positive(),
+  propertySegment: propertySegmentSchema.default("c_and_i"),
   estimate: modelOutputSchema,
 });
 
@@ -281,9 +289,11 @@ export function createCalculatorAssessmentSessionInput(
   estimates: {
     calculatorBillEstimate: number;
     calculatorAreaEstimate: number;
+    propertySegment?: z.infer<typeof propertySegmentSchema>;
     modelOutput: z.infer<typeof modelOutputSchema>;
   },
 ): StartAssessmentSessionPayload {
+  const segment = estimates.propertySegment ?? "c_and_i";
   return startAssessmentSessionSchema.parse({
     entryPoint: "calculator_handoff",
     preferredLanguage: values.preferredLanguage ?? "en",
@@ -293,17 +303,18 @@ export function createCalculatorAssessmentSessionInput(
       phone: values.phone,
       preferredChannel: "whatsapp",
     },
-    answers: values.address?.trim()
-      ? {
-          address: values.address.trim(),
-        }
-      : {},
+    answers: {
+      ...(values.address?.trim() ? { address: values.address.trim() } : {}),
+      propertyType: segment,
+    },
     calculatorContext: {
       estimatedMonthlyBillBdt: estimates.calculatorBillEstimate,
       estimatedMonthlyConsumptionKwh: estimateMonthlyConsumptionFromBill(
         estimates.calculatorBillEstimate,
+        segment,
       ),
       rooftopAreaSqft: estimates.calculatorAreaEstimate,
+      propertySegment: segment,
       estimate: estimates.modelOutput,
     },
     evidence: [],
