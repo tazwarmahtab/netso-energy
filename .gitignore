@@ -17,7 +17,7 @@ dist-ssr
 .env.*
 !.env.example
 
-# Editor directories and files
+# Editor and agent directories
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -28,12 +28,20 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+.claude/
+.codex/
+.cursor/
+.grok/
+.impeccable/
+.omc/
 
-# Local automation and verification artifacts
+# Local test, coverage, and reports
 .playwright-mcp/
 .playwright-cli/
 .superpowers/
 test-results/
+playwright-report/
+graphify-out/
 ANALYSIS_REPORT.md
 current-home-snapshot.md
 scroll-test.cjs

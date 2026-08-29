@@ -21,6 +21,7 @@ import { isSupabaseBrowserConfigured } from "@/lib/supabase-client";
 import {
   estimateMonthlyConsumptionFromBill,
   getSavingsModel,
+  type PropertySegment,
   type RescoSavingsModel,
 } from "@/lib/solar-engine";
 import { useSiteCopy } from "@/lib/site-copy";
@@ -64,6 +65,7 @@ export function SolarCalculatorFunnel() {
   const copy = useSiteCopy();
   const isBn = language === "bn";
   const [step, setStep] = useState(1);
+  const [segment, setSegment] = useState<PropertySegment>("c_and_i");
   const [bill, setBill] = useState(12000);
   const [area, setArea] = useState(1200);
   const [formState, setFormState] = useState<CalculatorFormState>(initialFormState);
@@ -114,35 +116,20 @@ export function SolarCalculatorFunnel() {
     error: isBn ? "দয়া করে হাইলাইট করা ফিল্ডগুলো ঠিক করুন।" : "Please fix the highlighted fields.",
     phoneError: isBn ? "একটি বৈধ বাংলাদেশি নম্বর দিন।" : "Enter a valid Bangladesh number.",
     nameError: isBn ? "আপনার পূর্ণ নাম লিখুন।" : "Enter your full name.",
+    segmentLabel: isBn ? "প্রপার্টির ধরন" : "Property Type",
+    segmentCnI: isBn ? "বাণিজ্যিক/শিল্প" : "Commercial/Factory",
+    segmentCommonService: isBn ? "কমন সার্ভিস (পাম্প/লিফট)" : "Common Services",
+    segmentResidential: isBn ? "আবাসিক ফ্ল্যাট" : "Residential Flat",
   };
 
   const estimatedMonthlyKwh = useMemo(
-    () => estimateMonthlyConsumptionFromBill(bill),
-    [bill],
+    () => estimateMonthlyConsumptionFromBill(bill, segment),
+    [bill, segment],
   );
 
   const model = useMemo(() => {
-    try {
-      return getSavingsModel(estimatedMonthlyKwh, area) as RescoSavingsModel;
-    } catch (err) {
-      console.error("Error in getSavingsModel:", err);
-      // return a safe fallback to prevent rendering crashes while debugging
-      return {
-        systemKwp: 0,
-        systemKwpRange: { low: 0, midpoint: 0, high: 0 },
-        monthlySavingsBdt: 0,
-        monthlySavingsBdtRange: { low: 0, midpoint: 0, high: 0 },
-        annualSavingsBdt: 0,
-        ppaTermSavingsBdt: 0,
-        ppaTermSavingsBdtRange: { low: 0, midpoint: 0, high: 0 },
-        co2SavedTonnes: 0,
-        annualGenerationKwh: 0,
-        confidenceLabel: "resco_ppa",
-        assumptions: [],
-        disclaimer: ""
-      } as RescoSavingsModel;
-    }
-  }, [area, estimatedMonthlyKwh]);
+    return getSavingsModel(estimatedMonthlyKwh, area, segment);
+  }, [area, estimatedMonthlyKwh, segment]);
 
   const manualWhatsAppDetails = useMemo(() => {
     const details = [
@@ -279,7 +266,34 @@ export function SolarCalculatorFunnel() {
                 </p>
               </div>
 
-              <div className="space-y-8 rounded-[24px] border border-border/70 bg-secondary/28 p-6">
+              <div className="space-y-6 rounded-[24px] border border-border/70 bg-secondary/28 p-6">
+                <div>
+                  <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {isBn ? "প্রপার্টির ধরন" : "Property Type"}
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: "c_and_i", label: isBn ? "বাণিজ্যিক/শিল্প" : "Commercial/Factory" },
+                      { id: "residential_common_service", label: isBn ? "কমন সার্ভিস (পাম্প/লিফট)" : "Common Services" },
+                      { id: "residential_multi_story", label: isBn ? "আবাসিক ফ্ল্যাট" : "Residential Flat" },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setSegment(item.id as PropertySegment)}
+                        className={cn(
+                          "rounded-xl border px-3 py-2 text-center text-xs font-medium transition-all",
+                          segment === item.id
+                            ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                            : "border-border/80 bg-background/80 text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                        )}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div>
                   <div className="mb-4 flex items-end justify-between gap-4">
                     <label htmlFor="bill-slider" className="text-sm font-medium text-muted-foreground">
