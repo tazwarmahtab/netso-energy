@@ -1,37 +1,73 @@
-// Netso Energy RESCO PPA Savings Engine
-// Based on C&I (Commercial & Industrial) MT-2 tariff structure and PPA model.
+// Netso Energy Solar Savings Engine (v2.0 - Multi-Tenant & Multi-Segment Architecture)
+// Reconciled against BERC June 2026 Tariff Schedules & SREDA Net Metering Guidelines 2025
 
-const C_AND_I_CONSTANTS = {
-  // From GROUND_TRUTH_CONSTANTS.md (CGS 12-Month Audit)
-  gridVariableRateBdt: 12.98, // BDT/kWh
-  netsoPpaRateBdt: 10.00, // BDT/kWh
+export type PropertySegment = "c_and_i" | "residential_multi_story" | "residential_common_service";
 
-  // From GROUND_TRUTH_CONSTANTS.md (Generation Physics)
-  annualYieldPerKwp: {
-    low: 1350,  // Conservative yield
-    midpoint: 1445, // Baseline (80kW * 1445.4 = 115,632 kWh/yr)
-    high: 1550, // Optimistic yield
+export interface TariffStructure {
+  segment: PropertySegment;
+  name: string;
+  displacedRateBdt: number;
+  description: string;
+}
+
+export const TARIFF_BENCHMARKS: Record<PropertySegment, TariffStructure> = {
+  c_and_i: {
+    segment: "c_and_i",
+    name: "Commercial & Industrial (MT-2)",
+    displacedRateBdt: 12.98, // Verified CGS 12-Month Audit true variable rate
+    description: "Medium-tension commercial & industrial variable energy rate excluding fixed demand charges.",
   },
-
-  // Engineering assumptions for calculator
-  roofUtilisationFactor: 0.65, // Accommodates setbacks, shading, access paths
-  sqftPerKwp: 100, // Standard for commercial rooftops
-  capexBdtPerKwp: 55000, // For Netso's internal payback, not customer-facing
-
-  // Other constants
-  co2KgPerKwh: 0.58, // Bangladesh grid emission factor
-  ppaEscalationRate: 0.03, // 3%
-  ppaEscalationInterval: 3, // Every 3 years
-  ppaTermYears: 20,
+  residential_common_service: {
+    segment: "residential_common_service",
+    name: "Residential Common Services (LT-E / Pump & Lift)",
+    displacedRateBdt: 14.50, // Blended commercial/high-slab rate for common lift/pumps
+    description: "Dedicated common-service meter powering elevators, deep water pumps, and stairwell lighting.",
+  },
+  residential_multi_story: {
+    segment: "residential_multi_story",
+    name: "Residential Apartment High Tier (LT-A 401+ Units)",
+    displacedRateBdt: 15.01, // BERC June 2026 Tier-5 rate (401-600 slab is 15.01, 600+ is 17.35)
+    description: "Daytime flat consumption offsetting progressive upper residential tariff slabs.",
+  },
 };
 
-type EstimateBand = {
+export const SOLAR_ENGINE_CONSTANTS = {
+  // PPA commercial constants
+  netsoPpaRateBdt: 10.00, // BDT/kWh base rate
+  ppaEscalationRate: 0.03, // 3% triennial escalation
+  ppaEscalationInterval: 3, // Every 3 years
+  ppaTermYears: 20,
+  annualDegradation: 0.005, // 0.5% p.a. Tier-1 PV degradation
+
+  // Solar insolation by region
+  annualYieldPerKwp: {
+    chattogram: 1445.4, // 16.5% Capacity Factor (Chattogram reference)
+    dhaka: 1340.3,      // 15.3% Capacity Factor (Dhaka urban baseline)
+    conservative: 1300.0,
+    optimistic: 1550.0,
+  },
+
+  // Turnkey CAPEX benchmarks (Scenario A)
+  capexBdtPerKwp: {
+    c_and_i: 55000,                  // 80 kWp CGS reference baseline
+    residential_multi_story: 60000,  // 20-50 kWp whole building
+    residential_common_service: 70000, // 5-10 kWp small common-service
+  },
+
+  // Engineering & environmental
+  roofUtilisationFactor: 0.65, // Net usable roof after setbacks/water tanks
+  sqftPerKwp: 100,             // 100 sqft per 1 kWp DC
+  co2KgPerKwh: 0.58,           // Bangladesh grid emission factor
+  sredaNemExportRateBdt: 6.4523, // BERC bulk generation avoided cost
+};
+
+export interface EstimateBand {
   low: number;
   midpoint: number;
   high: number;
-};
+}
 
-export type RescoSavingsModel = {
+export interface RescoSavingsModel {
   systemKwp: number;
   systemKwpRange: EstimateBand;
   monthlySavingsBdt: number;
@@ -41,21 +77,14 @@ export type RescoSavingsModel = {
   ppaTermSavingsBdtRange: EstimateBand;
   co2SavedTonnes: number;
   annualGenerationKwh: number;
+  effectiveDisplacedRateBdt: number;
+  savingsMarginPct: number;
   confidenceLabel: "resco_ppa";
   assumptions: string[];
   disclaimer: string;
-};
-
-export const RESCO_PPA_ASSUMPTIONS = [
-  "Zero upfront CAPEX for the customer under the PPA model.",
-  "Savings are based on the difference between the BDT 12.98/kWh grid tariff and Netso's BDT 10.00/kWh PPA rate.",
-  "System size is estimated based on available roof space and your electricity consumption.",
-  "Annual generation is modeled on Dhaka's solar irradiance data for commercial rooftops.",
-  "CO2 savings are calculated using the Bangladesh grid's carbon intensity factor.",
-];
+}
 
 function roundCurrency(value: number): number {
-  // Round to nearest 100 for display
   return Math.round(value / 100) * 100;
 }
 
@@ -79,70 +108,69 @@ function buildBand(values: [number, number, number], precision: "integer" | "dec
   };
 }
 
-export function estimateMonthlyConsumptionFromBill(monthlyBillBdt: number): number {
-  // Simplified for C&I - using the true variable rate from ground truth
-  const estimatedKwh = monthlyBillBdt / C_AND_I_CONSTANTS.gridVariableRateBdt;
+export function estimateMonthlyConsumptionFromBill(
+  monthlyBillBdt: number,
+  segment: PropertySegment = "c_and_i",
+): number {
+  const rate = TARIFF_BENCHMARKS[segment]?.displacedRateBdt ?? TARIFF_BENCHMARKS.c_and_i.displacedRateBdt;
+  const estimatedKwh = monthlyBillBdt / rate;
   return roundOneDecimal(estimatedKwh);
 }
 
-
-export function getSavingsModel(monthlyKwh: number, rooftopSqft: number): RescoSavingsModel {
-  const safeMonthlyKwh = Math.max(monthlyKwh, 100); // Min 100 kWh for C&I
-  const safeRooftopSqft = Math.max(rooftopSqft, 500); // Min 500 sqft
+export function getSavingsModel(
+  monthlyKwh: number,
+  rooftopSqft: number,
+  segment: PropertySegment = "c_and_i",
+  region: "chattogram" | "dhaka" = "dhaka",
+): RescoSavingsModel {
+  const safeMonthlyKwh = Math.max(monthlyKwh, 100);
+  const safeRooftopSqft = Math.max(rooftopSqft, 500);
   const annualLoadKwh = safeMonthlyKwh * 12;
 
-  // Max system size based on available roof space
-  const roofLimitKwp =
-    (safeRooftopSqft * C_AND_I_CONSTANTS.roofUtilisationFactor) / C_AND_I_CONSTANTS.sqftPerKwp;
+  const yieldConstant = SOLAR_ENGINE_CONSTANTS.annualYieldPerKwp[region] ?? SOLAR_ENGINE_CONSTANTS.annualYieldPerKwp.dhaka;
+  const lowYield = SOLAR_ENGINE_CONSTANTS.annualYieldPerKwp.conservative;
+  const highYield = SOLAR_ENGINE_CONSTANTS.annualYieldPerKwp.optimistic;
 
-  // Recommended system size is capped by either roof space or annual consumption
-  const lowSystem = Math.min(
-    roofLimitKwp * 0.8, // Conservative roof use
-    annualLoadKwh / C_AND_I_CONSTANTS.annualYieldPerKwp.high, // Optimistic yield to meet load
-  );
-  const midpointSystem = Math.min(
-    roofLimitKwp,
-    annualLoadKwh / C_AND_I_CONSTANTS.annualYieldPerKwp.midpoint,
-  );
-  const highSystem = Math.min(
-    roofLimitKwp * 1.1, // Slight over-provisioning potential
-    annualLoadKwh / C_AND_I_CONSTANTS.annualYieldPerKwp.low, // Conservative yield
-  );
+  const roofLimitKwp =
+    (safeRooftopSqft * SOLAR_ENGINE_CONSTANTS.roofUtilisationFactor) / SOLAR_ENGINE_CONSTANTS.sqftPerKwp;
+
+  const lowSystem = Math.min(roofLimitKwp * 0.8, annualLoadKwh / highYield);
+  const midpointSystem = Math.min(roofLimitKwp, annualLoadKwh / yieldConstant);
+  const highSystem = Math.min(roofLimitKwp * 1.1, annualLoadKwh / lowYield);
 
   const systemKwpRange = buildBand([lowSystem, midpointSystem, highSystem], "decimal");
 
-  const lowAnnualGeneration = systemKwpRange.low * C_AND_I_CONSTANTS.annualYieldPerKwp.low;
-  const midpointAnnualGeneration =
-    systemKwpRange.midpoint * C_AND_I_CONSTANTS.annualYieldPerKwp.midpoint;
-  const highAnnualGeneration = systemKwpRange.high * C_AND_I_CONSTANTS.annualYieldPerKwp.high;
+  const lowAnnualGen = systemKwpRange.low * lowYield;
+  const midpointAnnualGen = systemKwpRange.midpoint * yieldConstant;
+  const highAnnualGen = systemKwpRange.high * highYield;
 
-  const savingsMargin = C_AND_I_CONSTANTS.gridVariableRateBdt - C_AND_I_CONSTANTS.netsoPpaRateBdt;
+  const displacedRate = TARIFF_BENCHMARKS[segment]?.displacedRateBdt ?? TARIFF_BENCHMARKS.c_and_i.displacedRateBdt;
+  const ppaRate = SOLAR_ENGINE_CONSTANTS.netsoPpaRateBdt;
+  const savingsMargin = Math.max(0, displacedRate - ppaRate);
+  const savingsMarginPct = roundOneDecimal(((displacedRate - ppaRate) / displacedRate) * 100);
 
-  const lowAnnualSavings = lowAnnualGeneration * savingsMargin;
-  const midpointAnnualSavings = midpointAnnualGeneration * savingsMargin;
-  const highAnnualSavings = highAnnualGeneration * savingsMargin;
+  const lowAnnualSavings = lowAnnualGen * savingsMargin;
+  const midpointAnnualSavings = midpointAnnualGen * savingsMargin;
+  const highAnnualSavings = highAnnualGen * savingsMargin;
 
   const monthlySavingsBdtRange = buildBand(
     [lowAnnualSavings / 12, midpointAnnualSavings / 12, highAnnualSavings / 12],
     "integer",
   );
 
-  // Calculate 20-year savings with 3% triennial PPA escalation
-  const calculateLifetimeSavings = (annualGen: number) => {
+  // 20-Year Lifetime Savings with 3% triennial PPA escalation & 0.5% degradation
+  const calculateLifetimeSavings = (annualGen: number): number => {
     let totalSavings = 0;
-    let currentPpaRate = C_AND_I_CONSTANTS.netsoPpaRateBdt;
-    
-    for (let year = 1; year <= C_AND_I_CONSTANTS.ppaTermYears; year++) {
-      // Degrade generation by 0.5% each year (from GROUND TRUTH)
-      const degradedGen = annualGen * Math.pow(1 - 0.005, year - 1);
-      
-      // Escalate PPA rate by 3% every 3 years
-      if (year > 1 && (year - 1) % C_AND_I_CONSTANTS.ppaEscalationInterval === 0) {
-        currentPpaRate = currentPpaRate * (1 + C_AND_I_CONSTANTS.ppaEscalationRate);
+    let currentPpa = ppaRate;
+
+    for (let year = 1; year <= SOLAR_ENGINE_CONSTANTS.ppaTermYears; year++) {
+      const degradedGen = annualGen * Math.pow(1 - SOLAR_ENGINE_CONSTANTS.annualDegradation, year - 1);
+
+      if (year > 1 && (year - 1) % SOLAR_ENGINE_CONSTANTS.ppaEscalationInterval === 0) {
+        currentPpa *= (1 + SOLAR_ENGINE_CONSTANTS.ppaEscalationRate);
       }
-      
-      // Assume grid rate stays constant at 12.98 (conservative)
-      const yearSavings = degradedGen * (C_AND_I_CONSTANTS.gridVariableRateBdt - currentPpaRate);
+
+      const yearSavings = degradedGen * Math.max(0, displacedRate - currentPpa);
       totalSavings += yearSavings;
     }
     return totalSavings;
@@ -150,13 +178,20 @@ export function getSavingsModel(monthlyKwh: number, rooftopSqft: number): RescoS
 
   const ppaTermSavingsBdtRange = buildBand(
     [
-      calculateLifetimeSavings(lowAnnualGeneration),
-      calculateLifetimeSavings(midpointAnnualGeneration),
-      calculateLifetimeSavings(highAnnualGeneration)
+      calculateLifetimeSavings(lowAnnualGen),
+      calculateLifetimeSavings(midpointAnnualGen),
+      calculateLifetimeSavings(highAnnualGen),
     ],
     "integer",
   );
 
+  const assumptions = [
+    "Zero upfront CAPEX for the property owner under the Netso PPA model.",
+    `Savings calculated against ${TARIFF_BENCHMARKS[segment].name} (BDT ${displacedRate.toFixed(2)}/kWh) vs. Netso PPA (BDT ${ppaRate.toFixed(2)}/kWh).`,
+    `System sized using ${region === "chattogram" ? "Chattogram (16.5% CF)" : "Dhaka (15.3% CF)"} empirical irradiance profiles.`,
+    "Includes 20-year asset performance monitoring, cleaning, and maintenance.",
+    "CO2 emissions offset based on Bangladesh national grid emission factor (0.58 kg/kWh).",
+  ];
 
   return {
     systemKwp: systemKwpRange.midpoint,
@@ -166,18 +201,19 @@ export function getSavingsModel(monthlyKwh: number, rooftopSqft: number): RescoS
     annualSavingsBdt: roundCurrency(midpointAnnualSavings),
     ppaTermSavingsBdt: ppaTermSavingsBdtRange.midpoint,
     ppaTermSavingsBdtRange,
-    co2SavedTonnes: roundOneDecimal((midpointAnnualGeneration * C_AND_I_CONSTANTS.co2KgPerKwh) / 1000),
-    annualGenerationKwh: roundCurrency(midpointAnnualGeneration),
+    co2SavedTonnes: roundOneDecimal((midpointAnnualGen * SOLAR_ENGINE_CONSTANTS.co2KgPerKwh) / 1000),
+    annualGenerationKwh: roundCurrency(midpointAnnualGen),
+    effectiveDisplacedRateBdt: displacedRate,
+    savingsMarginPct,
     confidenceLabel: "resco_ppa",
-    assumptions: RESCO_PPA_ASSUMPTIONS,
+    assumptions,
     disclaimer:
-      "Preliminary estimate for a Commercial & Industrial PPA model. Actual savings depend on final system design, consumption patterns, and grid tariffs.",
+      "Preliminary engineering estimate for a Netso RESCO PPA deployment. Final scope and savings confirmed upon physical roof survey and utility billing audit.",
   };
 }
 
-// BPDB bill calculation is no longer needed for a PPA model, as savings are a direct rate arbitrage.
-// The functions calculateMonthlyBill and the TARIFF_SLABS can be removed.
-export function calculateMonthlyBill(monthlyKwh: number): number {
-  const bill = monthlyKwh * C_AND_I_CONSTANTS.gridVariableRateBdt;
+export function calculateMonthlyBill(monthlyKwh: number, segment: PropertySegment = "c_and_i"): number {
+  const rate = TARIFF_BENCHMARKS[segment]?.displacedRateBdt ?? TARIFF_BENCHMARKS.c_and_i.displacedRateBdt;
+  const bill = monthlyKwh * rate;
   return roundCurrency(bill);
 }
