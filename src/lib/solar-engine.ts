@@ -49,7 +49,7 @@ export const SOLAR_ENGINE_CONSTANTS = {
 
   // Turnkey CAPEX benchmarks (Scenario A)
   capexBdtPerKwp: {
-    c_and_i: 55000,                  // 80 kWp CGS reference baseline
+    c_and_i: 60000,                  // 80 kWp CGS reference baseline (pilot-validated)
     residential_multi_story: 60000,  // 20-50 kWp whole building
     residential_common_service: 70000, // 5-10 kWp small common-service
   },
