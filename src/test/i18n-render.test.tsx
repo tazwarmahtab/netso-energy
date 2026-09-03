@@ -24,8 +24,12 @@ function renderInBangla(ui: ReactNode) {
 
 describe("bengali copy", () => {
   beforeEach(() => {
-    window.localStorage.clear();
-    document.documentElement.lang = "en";
+    try {
+      window?.localStorage?.clear?.();
+    } catch {}
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = "en";
+    }
   });
 
   it("renders bengali section copy from the shared copy layer", async () => {

@@ -58,7 +58,7 @@ export const SOLAR_ENGINE_CONSTANTS = {
   roofUtilisationFactor: 0.65, // Net usable roof after setbacks/water tanks
   sqftPerKwp: 100,             // 100 sqft per 1 kWp DC
   co2KgPerKwh: 0.58,           // Bangladesh grid emission factor
-  sredaNemExportRateBdt: 6.4523, // BERC bulk generation avoided cost
+  sredaNemExportRateBdt: 8.39,  // BERC June 2026 bulk benchmark (SREDA 2025 90% crediting)
 };
 
 export interface EstimateBand {
