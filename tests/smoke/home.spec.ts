@@ -1,60 +1,35 @@
 import { expect, test } from "playwright/test";
-import {
-  DEFAULT_WHATSAPP_NUMBER,
-  sanitizePhoneNumber,
-} from "../../src/lib/site-metadata.shared.js";
 
-const expectedNumber = sanitizePhoneNumber(
-  process.env.VITE_WHATSAPP_NUMBER || DEFAULT_WHATSAPP_NUMBER,
-);
+test.describe("Netso homepage", () => {
+  test("renders the Netso proposition and core sections", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("heading", { name: /Make your rooftop/i })).toBeVisible();
+    await expect(page.getByText("Industrial Energy Infrastructure")).toBeVisible();
+    await expect(page.locator("canvas").first()).toBeAttached();
+    await expect(page.locator("#why-netso")).toBeAttached();
+    await expect(page.locator("#solutions")).toBeAttached();
+    await expect(page.locator("#projects")).toBeAttached();
+    await expect(page.locator("#contact")).toBeAttached();
+  });
 
-test("desktop hero video plays without native controls", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop");
+  test("opens and submits the project request modal", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Start a project" }).first().click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("heading", { name: /Tell us about the site/i })).toBeVisible();
+    await dialog.getByLabel("Name").fill("Test Company");
+    await dialog.getByLabel("Email").fill("test@example.com");
+    await dialog.getByLabel("Site / Company").fill("Factory rooftop");
+    await dialog.getByLabel("Message").fill("Testing the Netso project inquiry flow.");
+    await dialog.getByRole("button", { name: "Send request" }).click();
+    await expect(dialog.getByRole("heading", { name: "Request received" })).toBeVisible();
+  });
 
-  await page.goto("/");
-  // For mobile, wait for useIsMobile hydration hook
-  await page.waitForTimeout(500);
-  // Wait for the intro dithering shader to fade out (1.35s + 0.85s transition)
-  await page.waitForTimeout(2500);
-  
-  const video = page.locator("video").first();
-
-  // Force scroll so video Reveal triggers if needed
-  await page.evaluate(() => window.scrollBy(0, 100));
-  await page.waitForTimeout(500);
-
-  await expect(video).toBeVisible();
-  // Playwright headless autoplay can be flaky. We just care that it tries to play.
-  await video.evaluate((el) => el.play().catch(() => {}));
-  await expect
-    .poll(async () => video.evaluate((element) => element.currentTime), {
-      intervals: [500, 1000, 1500],
-      timeout: 10_000,
-    })
-    .toBeGreaterThan(0.1);
-
-  const state = await video.evaluate((element) => ({
-    controls: element.controls,
-    currentTime: element.currentTime,
-    paused: element.paused,
-  }));
-
-  expect(state.controls).toBe(false);
-  // expect(state.paused).toBe(false);
-  expect(state.currentTime).toBeGreaterThan(0.1);
-});
-
-test("mobile home shows immediate value proposition and persistent WhatsApp access", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile");
-
-  await page.goto("/");
-
-  await expect(page.locator("h1").first()).toContainText("Turn your rooftop");
-  await expect(page.locator("h1").first()).toBeVisible();
-
-  const headerWhatsapp = page.getByRole("link", { name: /WhatsApp/i }).first();
-  await expect(headerWhatsapp).toBeVisible();
-  await expect(
-    headerWhatsapp,
-  ).toHaveAttribute("href", new RegExp(`wa\\.me\\/${expectedNumber}`));
+  test("opens the navigation overlay", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await expect(page.getByRole("button", { name: /Close/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Why Netso" })).toBeVisible();
+  });
 });
