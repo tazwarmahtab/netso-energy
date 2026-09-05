@@ -14,10 +14,10 @@ export default {
     extend: {
       fontFamily: {
         // Satoshi as primary font
-        sans: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Satoshi', 'Georgia', 'serif'], // Satoshi for general headings
-        editorial: ['"Playfair Display"', 'Georgia', 'serif'], // High-contrast serif for hero titles only
-        mono: ['Satoshi Mono', 'ui-monospace', 'monospace'],
+        sans: ['Aeonik Pro', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Aeonik Pro', 'Georgia', 'serif'], // Bundled geometric sans for general headings
+        editorial: ['Feature Deck', 'Georgia', 'serif'], // Bundled display face for hero titles only
+        mono: ['ABC Social Mono', 'ui-monospace', 'monospace'],
       },
       spacing: {
         '1': '0.25rem',  // 4px base
@@ -43,7 +43,7 @@ export default {
         foreground: "var(--foreground)",
         primary: {
           DEFAULT: "var(--accent)",
-          foreground: "var(--background)",
+          foreground: "#141414",
           glow: "#e0d4ff", // Lighter purple glow
         },
         secondary: {
@@ -60,7 +60,7 @@ export default {
         },
         accent: {
           DEFAULT: "#c8b2ff", // Purple/lavender accent
-          foreground: "var(--background)",
+          foreground: "#141414",
         },
         popover: {
           DEFAULT: "#ffffff", // Surface for popover
@@ -74,7 +74,7 @@ export default {
           DEFAULT: "var(--background)",
           foreground: "var(--foreground)",
           primary: "var(--accent)",
-          "primary-foreground": "var(--background)",
+          "primary-foreground": "#141414",
           accent: "var(--surface)",
           "accent-foreground": "var(--foreground)",
           border: "var(--border)",

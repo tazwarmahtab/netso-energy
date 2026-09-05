@@ -252,6 +252,8 @@ const MobileHero = ({
             aria-hidden="true"
             className="h-full w-full object-cover object-[center_30%]"
             decoding="async"
+            width={1920}
+            height={1080}
             fallbackSrc={heroPosterFallback}
             fallbackSources={heroPosterJpegSources}
             loading="eager"
@@ -374,7 +376,7 @@ export const Hero = () => {
         title="NETSO ENERGY"
         showPosterBeforeReveal={false}
         playVideo
-        videoPreload="auto"
+        videoPreload="metadata"
         bgComponent={
           <ResponsiveImage
             alt=""
@@ -382,6 +384,8 @@ export const Hero = () => {
             className="h-full w-full object-cover object-center"
             decoding="async"
             fetchpriority="high"
+            width={1920}
+            height={1080}
             fallbackSrc={heroBackgroundFallback}
             fallbackSources={heroBackgroundJpegSources}
             loading="eager"

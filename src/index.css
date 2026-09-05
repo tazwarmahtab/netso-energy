@@ -1,6 +1,26 @@
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@font-face {
+  font-family: "Aeonik Pro";
+  src: url("/fonts/aeonikPro-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Feature Deck";
+  src: url("/fonts/featureDeck-700.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ABC Social Mono";
+  src: url("/fonts/socialMono-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -67,12 +87,12 @@
   --popover: var(--surface);
   --popover-foreground: var(--foreground);
   --primary: var(--accent);
-  --primary-foreground: var(--background);
+  --primary-foreground: #141414;
   --secondary: var(--surface);
   --secondary-foreground: var(--foreground);
   --muted: var(--surface);
   --muted-foreground: var(--text-muted);
-  --accent-foreground: var(--background);
+  --accent-foreground: #141414;
   --destructive: var(--danger);
   --destructive-foreground: #ffffff;
 
@@ -129,14 +149,14 @@ html {
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Aeonik Pro", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
   }
 
   h1, h2, h3, h4, h5 {
-    font-family: "Satoshi", Georgia, serif;
+    font-family: "Feature Deck", Georgia, serif;
     letter-spacing: -0.02em;
     font-weight: 700;
   }
@@ -155,28 +175,28 @@ select {
   }
 
   .display-2xl {
-    font-family: "Satoshi", Georgia, serif;
+    font-family: "Feature Deck", Georgia, serif;
     font-weight: 700;
     letter-spacing: -0.05em;
     line-height: 0.9;
     font-size: clamp(3.5rem, 9vw, 8.5rem);
   }
   .display-xl {
-    font-family: "Satoshi", Georgia, serif;
+    font-family: "Feature Deck", Georgia, serif;
     font-weight: 700;
     letter-spacing: -0.045em;
     line-height: 0.92;
     font-size: clamp(2.75rem, 7vw, 6.5rem);
   }
   .display-lg {
-    font-family: "Satoshi", Georgia, serif;
+    font-family: "Feature Deck", Georgia, serif;
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 0.95;
     font-size: clamp(2.25rem, 5.5vw, 4.5rem);
   }
   .display-md {
-    font-family: "Satoshi", Georgia, serif;
+    font-family: "Feature Deck", Georgia, serif;
     font-weight: 700;
     letter-spacing: -0.035em;
     line-height: 1;
@@ -184,7 +204,7 @@ select {
   }
 
   .display-text {
-    font-family: "Satoshi", Georgia, serif;
+    font-family: "Feature Deck", Georgia, serif;
     font-weight: 700;
     letter-spacing: -0.045em;
     line-height: 0.92;
