@@ -26,12 +26,69 @@ function forbidden(message: string): Response {
   return jsonResponse({ success: false, error: message }, 403);
 }
 
+function unauthorizedSignature(): Response {
+  return forbidden("Invalid webhook signature.");
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value);
 }
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function parseSignatureHeader(signatureHeader: string): string | null {
+  const [scheme, signature] = signatureHeader.trim().split("=", 2);
+  if (scheme !== "sha256" || !signature) {
+    return null;
+  }
+
+  return /^[a-f0-9]{64}$/i.test(signature) ? signature.toLowerCase() : null;
+}
+
+function constantTimeEqual(a: Uint8Array, b: Uint8Array): boolean {
+  const maxLength = Math.max(a.length, b.length);
+  let mismatch = a.length ^ b.length;
+
+  for (let i = 0; i < maxLength; i += 1) {
+    const aByte = i < a.length ? a[i] : 0;
+    const bByte = i < b.length ? b[i] : 0;
+    mismatch |= aByte ^ bByte;
+  }
+
+  return mismatch === 0;
+}
+
+async function verifyRequestSignature(request: Request, rawBody: string): Promise<boolean> {
+  const appSecret = Deno.env.get("WHATSAPP_APP_SECRET");
+  const headerValue = request.headers.get("X-Hub-Signature-256");
+
+  if (!appSecret || !headerValue) {
+    return false;
+  }
+
+  const providedSignature = parseSignatureHeader(headerValue);
+  if (!providedSignature) {
+    return false;
+  }
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(appSecret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const digest = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(rawBody));
+  const digestBytes = new Uint8Array(digest);
+  const computedHex = Array.from(digestBytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+
+  return constantTimeEqual(
+    new TextEncoder().encode(computedHex),
+    new TextEncoder().encode(providedSignature),
+  );
 }
 
 function eventTypeForMessage(message: Record<string, unknown>): WhatsappInboundEvent["eventType"] {
@@ -341,10 +398,15 @@ Deno.serve(async (request) => {
   }
 
   const rawBody = await request.text();
+        codex/implement-request-signature-verification
+  const isSignatureValid = await verifyRequestSignature(request, rawBody);
+  if (!isSignatureValid) {
+    return unauthorizedSignature();
 
   const isValidSignature = await verifyRequestSignature(request, rawBody);
   if (!isValidSignature) {
     return forbidden("Webhook signature verification failed.");
+         main
   }
 
   let parsedBody: unknown;
