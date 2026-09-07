@@ -101,14 +101,14 @@ const HeroOverlay = ({
       />
 
       <motion.div
-        className="absolute inset-x-0 bottom-5 z-10 mb-[max(1.25rem,env(safe-area-inset-bottom))] md:bottom-8"
+        className="absolute inset-0 z-10 flex items-center pb-[10vh]"
         style={{ y: overlayY }}
       >
-        <div className="mx-auto w-full max-w-[1280px] px-4 pb-2 md:px-6 md:pb-3">
-          <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.7fr)] lg:gap-14">
+        <div className="mx-auto w-full max-w-[1280px] px-4 md:px-6">
+          <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.7fr)] lg:gap-14">
             <motion.div
-              className="readability-mask-dark relative max-w-[52rem] self-end pb-1 md:pb-3"
-              style={{ scale: leftScale, y: leftY, transformOrigin: "left bottom" }}
+              className="readability-mask-dark relative max-w-[52rem] self-center pb-1 md:pb-3"
+              style={{ scale: leftScale, y: leftY, transformOrigin: "left center" }}
               initial={false}
               animate={{ opacity: contentVisible ? 1 : 0 }}
               transition={{ duration: revealDuration, ease: revealEase }}
@@ -161,12 +161,12 @@ const HeroOverlay = ({
             </motion.div>
 
             <motion.div
-              className="readability-panel-dark self-end rounded-[28px] p-4 md:p-6"
+              className="readability-panel-dark self-center rounded-[28px] p-4 md:p-6"
               style={{
                 scale: cardScale,
                 x: cardX,
                 y: cardY,
-                transformOrigin: "right bottom",
+                transformOrigin: "right center",
               }}
               initial={false}
               animate={{

@@ -141,9 +141,10 @@ const ScrollExpandMedia = ({
       return;
     }
 
-    const introEnd = isMobileState ? 0.1 : 0.14;
-    const expandEnd = isMobileState ? 0.64 : 0.78;
-    const revealStart = isMobileState ? 0.68 : 0.84;
+    // Unified 3-act windows shared with the render math below:
+    // Act 1 expansion (0-0.38) → Act 2 video scrub + text settle (0.35-0.82)
+    // → Act 3 locked hold (0.82-1.0). Trigger must emit on the same curve
+    // the scrub and overlay math consume, or frames drift and jump.
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top top',
@@ -165,10 +166,11 @@ const ScrollExpandMedia = ({
     };
   }, [isMobileState, mediaType, prefersReducedMotion]);
 
-  // Overlapping choreography: expansion (0-0.38) → video scrub (0.35-0.82)
-  // → text settle completes by 0.82, leaving the final 18% as locked hold.
+  // Unified 3-act windows — the single source of truth consumed by the
+  // ScrollTrigger onUpdate above, the video scrub seek, and the overlay math.
+  // Expansion (0-0.38) → video scrub + text settle (0.35-0.82) → locked hold.
   const actBreak1 = 0.38;
-  const actBreak2 = 0.7;
+  const actScrubEnd = 0.82;
 
   const introEnd = 0;
   const expandEnd = actBreak1;
@@ -183,7 +185,7 @@ const ScrollExpandMedia = ({
   }, [expandEnd, introEnd, prefersReducedMotion]);
 
   const expandProgress = easeOutCubic(clamp(scrollProgress / actBreak1));
-  const scrubProgress = easeOutCubic(clamp((scrollProgress - actBreak1) / (actBreak2 - actBreak1)));
+  const scrubProgress = easeOutCubic(clamp((scrollProgress - 0.35) / (actScrubEnd - 0.35)));
   const settleProgress = scrubProgress;
   const revealProgress = easeOutCubic(clamp((scrollProgress - revealStart) / revealSpan));
   const composedExpand = expandProgress;
