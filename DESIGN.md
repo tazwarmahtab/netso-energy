@@ -61,6 +61,7 @@ typography:
     "display-lg": "clamp(2.25rem, 5.5vw, 4.5rem)"
     "display-md": "clamp(1.75rem, 3.5vw, 2.75rem)"
     "display-text": "clamp(2.75rem, 6vw, 6rem)"
+    "hero-headline": "clamp(3.2rem, 5.8vw, 5.4rem)"
     "title": "1.18rem"
     "body": "1rem"
     "eyebrow": "0.72rem"

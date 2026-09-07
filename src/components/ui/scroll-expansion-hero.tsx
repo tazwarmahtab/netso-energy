@@ -26,6 +26,7 @@ interface ScrollExpandMediaProps {
   playVideo?: boolean;
   videoPreload?: "auto" | "metadata" | "none";
   videoRevealStart?: number;
+  scrubVideoToScroll?: boolean;
   showPosterBeforeReveal?: boolean;
   bgImageSrc?: string;
   bgComponent?: ReactNode;
@@ -70,6 +71,7 @@ const ScrollExpandMedia = ({
   playVideo = true,
   videoPreload = "metadata",
   videoRevealStart = 0,
+  scrubVideoToScroll = false,
   showPosterBeforeReveal = true,
   bgImageSrc,
   bgComponent,
@@ -163,10 +165,14 @@ const ScrollExpandMedia = ({
     };
   }, [isMobileState, mediaType, prefersReducedMotion]);
 
-  const introEnd = isMobileState ? 0.1 : 0.14;
-  const expandEnd = isMobileState ? 0.64 : 0.78;
-  const revealStart = isMobileState ? 0.68 : 0.84;
-  const revealSpan = isMobileState ? 0.18 : 0.16;
+  // 3-act choreography: expansion (0-0.35) → video scrub (0.35-0.70) → text reveal (0.70-1.0)
+  const actBreak1 = 0.35;
+  const actBreak2 = 0.7;
+
+  const introEnd = 0;
+  const expandEnd = actBreak1;
+  const revealStart = actBreak2;
+  const revealSpan = 1 - actBreak2;
 
   const phase = useMemo<HeroPhase>(() => {
     if (prefersReducedMotion || scrollProgress >= revealStart) return 'content-reveal';
@@ -175,10 +181,11 @@ const ScrollExpandMedia = ({
     return 'intro';
   }, [expandEnd, introEnd, prefersReducedMotion, revealStart, scrollProgress]);
 
-  const expandProgress = easeOutCubic(clamp((scrollProgress - introEnd) / (expandEnd - introEnd)));
-  const settleProgress = easeOutCubic(clamp((scrollProgress - expandEnd) / Math.max(revealStart - expandEnd, 0.001)));
+  const expandProgress = easeOutCubic(clamp(scrollProgress / actBreak1));
+  const scrubProgress = easeOutCubic(clamp((scrollProgress - actBreak1) / (actBreak2 - actBreak1)));
+  const settleProgress = scrubProgress;
   const revealProgress = easeOutCubic(clamp((scrollProgress - revealStart) / revealSpan));
-  const composedExpand = clamp(expandProgress * 0.92 + settleProgress * 0.08);
+  const composedExpand = expandProgress;
 
   const expandedWidth = isMobileState ? expandedWidthMobile : expandedWidthDesktop;
   const expandedHeight = isMobileState ? expandedHeightMobile : expandedHeightDesktop;
@@ -206,14 +213,11 @@ const ScrollExpandMedia = ({
     : videoRevealStart <= 0
       ? 1
       : easeOutCubic(clamp((scrollProgress - videoRevealStart) / (isMobileState ? 0.22 : 0.16)));
-  const titleRevealProgress = easeOutCubic(clamp(scrollProgress / Math.max(expandEnd, 0.001)));
+  // Act 1 (0-0.35): NETSO ENERGY wordmark drifts apart while video expands.
+  const titleRevealProgress = easeOutCubic(clamp(scrollProgress / actBreak1));
   const titleOpacity = prefersReducedMotion
     ? 0
-    : 1 -
-      clamp(
-        (scrollProgress - (isMobileState ? 0.54 : 0.58)) /
-          (isMobileState ? 0.18 : 0.16),
-      );
+    : 1 - clamp((scrollProgress - 0.26) / 0.09);
   const titleScale = mix(1, 0.94, titleRevealProgress);
   const titleY = mix(0, isMobileState ? -4 : -2, titleRevealProgress);
   const titleDrift = mix(0, isMobileState ? 18 : 40, titleRevealProgress);
@@ -260,6 +264,26 @@ const ScrollExpandMedia = ({
       if (cancelled) return;
       video.defaultMuted = true;
       video.muted = true;
+
+      if (scrubVideoToScroll && !prefersReducedMotion) {
+        video.pause();
+        // Act 1 (0-0.35): hold first frame while viewport expands.
+        // Act 2 (0.35-0.70): scrub video frames proportionally to scroll.
+        // Act 3 (0.70-1.0): hold final frame while text settles.
+        const videoScrub = clamp((scrollProgress - actBreak1) / (actBreak2 - actBreak1));
+        if (Number.isFinite(video.duration) && video.duration > 0) {
+          try {
+            video.currentTime = Math.min(
+              Math.max(videoScrub * video.duration, 0),
+              Math.max(video.duration - 0.05, 0),
+            );
+          } catch {
+            // Ignore seek errors while metadata is still settling.
+          }
+        }
+        return;
+      }
+
       const playPromise = video.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
@@ -287,7 +311,7 @@ const ScrollExpandMedia = ({
       video.removeEventListener('canplay', attemptPlay);
       video.removeEventListener('canplaythrough', attemptPlay);
     };
-  }, [playVideo, renderVideoLayer, mediaSrc]);
+  }, [playVideo, prefersReducedMotion, renderVideoLayer, mediaSrc, scrubVideoToScroll, scrollProgress]);
 
   const titleWords = title?.trim().split(/\s+/).filter(Boolean) ?? [];
   const firstWord = titleWords[0] ?? '';
@@ -399,8 +423,12 @@ const ScrollExpandMedia = ({
                               loop
                               playsInline
                               preload={videoPreload}
-                              className="absolute inset-0 h-full w-full object-cover"
+                              className="absolute inset-0 h-full w-full object-cover [&::-webkit-media-controls]:!hidden"
                               aria-hidden={mediaLabel ? undefined : "true"}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.currentTarget.play().catch(() => {});
+                              }}
                               style={{
                                 objectPosition: mediaObjectPosition,
                                 transform: `translate3d(0, ${videoY}%, 0) scale(${mediaScale})`,
@@ -408,8 +436,10 @@ const ScrollExpandMedia = ({
                                 opacity: posterSrc ? videoRevealProgress : 1,
                               }}
                               controls={false}
+                              controlsList="nodownload noplaybackrate noremoteplayback"
                               disablePictureInPicture
                               disableRemotePlayback
+                              x-webkit-airplay="deny"
                             />
                           ) : null}
                         </>

@@ -27,8 +27,8 @@ export const LOGO_LOOP_REFERENCE_FRAMES = [
 
 const DARK_BG = "#020202";
 const LIGHT_BG = "#f3f3f0";
-const DARK_STROKE = "rgba(255,255,255,0.8)";
-const LIGHT_STROKE = "rgba(36,36,36,0.66)";
+const DARK_STROKE = "#FFDE17";
+const LIGHT_STROKE = "#FFDE17";
 
 const rectangleSegments = [
   [[42, 24], [58, 24]],

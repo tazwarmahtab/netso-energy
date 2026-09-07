@@ -540,6 +540,22 @@ select {
   }
 }
 
+/* Kill WebKit native video chrome that leaks native play button overlay on Safari/macOS */
+video::-webkit-media-controls,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+video::-webkit-start-playback-button {
+  display: none !important;
+}
+
 /* Calculator range styling */
 .calc-range {
   --range-track: color-mix(in oklab, var(--border) 72%, transparent);

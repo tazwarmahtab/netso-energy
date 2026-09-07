@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" fill="none">
+  <!-- Left Parallelogram -->
+  <polygon points="240,610 350,410 480,410 480,510 410,510 350,610" fill="#FFDE17"/>
+  <!-- Right Polygon Step -->
+  <polygon points="480,510 550,510 660,410 730,410 730,510 660,510 600,610 480,610" fill="#FFDE17"/>
+</svg>

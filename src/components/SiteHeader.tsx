@@ -115,14 +115,13 @@ export const SiteHeader = () => {
             >
               <img
                 src={headerLogoAvif}
-                alt=""
-                aria-hidden="true"
+                alt="NETSO ENERGY lightning N monogram"
                 decoding="async"
                 onError={(event) => {
                   event.currentTarget.onerror = null;
                   event.currentTarget.src = headerLogoPng;
                 }}
-                className="size-full object-cover"
+                className="size-full object-contain"
               />
             </Link>
 

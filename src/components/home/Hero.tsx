@@ -60,8 +60,10 @@ const HeroOverlay = ({
   prefersReducedMotion,
 }: HeroOverlayProps) => {
   const copy = useSiteCopy();
+  // Act 3 (0.70-1.0): hero text only animates in after viewport expansion
+  // and video scrub are complete. Held pinned until final alignment.
   const revealProgress =
-    prefersReducedMotion || isMobile ? 1 : clamp((scrollProgress - 0.84) / 0.16);
+    prefersReducedMotion || isMobile ? 1 : clamp((scrollProgress - 0.7) / 0.24);
   const overlayY = `${(1 - revealProgress) * 8}vh`;
   const leftScale = 0.96 + revealProgress * 0.04;
   const leftY = `${(1 - revealProgress) * 2.8}vh`;
@@ -72,7 +74,7 @@ const HeroOverlay = ({
   const ambientLeftScale = 1.02 + revealProgress * 0.1;
   const ambientRightX = `${revealProgress * 2.4}vw`;
   const ambientRightScale = 1.03 + revealProgress * 0.1;
-  const headlineSize = "clamp(4rem, 6.6vw, 6rem)";
+  const headlineSize = "clamp(3.2rem, 5.8vw, 5.4rem)";
   const revealDuration = prefersReducedMotion ? 0 : 0.85;
   const revealEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -124,7 +126,7 @@ const HeroOverlay = ({
               </motion.div>
 
               <motion.h1
-                className="text-shadow-hero max-w-[8.8ch] font-editorial leading-[0.89] tracking-[-0.055em] text-white"
+                className="text-shadow-hero max-w-[12ch] font-sans font-extrabold leading-[0.94] tracking-[-0.04em] text-white"
                 style={{ fontSize: headlineSize }}
                 initial={false}
                 animate={{
@@ -378,6 +380,7 @@ export const Hero = () => {
         title="NETSO ENERGY"
         showPosterBeforeReveal={false}
         playVideo
+        scrubVideoToScroll
         videoPreload="auto"
         bgComponent={
           <ResponsiveImage
@@ -401,6 +404,7 @@ export const Hero = () => {
         maxMediaHeight="112vh"
         mediaOverlayOpacity={0.18}
         mediaObjectPosition="center 14%"
+        desktopSectionHeight="320svh"
         textBlend
         renderOverlay={({ scrollProgress, isMobile: desktopIsMobile, showContent }) => (
           <HeroOverlay
