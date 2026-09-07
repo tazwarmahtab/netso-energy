@@ -2,7 +2,7 @@
 
 import { CSSProperties, FormEvent, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Calculator, CheckCircle, ChevronRight } from "lucide-react";
+import { ArrowRight, Calculator, CheckCircle, ChevronRight, Info, MapPin } from "lucide-react";
 import { toast } from "sonner";
 
 import { StartAssessmentLink } from "@/components/AssessmentCtas";
@@ -10,6 +10,7 @@ import { trackEvent } from "@/lib/analytics";
 import { useLanguage } from "@/lib/i18n";
 import {
   bdPhoneRegex,
+  billExtractionDraftSchema,
   createCalculatorLeadPayload,
   type StartAssessmentSessionResponse,
 } from "@/lib/lead-types";
@@ -21,7 +22,10 @@ import { isSupabaseBrowserConfigured } from "@/lib/supabase-client";
 import {
   estimateMonthlyConsumptionFromBill,
   getSavingsModel,
+  SOLAR_ENGINE_CONSTANTS,
+  TARIFF_BENCHMARKS,
   type PropertySegment,
+  type RegionCode,
   type RescoSavingsModel,
 } from "@/lib/solar-engine";
 import { useSiteCopy } from "@/lib/site-copy";
@@ -42,6 +46,27 @@ const initialFormState: CalculatorFormState = {
   name: "",
   phone: "",
   address: "",
+};
+
+type BillDraftState = {
+  /** Raw bill document reference (e.g. file name); row/column data live in storage, UI holds none of PII beyond confirmation. */
+  publicId: string;
+  billingPeriod: string;
+  billingDemandKva: string;
+  monthlyConsumptionKwh: string;
+  exportedEnergyKwh: string;
+  netMeteringObserved: boolean;
+  confirmedByUser: boolean;
+};
+
+const initialBillDraftState: BillDraftState = {
+  publicId: "",
+  billingPeriod: "",
+  billingDemandKva: "",
+  monthlyConsumptionKwh: "",
+  exportedEnergyKwh: "",
+  netMeteringObserved: false,
+  confirmedByUser: false,
 };
 
 const billRange = {
@@ -66,8 +91,12 @@ export function SolarCalculatorFunnel() {
   const isBn = language === "bn";
   const [step, setStep] = useState(1);
   const [segment, setSegment] = useState<PropertySegment>("c_and_i");
+  const [region, setRegion] = useState<RegionCode>("dhaka");
   const [bill, setBill] = useState(12000);
   const [area, setArea] = useState(1200);
+  const [peakDemandKva, setPeakDemandKva] = useState(15);
+  const [showDemandDetail, setShowDemandDetail] = useState(false);
+  const [billDraft, setBillDraft] = useState<BillDraftState>(initialBillDraftState);
   const [formState, setFormState] = useState<CalculatorFormState>(initialFormState);
   const [errors, setErrors] = useState<Partial<Record<keyof CalculatorFormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -75,23 +104,34 @@ export function SolarCalculatorFunnel() {
     useState<StartAssessmentSessionResponse["session"] | null>(null);
 
   const labels = {
-    eyebrow: isBn ? "ধাপ ০১ — সেভিংস হিসাব" : "Step 01 — Estimate savings",
+    eyebrow: isBn ? "ধাপ ০১ — প্রাথমিক ছাদ সমীক্ষা" : "Step 01 — Preliminary roof study",
     headline: isBn
       ? "৩০ সেকেন্ডে আপনার ছাদের সম্ভাবনা হিসাব করুন।"
       : "Calculate your rooftop potential in 30 seconds.",
     body: isBn
-      ? "মাসিক বিল ও ছাদের আকার ঠিক করে প্রথম-পাস সেভিংস ও পে-ব্যাকের ধারণা নিন।"
-      : "Adjust your monthly bill and rooftop area to get a first-pass savings and payback estimate.",
+      ? "প্রথমে ছাদের প্রেক্ষাপট ও লোকেশন দিন, তারপর বিল থেকে প্রাথমিক সেভিংস দেখুন। সাইট-স্পেসিফিক রিভিউ পরে হবে।"
+      : "Start with roof context and location, then see first-pass savings from your bill. Site-specific engineering review follows.",
     bill: isBn ? "গড় মাসিক বিল" : "Average monthly bill",
     area: isBn ? "ছাদের আকার" : "Rooftop area",
+    regionLabel: isBn ? "লোকেশন" : "Location",
+    dhaka: isBn ? "ঢাকা" : "Dhaka",
+    chattogram: isBn ? "চট্টগ্রাম / উপকূল" : "Chattogram / Coastal",
+    otherRegion: isBn ? "অন্যান্য জেলা" : "Other district",
+    demandLabel: isBn ? "বিলড ডিমান্ড (kVA, ঐচ্ছিক)" : "Billed demand (kVA, optional)",
+    demandDetailToggle: isBn ? "ডিমান্ড-চার্জ ব্রেকডাউন দেখুন" : "View demand-charge breakdown",
+    billDraftTitle: isBn ? "বিল ড্রাফট (ঐচ্ছিক)" : "Bill draft (optional)",
+    billDraftBody: isBn
+      ? "ডকুমেন্ট প্রাইভেট থাকে এবং হোয়াটসঅ্যাপে ফরোয়ার্ড হয় না। ক্যালকুলেটরে ব্যবহারের আগে মানগুলো কনফার্ম করুন।"
+      : "Documents stay private and are never forwarded over WhatsApp. Confirm values before they feed the study.",
+    billDraftConfirm: isBn ? "মান কনফার্ম করে সমীক্ষায় ব্যবহার করুন" : "Confirm values for the study",
     cta: isBn ? "সেভিংস হিসাব করুন" : "Calculate my savings",
     resultsEyebrow: isBn ? "প্রাথমিক পরিকল্পনা-ভিত্তিক হিসাব" : "Indicative planning estimate",
     resultsHeadline: isBn
       ? "আপনার ছাদে উল্লেখযোগ্য এনার্জি ভ্যালু থাকতে পারে।"
       : "Your roof may have meaningful energy value.",
     resultsBody: isBn
-      ? "এই হিসাব আপনার বিল ও ছাদের ইনপুটের ওপর ভিত্তি করে তৈরি, এবং ইঞ্জিনিয়ারিং রিভিউর পরে এটি বদলাতে পারে।"
-      : "These estimates are based on your bill input and rooftop area, and they can shift after engineering review.",
+      ? "প্রাথমিক ছাদ সমীক্ষা আগে; সাইট-স্পেসিফিক ইঞ্জিনিয়ারিং রিভিউ পরে। এটি মূল্য উদ্ধৃতি বা পারফরম্যান্স গ্যারান্টি নয়।"
+      : "A preliminary roof study first; site-specific engineering review follows. This is not a price quote or performance guarantee.",
     contactHeadline: isBn ? "অ্যাসেসমেন্ট চালিয়ে যান" : "Continue with your assessment",
     contactBody: isBn
       ? "আপনার তথ্য দিন এবং হোয়াটসঅ্যাপে চালিয়ে যান, যাতে NETSO আপনার ছাদের প্রেক্ষাপট ও পরের ধাপের উপযোগিতা রিভিউ করতে পারে।"
@@ -101,6 +141,9 @@ export function SolarCalculatorFunnel() {
     twentyYearValue: isBn ? "২০ বছরের পরিকল্পিত ভ্যালু" : "20-Year PPA Savings",
     annualGeneration: isBn ? "বার্ষিক উৎপাদন" : "Annual Generation",
     co2Saved: isBn ? "CO₂ সাশ্রয়" : "CO₂ Offset",
+    demandSavings: isBn ? "ডিমান্ড সাশ্রয় (ইলাস্ট্রেটিভ)" : "Demand savings (illustrative)",
+    totalValue: isBn ? "মোট আনুমানিক মাসিক ভ্যালু" : "Total indicative monthly value",
+    exportNotice: isBn ? "নেট-মিটারিং রপ্তানি নোট" : "Net-metering export note",
     assumptions: isBn ? "হিসাবের অনুমানসমূহ" : "Estimate assumptions",
     continueWhatsApp: copy.common.continueWhatsApp,
     name: isBn ? "পূর্ণ নাম" : "Full name",
@@ -127,9 +170,31 @@ export function SolarCalculatorFunnel() {
     [bill, segment],
   );
 
+  const confirmedBillDraft = useMemo(() => {
+    if (!billDraft.confirmedByUser) return undefined;
+
+    const parsed = billExtractionDraftSchema.safeParse({
+      publicId: billDraft.publicId.trim() || `manual-${Date.now()}`,
+      billingPeriod: billDraft.billingPeriod.trim() || undefined,
+      billingDemandKva: billDraft.billingDemandKva ? Number(billDraft.billingDemandKva) : undefined,
+      monthlyConsumptionKwh: billDraft.monthlyConsumptionKwh ? Number(billDraft.monthlyConsumptionKwh) : undefined,
+      exportedEnergyKwh: billDraft.exportedEnergyKwh ? Number(billDraft.exportedEnergyKwh) : undefined,
+      netMeteringObserved: billDraft.netMeteringObserved,
+      confirmedByUser: true,
+    });
+
+    return parsed.success ? parsed.data : undefined;
+  }, [billDraft]);
+
   const model = useMemo(() => {
-    return getSavingsModel(estimatedMonthlyKwh, area, segment);
-  }, [area, estimatedMonthlyKwh, segment]);
+    return getSavingsModel(
+      confirmedBillDraft?.monthlyConsumptionKwh ?? estimatedMonthlyKwh,
+      area,
+      segment,
+      region,
+      confirmedBillDraft?.billingDemandKva ?? peakDemandKva,
+    );
+  }, [area, confirmedBillDraft, estimatedMonthlyKwh, peakDemandKva, region, segment]);
 
   const manualWhatsAppDetails = useMemo(() => {
     const segmentLabel =
@@ -173,8 +238,10 @@ export function SolarCalculatorFunnel() {
     try {
       const calculatorSummary = [
         `type=${segment}`,
+        `region=${region}`,
         `bill=${bill}`,
         `roof=${area}`,
+        `kwp=${model.systemKwp}`,
         `savings=${model.monthlySavingsBdtRange.low}-${model.monthlySavingsBdtRange.high}`,
       ].join(",");
 
@@ -205,7 +272,9 @@ export function SolarCalculatorFunnel() {
           calculatorBillEstimate: bill,
           calculatorAreaEstimate: area,
           propertySegment: segment,
+          region,
           modelOutput: model,
+          billExtraction: confirmedBillDraft,
         },
       );
 
@@ -279,13 +348,13 @@ export function SolarCalculatorFunnel() {
               <div className="space-y-6 rounded-[24px] border border-border/70 bg-secondary/28 p-6">
                 <div>
                   <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {isBn ? "প্রপার্টির ধরন" : "Property Type"}
+                    {labels.segmentLabel}
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: "c_and_i", label: isBn ? "বাণিজ্যিক/শিল্প" : "Commercial/Factory" },
-                      { id: "residential_common_service", label: isBn ? "কমন সার্ভিস (পাম্প/লিফট)" : "Common Services" },
-                      { id: "residential_multi_story", label: isBn ? "আবাসিক ফ্ল্যাট" : "Residential Flat" },
+                      { id: "c_and_i", label: labels.segmentCnI },
+                      { id: "residential_common_service", label: labels.segmentCommonService },
+                      { id: "residential_multi_story", label: labels.segmentResidential },
                     ].map((item) => (
                       <button
                         key={item.id}
@@ -295,6 +364,39 @@ export function SolarCalculatorFunnel() {
                           "rounded-xl border px-3 py-2 text-center text-xs font-medium transition-all",
                           segment === item.id
                             ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                            : "border-border/80 bg-background/80 text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                        )}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-3 flex items-center justify-between">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {labels.regionLabel}
+                    </label>
+                    <span className="flex items-center gap-1 font-mono text-[11px] text-muted-foreground">
+                      <MapPin className="h-3 w-3" />
+                      {region === "chattogram" ? "16.5% CF" : region === "other" ? "15.1% CF" : "15.3% CF"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: "dhaka", label: labels.dhaka },
+                      { id: "chattogram", label: labels.chattogram },
+                      { id: "other", label: labels.otherRegion },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setRegion(item.id as RegionCode)}
+                        className={cn(
+                          "rounded-xl border px-3 py-2 text-center text-xs font-medium transition-all",
+                          region === item.id
+                            ? "border-primary/60 bg-primary/15 text-foreground shadow-sm"
                             : "border-border/80 bg-background/80 text-muted-foreground hover:border-primary/40 hover:text-foreground",
                         )}
                       >
@@ -391,6 +493,48 @@ export function SolarCalculatorFunnel() {
                   value={`৳${model.monthlySavingsBdtRange.low.toLocaleString()} - ৳${model.monthlySavingsBdtRange.high.toLocaleString()}`}
                   accent
                 />
+
+                {/* Demand-charge breakdown toggle (Manus synthesis) */}
+                <div className="rounded-[20px] border border-border/70 bg-secondary/15 p-4 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setShowDemandDetail((prev) => !prev)}
+                    className="flex w-full items-center justify-between font-medium text-foreground hover:text-primary transition-colors"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Info className="h-3.5 w-3.5 text-primary" />
+                      {labels.demandDetailToggle}
+                    </span>
+                    <span className="font-mono text-[11px] text-muted-foreground">
+                      {showDemandDetail ? "−" : "+"}
+                    </span>
+                  </button>
+
+                  {showDemandDetail ? (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      className="mt-3 space-y-2 border-t border-border/60 pt-3 text-muted-foreground"
+                    >
+                      <div className="flex justify-between">
+                        <span>Energy offset:</span>
+                        <span className="font-mono font-medium text-foreground">৳{model.energySavingsBdt.toLocaleString()} / mo</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>{labels.demandSavings}:</span>
+                        <span className="font-mono font-medium text-foreground">৳{model.demandChargeSavingsBdt.toLocaleString()} / mo</span>
+                      </div>
+                      <div className="flex justify-between border-t border-border/40 pt-1 font-semibold text-foreground">
+                        <span>{labels.totalValue}:</span>
+                        <span className="font-mono text-primary">৳{model.totalEstimatedMonthlyValueBdt.toLocaleString()} / mo</span>
+                      </div>
+                      <p className="pt-2 text-[10px] leading-relaxed text-muted-foreground/80">
+                        {model.netMeteringExportNotice}
+                      </p>
+                    </motion.div>
+                  ) : null}
+                </div>
+
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <ResultCard
                     label={labels.systemSize}
@@ -432,6 +576,69 @@ export function SolarCalculatorFunnel() {
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Optional private bill draft drawer (Manus synthesis) */}
+                <div className="rounded-[18px] border border-border/70 bg-background/60 p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-foreground">
+                        {labels.billDraftTitle}
+                      </p>
+                      <p className="mt-1 text-[11px] leading-normal text-muted-foreground">
+                        {labels.billDraftBody}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      placeholder={isBn ? "বিলিং পিরিয়ড (যেমন 2026-04)" : "Billing period (e.g. 2026-04)"}
+                      value={billDraft.billingPeriod}
+                      onChange={(e) =>
+                        setBillDraft((d) => ({
+                          ...d,
+                          billingPeriod: e.target.value,
+                          publicId: d.publicId || `draft-${Date.now().toString(36)}`,
+                        }))
+                      }
+                      className="rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
+                    />
+                    <input
+                      type="number"
+                      placeholder={isBn ? "বিল্ড ডিমান্ড kVA" : "Billed demand kVA"}
+                      value={billDraft.billingDemandKva}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setBillDraft((d) => ({ ...d, billingDemandKva: val }));
+                        if (val && Number(val) > 0) setPeakDemandKva(Number(val));
+                      }}
+                      className="rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div className="mt-2.5 flex items-center gap-2">
+                    <input
+                      id="billDraftConfirm"
+                      type="checkbox"
+                      checked={billDraft.confirmedByUser}
+                      onChange={(e) =>
+                        setBillDraft((d) => ({
+                          ...d,
+                          confirmedByUser: e.target.checked,
+                          publicId: d.publicId || `draft-${Date.now().toString(36)}`,
+                        }))
+                      }
+                      className="h-3.5 w-3.5 rounded border-border text-primary focus:ring-primary/20"
+                    />
+                    <label
+                      htmlFor="billDraftConfirm"
+                      className="text-[11px] font-medium text-foreground/80 cursor-pointer"
+                    >
+                      {labels.billDraftConfirm}
+                    </label>
+                  </div>
+                </div>
+
                 <div>
                   <label htmlFor="calculator-name" className="mb-2 block text-sm font-medium text-foreground">
                     {labels.name}

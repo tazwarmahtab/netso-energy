@@ -26,7 +26,9 @@ describe("bengali copy", () => {
   beforeEach(() => {
     try {
       window?.localStorage?.clear?.();
-    } catch {}
+    } catch {
+      // Ignore storage-access errors in jsdom
+    }
     if (typeof document !== "undefined") {
       document.documentElement.lang = "en";
     }

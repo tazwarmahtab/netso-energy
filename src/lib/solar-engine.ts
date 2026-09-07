@@ -3,10 +3,18 @@
 
 export type PropertySegment = "c_and_i" | "residential_multi_story" | "residential_common_service";
 
+export type RegionCode = "chattogram" | "dhaka" | "other";
+
+export interface DemandChargeInput {
+  /** Sanctioned or billed demand in kVA; illustrative only, pending utility billing audit. */
+  peakDemandKva?: number;
+}
+
 export interface TariffStructure {
   segment: PropertySegment;
   name: string;
   displacedRateBdt: number;
+  demandChargeBdtPerKwMonth?: number;
   description: string;
 }
 
@@ -15,18 +23,21 @@ export const TARIFF_BENCHMARKS: Record<PropertySegment, TariffStructure> = {
     segment: "c_and_i",
     name: "Commercial & Industrial (MT-2)",
     displacedRateBdt: 12.98, // Verified CGS 12-Month Audit true variable rate
-    description: "Medium-tension commercial & industrial variable energy rate excluding fixed demand charges.",
+    demandChargeBdtPerKwMonth: 70.0, // MT-2 billing demand charge (indicative)
+    description: "Medium-tension commercial & industrial variable energy rate plus fixed monthly billing demand.",
   },
   residential_common_service: {
     segment: "residential_common_service",
     name: "Residential Common Services (LT-E / Pump & Lift)",
     displacedRateBdt: 14.50, // Blended commercial/high-slab rate for common lift/pumps
+    demandChargeBdtPerKwMonth: 42.0, // LT-E pump & lift demand charge (indicative)
     description: "Dedicated common-service meter powering elevators, deep water pumps, and stairwell lighting.",
   },
   residential_multi_story: {
     segment: "residential_multi_story",
     name: "Residential Apartment High Tier (LT-A 401+ Units)",
     displacedRateBdt: 15.01, // BERC June 2026 Tier-5 rate (401-600 slab is 15.01, 600+ is 17.35)
+    demandChargeBdtPerKwMonth: 42.0, // Fixed charge equivalent per kW demand (indicative)
     description: "Daytime flat consumption offsetting progressive upper residential tariff slabs.",
   },
 };
@@ -43,6 +54,7 @@ export const SOLAR_ENGINE_CONSTANTS = {
   annualYieldPerKwp: {
     chattogram: 1445.4, // 16.5% Capacity Factor (Chattogram reference)
     dhaka: 1340.3,      // 15.3% Capacity Factor (Dhaka urban baseline)
+    other: 1320.0,      // General Bangladesh regional baseline (subject to site micro-climate audit)
     conservative: 1300.0,
     optimistic: 1550.0,
   },
@@ -79,6 +91,14 @@ export interface RescoSavingsModel {
   annualGenerationKwh: number;
   effectiveDisplacedRateBdt: number;
   savingsMarginPct: number;
+  /** Same as monthlySavingsBdt but explicitly flagged as energy-displaced only. */
+  energySavingsBdt: number;
+  /** Illustrative demand-charge offset in BDT/month. Pending billing-demand & interval load study. */
+  demandChargeSavingsBdt: number;
+  /** Combined monthly planning value (energy + illustrative demand). */
+  totalEstimatedMonthlyValueBdt: number;
+  /** SREDA NEM advisory notice clarifying export credit exclusions. */
+  netMeteringExportNotice: string;
   confidenceLabel: "resco_ppa";
   assumptions: string[];
   disclaimer: string;
@@ -121,7 +141,8 @@ export function getSavingsModel(
   monthlyKwh: number,
   rooftopSqft: number,
   segment: PropertySegment = "c_and_i",
-  region: "chattogram" | "dhaka" = "dhaka",
+  region: RegionCode = "dhaka",
+  peakDemandKva = 15,
 ): RescoSavingsModel {
   const safeMonthlyKwh = Math.max(monthlyKwh, 100);
   const safeRooftopSqft = Math.max(rooftopSqft, 500);
@@ -158,6 +179,19 @@ export function getSavingsModel(
     "integer",
   );
 
+  // Demand-charge offset (illustrative) — Manus synthesis for C&I proposals.
+  // Estimate provisional demand reduction from rooftop solar as ~12% of rooftop capacity during billing period.
+  const tariffDemandRate = TARIFF_BENCHMARKS[segment]?.demandChargeBdtPerKwMonth ?? 0;
+  const effectiveDemandKva = Math.max(0, peakDemandKva);
+  const midpointDemandOffsetKva = Math.min(effectiveDemandKva * 0.12, midpointSystem * 0.18);
+  const demandChargeSavingsBdt = roundCurrency(midpointDemandOffsetKva * tariffDemandRate);
+  const energySavingsBdt = monthlySavingsBdtRange.midpoint;
+  const totalEstimatedMonthlyValueBdt = energySavingsBdt + demandChargeSavingsBdt;
+
+  const netMeteringExportNotice =
+    `Net metering export credit (SREDA 2025 benchmark BDT ${SOLAR_ENGINE_CONSTANTS.sredaNemExportRateBdt.toFixed(2)}/kWh) ` +
+    `is excluded from monthly cash savings pending utility/BERC inter-connection approval.`;
+
   // 20-Year Lifetime Savings with 3% triennial PPA escalation & 0.5% degradation
   const calculateLifetimeSavings = (annualGen: number): number => {
     let totalSavings = 0;
@@ -188,7 +222,13 @@ export function getSavingsModel(
   const assumptions = [
     "Zero upfront CAPEX for the property owner under the Netso PPA model.",
     `Savings calculated against ${TARIFF_BENCHMARKS[segment].name} (BDT ${displacedRate.toFixed(2)}/kWh) vs. Netso PPA (BDT ${ppaRate.toFixed(2)}/kWh).`,
-    `System sized using ${region === "chattogram" ? "Chattogram (16.5% CF)" : "Dhaka (15.3% CF)"} empirical irradiance profiles.`,
+    `System sized using ${
+      region === "chattogram"
+        ? "Chattogram (16.5% CF)"
+        : region === "other"
+          ? "regional micro-climate estimate (~15.1% CF)"
+          : "Dhaka (15.3% CF)"
+    } empirical irradiance profiles.`,
     "Includes 20-year asset performance monitoring, cleaning, and maintenance.",
     "CO2 emissions offset based on Bangladesh national grid emission factor (0.58 kg/kWh).",
   ];
@@ -205,6 +245,10 @@ export function getSavingsModel(
     annualGenerationKwh: roundCurrency(midpointAnnualGen),
     effectiveDisplacedRateBdt: displacedRate,
     savingsMarginPct,
+    energySavingsBdt,
+    demandChargeSavingsBdt,
+    totalEstimatedMonthlyValueBdt,
+    netMeteringExportNotice,
     confidenceLabel: "resco_ppa",
     assumptions,
     disclaimer:

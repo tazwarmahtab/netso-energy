@@ -67,9 +67,26 @@ export const modelOutputSchema = z.object({
   annualGenerationKwh: z.number().nonnegative(),
   effectiveDisplacedRateBdt: z.number().positive(),
   savingsMarginPct: z.number().nonnegative(),
+  energySavingsBdt: z.number().nonnegative().optional(),
+  demandChargeSavingsBdt: z.number().nonnegative().optional(),
+  totalEstimatedMonthlyValueBdt: z.number().nonnegative().optional(),
+  netMeteringExportNotice: z.string().trim().min(1).optional(),
   confidenceLabel: z.literal("resco_ppa"),
   assumptions: z.array(z.string().trim().min(1)).min(1),
   disclaimer: z.string().trim().min(1),
+});
+
+export const billExtractionDraftSchema = z.object({
+  publicId: z.string().trim().min(4).max(64),
+  billingPeriod: z.string().trim().min(2).max(40).optional(),
+  billingDemandKva: z.number().positive().optional(),
+  sanctionedDemandKva: z.number().positive().optional(),
+  monthlyConsumptionKwh: z.number().positive().optional(),
+  exportedEnergyKwh: z.number().nonnegative().optional(),
+  settlementBalanceKwh: z.number().optional(),
+  netMeteringObserved: z.boolean().default(false),
+  confirmedByUser: z.boolean().default(false),
+  documentStoragePath: z.string().trim().min(1).optional(),
 });
 
 export const calculatorContextSchema = z.object({
@@ -77,7 +94,9 @@ export const calculatorContextSchema = z.object({
   estimatedMonthlyConsumptionKwh: z.number().positive().optional(),
   rooftopAreaSqft: z.number().positive(),
   propertySegment: propertySegmentSchema.default("c_and_i"),
+  region: z.enum(["dhaka", "chattogram", "other"]).default("dhaka"),
   estimate: modelOutputSchema,
+  billExtraction: billExtractionDraftSchema.optional(),
 });
 
 export const assessmentEvidenceSchema = z
@@ -284,16 +303,21 @@ export function createFeasibilityAssessmentSessionInput(
   });
 }
 
+export type BillExtractionDraft = z.infer<typeof billExtractionDraftSchema>;
+
 export function createCalculatorAssessmentSessionInput(
   values: CalculatorLeadFormValues,
   estimates: {
     calculatorBillEstimate: number;
     calculatorAreaEstimate: number;
     propertySegment?: z.infer<typeof propertySegmentSchema>;
+    region?: "dhaka" | "chattogram" | "other";
     modelOutput: z.infer<typeof modelOutputSchema>;
+    billExtraction?: BillExtractionDraft;
   },
 ): StartAssessmentSessionPayload {
   const segment = estimates.propertySegment ?? "c_and_i";
+  const region = estimates.region ?? "dhaka";
   return startAssessmentSessionSchema.parse({
     entryPoint: "calculator_handoff",
     preferredLanguage: values.preferredLanguage ?? "en",
@@ -315,9 +339,27 @@ export function createCalculatorAssessmentSessionInput(
       ),
       rooftopAreaSqft: estimates.calculatorAreaEstimate,
       propertySegment: segment,
+      region,
       estimate: estimates.modelOutput,
+      billExtraction: estimates.billExtraction,
     },
-    evidence: [],
+    evidence: estimates.billExtraction?.documentStoragePath
+      ? [
+          {
+            kind: "electric_bill",
+            captureChannel: "calculator",
+            status: "pending_review",
+            storagePath: estimates.billExtraction.documentStoragePath,
+            note: "Private review draft confirmed by user during calculator intake.",
+            metadata: {
+              publicId: estimates.billExtraction.publicId,
+              billingPeriod: estimates.billExtraction.billingPeriod,
+              billingDemandKva: estimates.billExtraction.billingDemandKva,
+              monthlyConsumptionKwh: estimates.billExtraction.monthlyConsumptionKwh,
+            },
+          },
+        ]
+      : [],
   });
 }
 

@@ -124,6 +124,54 @@ describe("assessment session payload builders", () => {
     expect(inspectionReviewStateSchema?.parse("inspection_pending")).toBe("inspection_pending");
   });
 
+  it("attaches private bill extraction draft to calculator handoff payload", () => {
+    const payload = createCalculatorLeadPayload(
+      {
+        preferredLanguage: "en",
+        name: "Rashid Ali",
+        phone: "01912345678",
+      },
+      {
+        calculatorBillEstimate: 25000,
+        calculatorAreaEstimate: 3000,
+        propertySegment: "c_and_i",
+        region: "chattogram",
+        billExtraction: {
+          publicId: "bill-cgs-2026-05",
+          billingPeriod: "2026-04",
+          billingDemandKva: 45,
+          monthlyConsumptionKwh: 2200,
+          confirmedByUser: true,
+          netMeteringObserved: false,
+          documentStoragePath: "private/bills/bill-cgs-2026-05.pdf",
+        },
+        modelOutput: {
+          systemKwp: 19.5,
+          systemKwpRange: { low: 16.5, midpoint: 19.5, high: 22.5 },
+          monthlySavingsBdt: 14500,
+          monthlySavingsBdtRange: { low: 12000, midpoint: 14500, high: 17000 },
+          annualSavingsBdt: 174000,
+          ppaTermSavingsBdt: 3480000,
+          ppaTermSavingsBdtRange: { low: 3000000, midpoint: 3480000, high: 4000000 },
+          co2SavedTonnes: 16.4,
+          annualGenerationKwh: 28185,
+          effectiveDisplacedRateBdt: 12.98,
+          savingsMarginPct: 23.0,
+          confidenceLabel: "resco_ppa",
+          assumptions: ["Zero upfront CAPEX under Netso PPA."],
+          disclaimer: "Preliminary planning estimate. Subject to site review.",
+        },
+      },
+    );
+
+    expect(payload.calculatorContext?.billExtraction).toBeDefined();
+    expect(payload.calculatorContext?.billExtraction?.confirmedByUser).toBe(true);
+    expect(payload.calculatorContext?.region).toBe("chattogram");
+    expect(payload.evidence).toHaveLength(1);
+    expect(payload.evidence[0].kind).toBe("electric_bill");
+    expect(payload.evidence[0].storagePath).toBe("private/bills/bill-cgs-2026-05.pdf");
+  });
+
   it("requires expanded fallback intake fields before a web assessment can be created", () => {
     expect(() =>
       createAssessmentSessionPayload({

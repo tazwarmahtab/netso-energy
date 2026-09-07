@@ -220,3 +220,33 @@ test('Solar calculator property segment selector switches rates', async ({ page 
   await expect(residentialBtn).toHaveClass(/bg-primary/);
   await expect(commonServiceBtn).not.toHaveClass(/bg-primary/);
 });
+
+test('Solar calculator regional yield + demand-detail breakdown renders (Manus synthesis)', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#savings-estimate', { waitUntil: 'networkidle' });
+
+  const calculatorSection = page.locator('#savings-estimate');
+  await calculatorSection.scrollIntoViewIfNeeded();
+
+  // Regional yield selector visible
+  const dhakaBtn = page.getByRole('button', { name: /^Dhaka|ঢাকা$/i });
+  const chattogramBtn = page.getByRole('button', { name: /Chattogram|চট্টগ্রাম/i });
+  await expect(dhakaBtn.first()).toBeVisible({ timeout: 15000 });
+  await expect(chattogramBtn.first()).toBeVisible({ timeout: 15000 });
+
+  // Switch region to verify selector state
+  await chattogramBtn.first().click();
+  await expect(chattogramBtn.first()).toHaveClass(/bg-primary\/15/);
+
+  // Move to results step
+  const calculateBtn = page.getByRole('button', { name: /Calculate my savings|সেভিংস/i });
+  await calculateBtn.first().click();
+
+  // Demand-charge breakdown toggle visible + expands
+  const demandToggle = page.getByRole('button', { name: /demand-charge|ডিমান্ড/i });
+  await expect(demandToggle).toBeVisible({ timeout: 15000 });
+  await demandToggle.click();
+
+  // SREDA export advisory notice appears
+  await expect(page.locator('text=SREDA 2025')).toBeVisible({ timeout: 8000 });
+});

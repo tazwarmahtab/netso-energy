@@ -104,4 +104,32 @@ describe("regional insolation sensitivity", () => {
     expect(delta).toBeGreaterThanOrEqual(0.07);
     expect(delta).toBeLessThanOrEqual(0.10);
   });
+
+  it("handles non-Dhaka regional flag and notes location micro-climate adjustment", () => {
+    const regional = getSavingsModel(2500, 2000, "c_and_i", "other");
+    expect(regional.assumptions.some((a) => a.includes("micro-climate") || a.includes("location"))).toBe(true);
+    expect(regional.annualGenerationKwh).toBeGreaterThan(0);
+  });
+});
+
+describe("demand charge vs energy displaced separation (Manus synthesis)", () => {
+  it("exposes fixed demand rate BDT/kW/month for commercial MT-2 tariff", () => {
+    expect(TARIFF_BENCHMARKS.c_and_i.demandChargeBdtPerKwMonth).toBeDefined();
+    expect(TARIFF_BENCHMARKS.c_and_i.demandChargeBdtPerKwMonth).toBeGreaterThanOrEqual(70);
+  });
+
+  it("separates energy savings from illustrative demand savings without false certainty", () => {
+    const model = getSavingsModel(3500, 2000, "c_and_i", "dhaka", 15);
+    expect(model.demandChargeSavingsBdt).toBeDefined();
+    expect(model.demandChargeSavingsBdt).toBeGreaterThan(0);
+    expect(model.energySavingsBdt).toBe(model.monthlySavingsBdt);
+    expect(model.totalEstimatedMonthlyValueBdt).toBe(model.energySavingsBdt + (model.demandChargeSavingsBdt ?? 0));
+  });
+
+  it("includes SREDA Net Metering export rate advisory notice", () => {
+    const model = getSavingsModel(1200, 1500, "c_and_i");
+    expect(model.netMeteringExportNotice).toBeDefined();
+    expect(model.netMeteringExportNotice).toContain("8.39");
+    expect(model.netMeteringExportNotice).toContain("utility");
+  });
 });
