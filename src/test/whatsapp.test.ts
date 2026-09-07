@@ -12,6 +12,9 @@ describe("whatsapp CTA configuration", () => {
     });
 
     expect(url).toContain("https://wa.me/8801791222777");
-    expect(url).toContain(encodeURIComponent("START NETSO | lang=en | source=test"));
+    expect(url).toContain(
+      encodeURIComponent("Hello NETSO! I want a rooftop review."),
+    );
+    expect(url).toContain(encodeURIComponent("[EN · test]"));
   });
 });

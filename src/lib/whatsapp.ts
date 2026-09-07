@@ -46,16 +46,20 @@ export function buildWhatsAppStartUrl(options: WhatsAppStartOptions) {
   const number = getWhatsAppNumber();
   if (!number) return DEFAULT_ASSESSMENT_PATH;
 
-  const starter =
+  const langTag = options.language === "bn" ? "BN" : "EN";
+  const greeting =
     options.language === "bn"
-      ? ["START NETSO", "lang=bn", `source=${options.source}`]
-      : ["START NETSO", "lang=en", `source=${options.source}`];
+      ? "হ্যালো NETSO! আমি ছাদের রিভিউ চাই।"
+      : "Hello NETSO! I want a rooftop review.";
 
-  if (options.sessionId) starter.push(`session=${options.sessionId}`);
-  if (options.calculatorSummary) starter.push(`estimate=${options.calculatorSummary}`);
+  const refParts = [langTag, options.source];
+  if (options.sessionId) refParts.push(`session ${options.sessionId}`);
+  if (options.calculatorSummary) refParts.push(`estimate ${options.calculatorSummary}`);
+
+  const lines = [greeting, `[${refParts.join(" · ")}]`];
   if (options.details?.length) {
-    starter.push(...options.details.filter((detail) => detail.trim().length > 0));
+    lines.push(...options.details.filter((detail) => detail.trim().length > 0));
   }
 
-  return `https://wa.me/${number}?text=${encodeURIComponent(starter.join(" | "))}`;
+  return `https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
