@@ -13,6 +13,7 @@ import {
   heroBackgroundAvifSources,
   heroBackgroundFallback,
   heroBackgroundJpegSources,
+  heroIntroShaderColors,
   heroPosterFallback,
   heroPosterJpegSources,
   heroPosterMobileFallback,
@@ -466,8 +467,8 @@ export const Hero = () => {
           >
             <DitheringShader
               className="absolute inset-0"
-              colorBack="#090806"
-              colorFront="#c8b2ff"
+              colorBack={heroIntroShaderColors.back}
+              colorFront={heroIntroShaderColors.front}
               shape="warp"
               type="4x4"
               pxSize={5}

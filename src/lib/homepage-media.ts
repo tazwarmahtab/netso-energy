@@ -58,3 +58,22 @@ export const problemRooftopsFallback = problemRooftops;
 export const headerLogoAvif = logoBrandSvg;
 export const headerLogoPng = logoBrandSvg;
 export const mobileHeaderLogoAvif = logoBrandSvg;
+
+/**
+ * Dithering-shader palettes, kept as named theme constants (DESIGN.md § colors).
+ * WebGL uniforms require hex strings, so these live here as the single source
+ * of truth instead of inline literals at call sites.
+ */
+export const heroIntroShaderColors = {
+  /** Near-black dusk ground for the 1.35s hero intro veil. */
+  back: "#090806",
+  /** Brand accent (DESIGN.md `accent: #c8b2ff`). */
+  front: "#c8b2ff",
+} as const;
+
+export const sectionTransitionShaderColors = {
+  /** Warm ivory ground matching light sections. */
+  back: "#f6efe2",
+  /** Muted lavender matching the accent family. */
+  front: "#d6c3f6",
+} as const;

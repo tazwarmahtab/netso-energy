@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { DitheringShader } from "@/components/ui/dithering-shader";
+import { sectionTransitionShaderColors } from "@/lib/homepage-media";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 type SectionShaderTransitionProps = {
@@ -36,8 +37,8 @@ export const SectionShaderTransition = ({
         >
           <DitheringShader
             className="absolute inset-0 opacity-70"
-            colorBack="#f6efe2"
-            colorFront="#d6c3f6"
+            colorBack={sectionTransitionShaderColors.back}
+            colorFront={sectionTransitionShaderColors.front}
             shape="simplex"
             type="4x4"
             pxSize={5}
