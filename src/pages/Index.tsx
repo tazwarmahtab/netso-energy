@@ -62,8 +62,8 @@ const Index = () => {
     <div className="relative">
       <SEO path="/" />
       <Hero />
-      <div className="theme-light relative z-0 bg-background text-foreground">
-        <SectionFadeTransition darkTop />
+      <div className="theme-light relative z-10 -mt-[22vh] bg-background text-foreground">
+        <SectionFadeTransition darkTop className="bg-transparent" />
         <LazySection
           component={LazyProblemSection}
           eagerOnIdle

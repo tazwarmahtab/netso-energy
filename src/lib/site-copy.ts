@@ -199,10 +199,10 @@ const en: SiteCopy = {
     scrollCue: "Scroll to reveal",
   },
   problem: {
-    eyebrow: "The problem",
-    headline: "Dhaka has millions of rooftops. Almost none of them generate value.",
+    eyebrow: "From the rooftop down",
+    headline: "The city already built the power plant. It just never switched it on.",
     body:
-      "Unused roofs already sit above the city, but most remain cluttered, overheated, and economically idle instead of producing energy.",
+      "Step off the pergola and look down: the same rooftops stretching to the horizon sit cluttered, overheated, and idle — square kilometres of concrete absorbing heat instead of making power.",
     imageEyebrow: "The rooftop layer",
     imageBody: "Aerial views of Dhaka reveal a vast layer of unused rooftop surface waiting to be activated.",
     opportunityLabel: "The opportunity",
@@ -556,10 +556,10 @@ const bn: SiteCopy = {
     scrollCue: "রিভিল দেখতে স্ক্রল করুন",
   },
   problem: {
-    eyebrow: "সমস্যা",
-    headline: "ঢাকায় লক্ষ লক্ষ ছাদ আছে। প্রায় কোনোটাই মূল্য তৈরি করে না।",
+    eyebrow: "ছাদ থেকে নিচে তাকান",
+    headline: "শহর ইতিমধ্যে পাওয়ার প্ল্যান্ট বানিয়ে ফেলেছে। শুধু সুইচটা অন করা হয়নি।",
     body:
-      "অব্যবহৃত ছাদ শহরের উপরেই আছে, কিন্তু বেশিরভাগই শক্তি উৎপাদনের বদলে অগোছালো, উত্তপ্ত এবং আর্থিকভাবে নিষ্ক্রিয় পড়ে থাকে।",
+      "পারগোলা থেকে নেমে নিচের দিকে তাকান: দিগন্তজোড়া সেই ছাদগুলো এখনও অগোছালো, উত্তপ্ত ও নিষ্ক্রিয় — বিদ্যুৎ তৈরির বদলে শুধু তাপ শোষণ করছে।",
     imageEyebrow: "ছাদের স্তর",
     imageBody: "ঢাকার আকাশদৃশ্যে বিশাল এক অব্যবহৃত ছাদ-স্তর দেখা যায়, যা সক্রিয় হওয়ার অপেক্ষায় আছে।",
     opportunityLabel: "সুযোগ",

@@ -317,13 +317,21 @@ const ScrollExpandMedia = ({
   const titleWords = title?.trim().split(/\s+/).filter(Boolean) ?? [];
   const firstWord = titleWords[0] ?? '';
   const restOfTitle = titleWords.slice(1).join(' ');
+  // Exit choreography: in the final 8% of scroll, the full-bleed video lifts
+  // and scales gently while the next section slides over it, creating a
+  // continuous cinematic handoff instead of a hard seam cut.
+  const exitProgress = easeOutCubic(clamp((scrollProgress - 0.92) / 0.08));
+  const exitLift = exitProgress * -6;
+  const exitScale = 1 + exitProgress * 0.04;
+  const exitDim = 1 - exitProgress * 0.28;
+
   return (
     <div
       ref={sectionRef}
-      className="relative overflow-clip transition-colors duration-700 ease-in-out"
+      className="relative overflow-clip bg-[#0a0906] transition-colors duration-700 ease-in-out"
       style={{ height: sectionHeight }}
     >
-      <section className="sticky top-0 flex h-[100svh] flex-col items-center justify-start overflow-clip">
+      <section className="sticky top-0 flex h-[100svh] flex-col items-center justify-start overflow-clip bg-[#0a0906]">
         <div className="relative flex h-full w-full flex-col items-center">
           <motion.div
             className="absolute inset-0 z-0 h-full"
@@ -353,9 +361,9 @@ const ScrollExpandMedia = ({
                   height: `${expandedHeight}px`,
                   maxWidth: maxMediaWidth,
                   maxHeight: maxMediaHeight,
-                  opacity: mediaOpacity,
+                  opacity: mediaOpacity * exitDim,
                   borderRadius: `${26 * (1 - composedExpand)}px`,
-                  transform: `translate(-50%, -50%) translate3d(0, calc(${mediaY}vh + ${mediaEntryLift}vh), 0) scale(${scaleX}, ${scaleY})`,
+                  transform: `translate(-50%, -50%) translate3d(0, calc(${mediaY + exitLift}vh + ${mediaEntryLift}vh), 0) scale(${scaleX * exitScale}, ${scaleY * exitScale})`,
                   transformOrigin: 'center center',
                   willChange: 'transform, border-radius',
                 }}
@@ -596,7 +604,15 @@ const ScrollExpandMedia = ({
               ) : null}
 
               {renderOverlay ? (
-                <div className="absolute inset-0 z-10 h-full w-full">
+                <motion.div
+                  className="absolute inset-0 z-10 h-full w-full"
+                  initial={false}
+                  animate={{
+                    opacity: 1 - exitProgress * 0.85,
+                    y: `${exitProgress * -4}vh`,
+                  }}
+                  transition={{ duration: 0.2 }}
+                >
                   {renderOverlay({
                     scrollProgress,
                     mediaFullyExpanded,
@@ -604,8 +620,22 @@ const ScrollExpandMedia = ({
                     isMobile: isMobileState,
                     phase,
                   })}
-                </div>
+                </motion.div>
               ) : null}
+
+              {/* Cinematic bottom veil: bridges the dark hero into the light section
+                  so the handoff reads as a gradient dissolve, not a seam cut. */}
+              <motion.div
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[22vh]"
+                aria-hidden="true"
+                initial={false}
+                animate={{ opacity: exitProgress }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  background:
+                    "linear-gradient(to bottom, transparent 0%, rgba(10,9,6,0.55) 45%, var(--background) 100%)",
+                }}
+              />
             </div>
 
             {!renderOverlay ? (
