@@ -60,10 +60,11 @@ const HeroOverlay = ({
   prefersReducedMotion,
 }: HeroOverlayProps) => {
   const copy = useSiteCopy();
-  // Act 3 (0.70-1.0): hero text only animates in after viewport expansion
-  // and video scrub are complete. Held pinned until final alignment.
+  // Text choreographs with the video expansion: begins as the viewport
+  // completes its growth, settles fully before the scroll pin releases.
+  // Final alignment target: scrollProgress >= 0.82 (well before 1.0).
   const revealProgress =
-    prefersReducedMotion || isMobile ? 1 : clamp((scrollProgress - 0.7) / 0.24);
+    prefersReducedMotion || isMobile ? 1 : clamp((scrollProgress - 0.38) / 0.44);
   const overlayY = `${(1 - revealProgress) * 8}vh`;
   const leftScale = 0.96 + revealProgress * 0.04;
   const leftY = `${(1 - revealProgress) * 2.8}vh`;

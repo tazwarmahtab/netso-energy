@@ -165,21 +165,22 @@ const ScrollExpandMedia = ({
     };
   }, [isMobileState, mediaType, prefersReducedMotion]);
 
-  // 3-act choreography: expansion (0-0.35) → video scrub (0.35-0.70) → text reveal (0.70-1.0)
-  const actBreak1 = 0.35;
+  // Overlapping choreography: expansion (0-0.38) → video scrub (0.35-0.82)
+  // → text settle completes by 0.82, leaving the final 18% as locked hold.
+  const actBreak1 = 0.38;
   const actBreak2 = 0.7;
 
   const introEnd = 0;
   const expandEnd = actBreak1;
-  const revealStart = actBreak2;
-  const revealSpan = 1 - actBreak2;
+  const revealStart = 0.38;
+  const revealSpan = 0.44;
 
   const phase = useMemo<HeroPhase>(() => {
-    if (prefersReducedMotion || scrollProgress >= revealStart) return 'content-reveal';
+    if (prefersReducedMotion || scrollProgress >= 0.82) return 'content-reveal';
     if (scrollProgress >= expandEnd) return 'settle';
     if (scrollProgress >= introEnd) return 'expand';
     return 'intro';
-  }, [expandEnd, introEnd, prefersReducedMotion, revealStart, scrollProgress]);
+  }, [expandEnd, introEnd, prefersReducedMotion]);
 
   const expandProgress = easeOutCubic(clamp(scrollProgress / actBreak1));
   const scrubProgress = easeOutCubic(clamp((scrollProgress - actBreak1) / (actBreak2 - actBreak1)));
@@ -234,7 +235,9 @@ const ScrollExpandMedia = ({
       ? mobileSectionHeight
       : desktopSectionHeight;
   const mediaFullyExpanded = prefersReducedMotion || scrollProgress >= expandEnd;
-  const showContent = prefersReducedMotion || scrollProgress >= revealStart;
+  // Text participates from 0.38 and is fully settled by 0.82 — the final
+  // 18% of the pin is a locked hold, never a reveal window.
+  const showContent = prefersReducedMotion || scrollProgress >= 0.38;
   const renderStaticPoster =
     mediaType === 'video' &&
     Boolean(posterSrc) &&
@@ -268,10 +271,9 @@ const ScrollExpandMedia = ({
 
       if (scrubVideoToScroll && !prefersReducedMotion) {
         video.pause();
-        // Act 1 (0-0.35): hold first frame while viewport expands.
-        // Act 2 (0.35-0.70): scrub video frames proportionally to scroll.
-        // Act 3 (0.70-1.0): hold final frame while text settles.
-        const videoScrub = clamp((scrollProgress - actBreak1) / (actBreak2 - actBreak1));
+        // Expansion holds frame 0; scrub runs 0.35-0.82 while text settles
+        // in parallel; final 18% of scroll is a locked hold on the last frame.
+        const videoScrub = clamp((scrollProgress - 0.35) / 0.47);
         if (Number.isFinite(video.duration) && video.duration > 0) {
           try {
             video.currentTime = Math.min(
