@@ -161,6 +161,7 @@ rounded:
   "hero-overlay-card": "26px"
   "hero-card-desktop": "28px"
   "large-modal": "2rem"
+  "readability-mask": "2.5rem"
   "fullscreen-sheet": "32px"
 
 spacing:

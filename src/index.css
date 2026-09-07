@@ -417,19 +417,6 @@ select {
     border-color: color-mix(in oklab, var(--border) 100%, transparent);
   }
 
-  .bg-structural-grid {
-    background-size: 60px 60px;
-    background-image:
-      linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
-  }
-
-  .dark .bg-structural-grid {
-    background-image:
-      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-  }
-
   .accent-text {
     color: var(--accent);
   }
@@ -616,11 +603,3 @@ select {
   100% { transform: translateX(-50%); }
 }
 
-@layer utilities {
-  .bg-grid-subtle {
-    background-size: 40px 40px;
-    background-image:
-      linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
-  }
-}
