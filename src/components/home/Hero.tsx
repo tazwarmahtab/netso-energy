@@ -122,7 +122,7 @@ const HeroOverlay = ({
                     />
                     <a
                       href="/#savings-estimate"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       {copy.common.runEstimate}
                     </a>
@@ -236,7 +236,7 @@ const HeroOverlay = ({
                     />
                     <a
                       href="/#savings-estimate"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       {copy.common.runEstimate}
                     </a>
@@ -376,7 +376,7 @@ const MobileHero = ({
             />
             <a
               href="/#savings-estimate"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-[0.83rem] font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-[0.83rem] font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {copy.common.runEstimate}
             </a>

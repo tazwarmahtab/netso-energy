@@ -43,7 +43,7 @@ export function StartAssessmentLink({
       }
       rel="noopener noreferrer"
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-medium text-primary-foreground transition-all duration-300 hover:brightness-110",
+        "inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-medium text-primary-foreground transition-all duration-200 hover:brightness-110 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
     >
@@ -91,7 +91,7 @@ export function EstimateLink({
         onClick?.();
       }}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-background/82 px-7 py-4 text-sm font-medium text-foreground transition-colors hover:border-primary/35 hover:bg-secondary/35",
+        "inline-flex items-center justify-center gap-2 rounded-full border border-border/70 bg-background/82 px-7 py-4 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary/35 hover:bg-secondary/35 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
     >

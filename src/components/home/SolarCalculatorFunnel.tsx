@@ -474,7 +474,7 @@ export function SolarCalculatorFunnel() {
                     trackEvent("calculator_start", { language, bill, area });
                     setStep(2);
                   }}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-medium text-primary-foreground transition-all duration-300 hover:brightness-110"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-medium text-primary-foreground transition-all duration-200 hover:brightness-110 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   {labels.cta}
                   <ChevronRight className="h-4 w-4" />
@@ -749,7 +749,7 @@ export function SolarCalculatorFunnel() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-4 text-sm font-medium text-background transition-colors hover:bg-primary disabled:opacity-70"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-4 text-sm font-medium text-background transition-colors duration-200 hover:bg-primary active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-70"
                 >
                   {submitting ? labels.sending : labels.continueWhatsApp}
                   <ArrowRight className="h-4 w-4" />
