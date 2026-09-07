@@ -359,7 +359,7 @@ export const SiteHeader = () => {
               </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-[90vw] border-white/10 bg-[#0d0d0d] text-white sm:max-w-md"
+              className="w-[90vw] border-white/10 bg-night text-white sm:max-w-md"
             >
               <SheetHeader className="space-y-3 text-left">
                 <SheetTitle className="text-white">{copy.common.brand}</SheetTitle>

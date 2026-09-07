@@ -411,7 +411,7 @@ export function SolarCalculatorFunnel() {
                     <label htmlFor="bill-slider" className="text-sm font-medium text-muted-foreground">
                       {labels.bill}
                     </label>
-                    <span className="text-2xl font-bold text-[#3f325c]">৳ {bill.toLocaleString()}</span>
+                    <span className="text-2xl font-bold text-foreground">৳ {bill.toLocaleString()}</span>
                   </div>
                   <input
                     id="bill-slider"
@@ -431,7 +431,7 @@ export function SolarCalculatorFunnel() {
                     <label htmlFor="area-slider" className="text-sm font-medium text-muted-foreground">
                       {labels.area}
                     </label>
-                    <span className="text-2xl font-bold text-[#3f325c]">
+                    <span className="text-2xl font-bold text-foreground">
                       {area.toLocaleString()} {isBn ? "বর্গফুট" : "sqft"}
                     </span>
                   </div>
@@ -590,30 +590,44 @@ export function SolarCalculatorFunnel() {
                   </div>
 
                   <div className="mt-3 grid grid-cols-2 gap-2">
-                    <input
-                      type="text"
-                      placeholder={isBn ? "বিলিং পিরিয়ড (যেমন 2026-04)" : "Billing period (e.g. 2026-04)"}
-                      value={billDraft.billingPeriod}
-                      onChange={(e) =>
-                        setBillDraft((d) => ({
-                          ...d,
-                          billingPeriod: e.target.value,
-                          publicId: d.publicId || `draft-${Date.now().toString(36)}`,
-                        }))
-                      }
-                      className="rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
-                    />
-                    <input
-                      type="number"
-                      placeholder={isBn ? "বিল্ড ডিমান্ড kVA" : "Billed demand kVA"}
-                      value={billDraft.billingDemandKva}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setBillDraft((d) => ({ ...d, billingDemandKva: val }));
-                        if (val && Number(val) > 0) setPeakDemandKva(Number(val));
-                      }}
-                      className="rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
-                    />
+                    <div>
+                      <label htmlFor="bill-draft-period" className="sr-only">
+                        {isBn ? "বিলিং পিরিয়ড" : "Billing period"}
+                      </label>
+                      <input
+                        id="bill-draft-period"
+                        type="text"
+                        aria-label={isBn ? "বিলিং পিরিয়ড" : "Billing period"}
+                        placeholder={isBn ? "বিলিং পিরিয়ড (যেমন 2026-04)" : "Billing period (e.g. 2026-04)"}
+                        value={billDraft.billingPeriod}
+                        onChange={(e) =>
+                          setBillDraft((d) => ({
+                            ...d,
+                            billingPeriod: e.target.value,
+                            publicId: d.publicId || `draft-${Date.now().toString(36)}`,
+                          }))
+                        }
+                        className="w-full rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="bill-draft-demand" className="sr-only">
+                        {isBn ? "বিল্ড ডিমান্ড kVA" : "Billed demand kVA"}
+                      </label>
+                      <input
+                        id="bill-draft-demand"
+                        type="number"
+                        aria-label={isBn ? "বিল্ড ডিমান্ড kVA" : "Billed demand kVA"}
+                        placeholder={isBn ? "বিল্ড ডিমান্ড kVA" : "Billed demand kVA"}
+                        value={billDraft.billingDemandKva}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setBillDraft((d) => ({ ...d, billingDemandKva: val }));
+                          if (val && Number(val) > 0) setPeakDemandKva(Number(val));
+                        }}
+                        className="w-full rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
+                      />
+                    </div>
                   </div>
 
                   <div className="mt-2.5 flex items-center gap-2">
@@ -772,7 +786,7 @@ function ResultCard({ label, value, accent = false }: ResultCardProps) {
       <div
         className={cn(
           "text-2xl font-display tracking-[-0.04em]",
-          accent ? "text-[#3f325c]" : "text-foreground",
+          accent ? "text-primary font-bold" : "text-foreground",
         )}
       >
         {value}
