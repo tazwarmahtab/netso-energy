@@ -100,10 +100,10 @@ const HeroOverlay = ({
       />
 
       <motion.div
-        className="absolute inset-x-0 bottom-2 z-10 md:bottom-5"
+        className="absolute inset-x-0 bottom-5 z-10 mb-[max(1.25rem,env(safe-area-inset-bottom))] md:bottom-8"
         style={{ y: overlayY }}
       >
-        <div className="mx-auto w-full max-w-[1280px] px-4 md:px-6">
+        <div className="mx-auto w-full max-w-[1280px] px-4 pb-2 md:px-6 md:pb-3">
           <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.7fr)] lg:gap-14">
             <motion.div
               className="readability-mask-dark relative max-w-[52rem] self-end pb-1 md:pb-3"
@@ -399,9 +399,9 @@ export const Hero = () => {
         initialWidthDesktop={448}
         expandedWidthDesktop={1680}
         initialHeightDesktop={286}
-        expandedHeightDesktop={930}
+        expandedHeightDesktop={1080}
         maxMediaWidth="100vw"
-        maxMediaHeight="112vh"
+        maxMediaHeight="100svh"
         mediaOverlayOpacity={0.18}
         mediaObjectPosition="center 14%"
         desktopSectionHeight="320svh"

@@ -195,7 +195,8 @@ const ScrollExpandMedia = ({
   const scaleX = mix(initialWidth / expandedWidth, 1, composedExpand);
   const scaleY = mix(initialHeight / expandedHeight, 1, composedExpand);
   const mediaScale = mix(1.02, 1, settleProgress);
-  const mediaY = mix(isMobileState ? 4 : 6, isMobileState ? 1 : -2, composedExpand);
+  // Terminal Y-offset must be 0 so the expanded viewport sits flush with the sticky frame.
+  const mediaY = mix(isMobileState ? 4 : 6, 0, composedExpand);
   const videoY = mix(0, isMobileState ? -2 : -5, composedExpand);
   const backgroundOpacity = mix(1, 0.24, clamp((scrollProgress - 0.08) / 0.68));
   const backgroundScale = mix(1, 1.03, clamp(scrollProgress / 0.78));
@@ -346,16 +347,17 @@ const ScrollExpandMedia = ({
           <div className="container relative z-10 mx-auto h-full">
             <div className="relative flex h-full w-full items-center justify-center">
               <div
-                className="absolute left-1/2 top-1/2 z-0 overflow-hidden rounded-[26px] shadow-[0_24px_80px_rgba(0,0,0,0.26)]"
+                className="absolute left-1/2 top-1/2 z-0 overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.26)]"
                 style={{
                   width: `${expandedWidth}px`,
                   height: `${expandedHeight}px`,
                   maxWidth: maxMediaWidth,
                   maxHeight: maxMediaHeight,
                   opacity: mediaOpacity,
+                  borderRadius: `${26 * (1 - composedExpand)}px`,
                   transform: `translate(-50%, -50%) translate3d(0, calc(${mediaY}vh + ${mediaEntryLift}vh), 0) scale(${scaleX}, ${scaleY})`,
                   transformOrigin: 'center center',
-                  willChange: 'transform',
+                  willChange: 'transform, border-radius',
                 }}
               >
                 {mediaType === 'video' ? (
