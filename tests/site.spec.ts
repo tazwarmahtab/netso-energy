@@ -117,7 +117,7 @@ test('Hero section elements', async ({ page }) => {
   // Hero headline is visible under reduced motion / after reveal
   const headline = page.locator('h1').first();
   await expect(headline).toBeVisible();
-  await expect(headline).toContainText('energy-generating asset');
+  await expect(headline).toContainText('Shade, built to generate');
 
   // Hero card title
   await expect(page.locator('text=Architecture that shades, shelters, and generates.')).toBeVisible();

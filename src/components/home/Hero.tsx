@@ -32,9 +32,13 @@ const renderHeadline = (headline: string) => {
   const highlight =
     headline.includes("energy-generating")
       ? "energy-generating"
-      : headline.includes("বিদ্যুৎ-উৎপাদনকারী")
-        ? "বিদ্যুৎ-উৎপাদনকারী"
-        : null;
+      : headline.includes("generate.")
+        ? "generate."
+        : headline.includes("বিদ্যুৎ-উৎপাদনকারী")
+          ? "বিদ্যুৎ-উৎপাদনকারী"
+          : headline.includes("বিদ্যুৎ তৈরি করে")
+            ? "বিদ্যুৎ তৈরি করে"
+            : null;
 
   if (!highlight) return headline;
 

@@ -49,7 +49,7 @@ test("mobile home shows immediate value proposition and persistent WhatsApp acce
 
   await page.goto("/");
 
-  await expect(page.locator("h1").first()).toContainText("Turn your rooftop");
+  await expect(page.locator("h1").first()).toContainText("Shade, built to generate");
   await expect(page.locator("h1").first()).toBeVisible();
 
   const headerWhatsapp = page.getByRole("link", { name: /WhatsApp/i }).first();

@@ -188,10 +188,10 @@ const en: SiteCopy = {
   },
   hero: {
     eyebrow: "Rooftop energy infrastructure · Dhaka",
-    headline: "Turn your rooftop into an energy-generating asset.",
+    headline: "Shade, built to generate.",
     body:
-      "NETSO provides zero-CAPEX solar for factories and beautiful solar pergolas for homes. Transform your unused rooftop into productive energy infrastructure.",
-    cardEyebrow: "Solar Pergola",
+      "Solar pergolas shaped around how your roof is used — usable shade with onsite power. A preliminary study first; site-specific review follows.",
+    cardEyebrow: "NETSO / Rooftop study 01",
     cardTitle: "Architecture that shades, shelters, and generates.",
     cardBody:
       "A modular steel canopy with integrated photovoltaic panels — engineered for Bangladesh's climate and skyline.",
@@ -545,10 +545,10 @@ const bn: SiteCopy = {
   },
   hero: {
     eyebrow: "রুফটপ এনার্জি ইনফ্রাস্ট্রাকচার · ঢাকা",
-    headline: "আপনার ছাদকে বিদ্যুৎ-উৎপাদনকারী সম্পদে রূপ দিন।",
+    headline: "ছায়া, যা বিদ্যুৎ তৈরি করে।",
     body:
-      "NETSO কারখানার জন্য জিরো-ক্যাপেক্স সোলার এবং বাড়ির জন্য সুন্দর সোলার পারগোলা প্রদান করে। আপনার অব্যবহৃত ছাদকে উৎপাদনশীল জ্বালানি অবকাঠামোয় রূপান্তর করুন।",
-    cardEyebrow: "সোলার পারগোলা",
+      "ছাদের ব্যবহারের সাথে সামঞ্জস্য রেখে নির্মিত সোলার পারগোলা — আরামদায়ক ছায়ার সাথে অনসাইট বিদ্যুৎ। প্রথমে প্রাথমিক সমীক্ষা; সাইট-স্পেসিফিক ইঞ্জিনিয়ারিং রিভিউ পরে।",
+    cardEyebrow: "NETSO / ছাদ সমীক্ষা ০১",
     cardTitle: "যে স্থাপত্য ছায়া দেয়, আশ্রয় দেয়, বিদ্যুৎও উৎপাদন করে।",
     cardBody:
       "ফটোভোল্টাইক প্যানেল-সমন্বিত একটি মডুলার স্টিল ক্যানপি — বাংলাদেশের জলবায়ু ও নগর দৃশ্যের জন্য ইঞ্জিনিয়ার্ড।",
