@@ -48,6 +48,9 @@ const initialFormState: CalculatorFormState = {
   address: "",
 };
 
+const DEFAULT_BILL = 12000;
+const DEFAULT_AREA = 1200;
+
 type BillDraftState = {
   /** Raw bill document reference (e.g. file name); row/column data live in storage, UI holds none of PII beyond confirmation. */
   publicId: string;
@@ -124,7 +127,14 @@ export function SolarCalculatorFunnel() {
       ? "ডকুমেন্ট প্রাইভেট থাকে এবং হোয়াটসঅ্যাপে ফরোয়ার্ড হয় না। ক্যালকুলেটরে ব্যবহারের আগে মানগুলো কনফার্ম করুন।"
       : "Documents stay private and are never forwarded over WhatsApp. Confirm values before they feed the study.",
     billDraftConfirm: isBn ? "মান কনফার্ম করে সমীক্ষায় ব্যবহার করুন" : "Confirm values for the study",
+    cfGloss: isBn
+      ? "CF মানে সানলাইট-ভিত্তিক বার্ষিক ফলন — সাইট রিভিউতে নিশ্চিত হবে।"
+      : "CF = expected annual yield from sunlight — confirmed at site review.",
     cta: isBn ? "সেভিংস হিসাব করুন" : "Calculate my savings",
+    ctaDisclaimer: isBn
+      ? "প্রাথমিক সমীক্ষা মাত্র — মূল্য উদ্ধৃতি নয়। সাইট রিভিউর পর চূড়ান্ত হবে।"
+      : "Indicative first pass only — not a quote. Final numbers follow a site review.",
+    resetEstimates: isBn ? "ডিফল্টে ফিরুন" : "Reset to defaults",
     resultsEyebrow: isBn ? "প্রাথমিক পরিকল্পনা-ভিত্তিক হিসাব" : "Indicative planning estimate",
     resultsHeadline: isBn
       ? "আপনার ছাদে উল্লেখযোগ্য এনার্জি ভ্যালু থাকতে পারে।"
@@ -378,11 +388,15 @@ export function SolarCalculatorFunnel() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       {labels.regionLabel}
                     </label>
-                    <span className="flex items-center gap-1 font-mono text-[11px] text-muted-foreground">
-                      <MapPin className="h-3 w-3" />
+                    <span className="flex items-center gap-1 font-mono text-[11px] text-muted-foreground" title={labels.cfGloss}>
+                      <MapPin className="h-3 w-3" aria-hidden="true" />
                       {region === "chattogram" ? "16.5% CF" : region === "other" ? "15.1% CF" : "15.3% CF"}
+                      <Info className="h-3 w-3 text-primary/60" aria-hidden="true" />
                     </span>
                   </div>
+                  <p className="mb-3 text-[11px] leading-4 text-muted-foreground/80">
+                    {labels.cfGloss}
+                  </p>
                   <div className="grid grid-cols-3 gap-2">
                     {[
                       { id: "dhaka", label: labels.dhaka },
@@ -464,6 +478,20 @@ export function SolarCalculatorFunnel() {
                 >
                   {labels.cta}
                   <ChevronRight className="h-4 w-4" />
+                </button>
+                <p className="text-center text-[11px] leading-4 text-muted-foreground/85">
+                  {labels.ctaDisclaimer}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBill(DEFAULT_BILL);
+                    setArea(DEFAULT_AREA);
+                    trackEvent("calculator_reset", { language });
+                  }}
+                  className="mx-auto block text-[11px] font-medium text-primary/80 underline-offset-4 hover:text-primary hover:underline"
+                >
+                  {labels.resetEstimates}
                 </button>
               </div>
             </div>

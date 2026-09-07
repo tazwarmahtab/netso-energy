@@ -75,9 +75,9 @@ export const ProblemSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="ivory-panel relative mt-24 hidden overflow-hidden rounded-[2rem] md:block"
+          className="ivory-panel relative mt-16 overflow-hidden rounded-[1.75rem] md:mt-24 md:rounded-[2rem]"
         >
-          <div className="relative aspect-[16/9] lg:aspect-[21/9]">
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]">
             <ResponsiveImage
               alt="Dhaka rooftops aerial view"
               className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.9] saturate-[0.96]"
@@ -100,10 +100,10 @@ export const ProblemSection = () => {
               }}
             />
 
-            <div className="absolute bottom-8 left-8 z-30 max-w-md md:bottom-10 md:left-10">
-              <div className="readability-panel-light rounded-[1.5rem] p-5 md:p-6">
-                <p className="eyebrow mb-2 text-primary/85">{copy.problem.imageEyebrow}</p>
-                <p className="text-2xl font-display text-balance text-foreground md:text-[2rem]">
+            <div className="absolute bottom-5 left-5 right-5 z-30 max-w-md sm:bottom-8 sm:left-8 md:bottom-10 md:left-10">
+              <div className="readability-panel-light rounded-[1.35rem] p-4 sm:rounded-[1.5rem] sm:p-5 md:p-6">
+                <p className="eyebrow mb-1 text-[0.72rem] text-primary/85 sm:mb-2 sm:text-xs">{copy.problem.imageEyebrow}</p>
+                <p className="text-xl font-display text-balance text-foreground sm:text-2xl md:text-[2rem]">
                   {copy.problem.imageBody}
                 </p>
               </div>
@@ -119,12 +119,22 @@ export const ProblemSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 + (i * 0.1) }}
-              className="ivory-surface flex flex-col gap-3 rounded-[1.75rem] p-6 md:gap-4 md:p-8"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-[1.85rem] border border-border/80 bg-gradient-to-b from-background/90 to-secondary/35 p-6 shadow-sm transition-all duration-500 hover:border-primary/40 md:p-8"
             >
-              <p className="font-display text-3xl font-medium tracking-[-0.05em] text-foreground md:text-4xl">{s.title}</p>
-              <p className="max-w-[16rem] text-[0.98rem] leading-7 text-foreground/62 md:text-sm md:leading-snug">
-                {s.body}
-              </p>
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary/75">
+                  Issue 0{i + 1}
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-primary/40 transition-colors group-hover:bg-primary" />
+              </div>
+              <div className="mt-8 space-y-3">
+                <p className="font-display text-2xl font-medium tracking-[-0.04em] text-foreground md:text-3xl">
+                  {s.title}
+                </p>
+                <p className="text-[0.92rem] leading-6 text-foreground/68 md:text-sm md:leading-relaxed">
+                  {s.body}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>

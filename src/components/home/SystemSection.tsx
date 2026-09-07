@@ -23,28 +23,39 @@ export const SystemSection = () => {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-5 md:mt-20 md:grid-cols-3 md:gap-6">
-          {steps.map((s, i) => (
-            <motion.div
-              key={s.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="ivory-panel group rounded-[1.75rem] p-6 transition-colors duration-500 hover:border-primary/40 md:p-8"
-            >
-              <div className="mb-8 flex items-start justify-between md:mb-10">
-                <span className="font-mono text-xs text-muted-foreground">
-                  0{i + 1}
-                </span>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-primary/18 bg-primary/10 text-primary transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
-                  <s.icon className="h-5 w-5" />
-                </span>
-              </div>
-              <h3 className="mb-3 font-display text-3xl text-foreground">{s.title}</h3>
-              <p className="text-foreground/66 leading-7 md:leading-relaxed">{s.body}</p>
-            </motion.div>
-          ))}
+        <div className="relative mt-12 md:mt-20">
+          <div aria-hidden="true" className="pointer-events-none absolute left-0 right-0 top-7 hidden h-px md:block">
+            <div className="mx-auto h-full w-full max-w-5xl bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
+          </div>
+          <ol className="relative grid gap-6 md:grid-cols-3 md:gap-10">
+            {steps.map((s, i) => (
+              <motion.li
+                key={s.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative rounded-[1.5rem] border border-transparent p-1 md:p-2"
+              >
+                <div className="flex items-center gap-4 md:flex-col md:items-start md:gap-0">
+                  <span className="relative z-10 inline-flex h-14 w-14 flex-none items-center justify-center rounded-2xl bg-foreground text-background shadow-[0_10px_28px_rgba(27,18,6,0.22)] transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground md:mb-6">
+                    <s.icon className="h-6 w-6" />
+                  </span>
+                  <span aria-hidden="true" className="hidden font-mono text-xs uppercase tracking-[0.24em] text-primary/70 md:block">
+                    Phase 0{i + 1}
+                  </span>
+                  <span aria-hidden="true" className="h-px flex-1 bg-border/60 md:hidden" />
+                </div>
+                <h3 className="mt-4 font-display text-2xl tracking-[-0.02em] text-foreground md:mt-3 md:text-3xl">{s.title}</h3>
+                <p className="mt-2 text-[0.95rem] leading-6 text-foreground/66 md:leading-relaxed">{s.body}</p>
+                {s.detail ? (
+                  <p className="mt-3 border-l-2 border-primary/40 pl-3 text-xs leading-5 text-foreground/58">
+                    {s.detail}
+                  </p>
+                ) : null}
+              </motion.li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
