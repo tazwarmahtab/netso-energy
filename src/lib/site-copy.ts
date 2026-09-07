@@ -103,6 +103,19 @@ type SiteCopy = {
     headline: string;
     body: string;
   };
+  anatomy: {
+    eyebrow: string;
+    headline: string;
+    body: string;
+    layers: { title: string; body: string }[];
+    note: string;
+  };
+  faq: {
+    eyebrow: string;
+    headline: string;
+    body: string;
+    items: { question: string; answer: string }[];
+  };
   howItWorks: {
     eyebrow: string;
     headline: string;
@@ -334,6 +347,69 @@ const en: SiteCopy = {
     headline: "Claim early access for your rooftop review.",
     body:
       "Start on WhatsApp to reserve an early place. NETSO reviews the basics first, then guides the next step from there.",
+  },
+  anatomy: {
+    eyebrow: "What NETSO installs",
+    headline: "One structure. Four engineered layers.",
+    body:
+      "A solar pergola is a steel canopy that shades your roof and generates power at the same time. Every layer is surveyed, sized, and installed by the NETSO engineering team — nothing arrives as a generic kit.",
+    layers: [
+      {
+        title: "Galvanised steel canopy",
+        body: "Monsoon-rated frame engineered for Dhaka wind loads, with setback clearance for water tanks, stair bulkheads, and lift rooms.",
+      },
+      {
+        title: "Tier-1 glass-glass PV panels",
+        body: "The canopy surface itself: bifacial panels that absorb overhead sunlight and reflected heat off the concrete slab.",
+      },
+      {
+        title: "Hybrid inverter and switchgear",
+        body: "Grid-tied conversion with battery-ready wiring, net-metering interconnection support, and per-string safety isolation.",
+      },
+      {
+        title: "Usable shaded space",
+        body: "The floor beneath stays cooler and usable — gardens, rooftop dining, prayer space, or quiet community seating.",
+      },
+    ],
+    note: "Equipment brands, warranties, and maintenance scope are confirmed at the engineering review — never assumed from this diagram.",
+  },
+  faq: {
+    eyebrow: "Before you ask",
+    headline: "Straight answers, no sales pressure.",
+    body:
+      "The questions every Dhaka rooftop owner asks first. Anything site-specific is confirmed at the engineering review, not guessed here.",
+    items: [
+      {
+        question: "Will installation damage my roof or waterproofing?",
+        answer:
+          "No penetrations are made without a structural and waterproofing survey. Mounts use ballasted or chemically anchored feet sealed to the slab, and every roof is photographed before and after. If the survey finds the slab unsuitable, NETSO says so and stops.",
+      },
+      {
+        question: "Can our apartment association or building committee do this?",
+        answer:
+          "Yes — common-service meters for lifts, pumps, and stairwell lighting are one of the strongest use cases. NETSO contracts with the association as a single counterparty and bills through the existing maintenance surcharge process.",
+      },
+      {
+        question: "Does the system work during load-shedding?",
+        answer:
+          "A standard grid-tied pergola shuts down during outages for line-worker safety. Backup during outages requires a hybrid inverter plus battery storage, sized to your critical loads — NETSO will tell you honestly whether your roof and budget support it.",
+      },
+      {
+        question: "What maintenance does the system need in monsoon season?",
+        answer:
+          "Panels are washed on a fixed schedule (more often in dry, dusty months), drains and mounts are inspected before each monsoon, and every system ships with lifetime performance monitoring. Cleaning and inspection are included in the service scope agreed at contracting.",
+      },
+      {
+        question: "How long does installation take?",
+        answer:
+          "A typical residential pergola installs in 2–4 weeks from signed agreement: one week for detailed survey and design, one week for fabrication, and a few days for on-roof assembly and commissioning. Commercial systems are scheduled per site.",
+      },
+      {
+        question: "How is pricing decided — is there a fixed price list?",
+        answer:
+          "No fixed price list, because roof condition, structure height, equipment choice, and interconnection work vary per site. NETSO gives an indicative range after the desk study and a binding quotation only after the physical survey and utility billing audit.",
+      },
+    ],
   },
   howItWorks: {
     eyebrow: "How it works",
@@ -692,6 +768,69 @@ const bn: SiteCopy = {
     headline: "আপনার ছাদ রিভিউয়ের জন্য আর্লি অ্যাক্সেস নিন।",
     body:
       "হোয়াটসঅ্যাপে শুরু করে একটি আগাম জায়গা রিজার্ভ করুন। NETSO আগে মৌলিক তথ্য রিভিউ করে, তারপর পরের ধাপ গাইড করবে।",
+  },
+  anatomy: {
+    eyebrow: "NETSO যা ইনস্টল করে",
+    headline: "একটি স্ট্রাকচার। চারটি ইঞ্জিনিয়ার্ড স্তর।",
+    body:
+      "সোলার পারগোলা হলো একটি স্টিল ক্যানপি, যা ছাদে ছায়া দেয় এবং একই সাথে বিদ্যুৎ উৎপাদন করে। প্রতিটি স্তর NETSO ইঞ্জিনিয়ারিং টিম সার্ভে, সাইজিং ও ইনস্টল করে — কোনো জেনেরিক কিট নয়।",
+    layers: [
+      {
+        title: "গ্যালভানাইজড স্টিল ক্যানপি",
+        body: "ঢাকার বাতাসের লোড সহনশীল মনসুন-রেটেড ফ্রেম; পানির ট্যাংক, সিঁড়িঘর ও লিফট রুমের জন্য সেটব্যাক ক্লিয়ারেন্সসহ।",
+      },
+      {
+        title: "টায়ার-১ গ্লাস-গ্লাস PV প্যানেল",
+        body: "ক্যানপির পৃষ্ঠতলই প্যানেল: বাইফেসিয়াল প্যানেল যা সরাসরি রোদ এবং কংক্রিট স্ল্যাবের প্রতিফলিত তাপ — দুটোই শোষণ করে।",
+      },
+      {
+        title: "হাইব্রিড ইনভার্টার ও সুইচগিয়ার",
+        body: "ব্যাটারি-রেডি ওয়্যারিংসহ গ্রিড-টাইড কনভার্শন, নেট-মিটারিং ইন্টারকানেকশন সাপোর্ট এবং প্রতি-স্ট্রিং সেফটি আইসোলেশন।",
+      },
+      {
+        title: "ব্যবহারযোগ্য ছায়াঘেরা জায়গা",
+        body: "নিচের জায়গা ঠান্ডা ও ব্যবহারযোগ্য থাকে — বাগান, ছাদের খাবার জায়গা, নামাজের জায়গা বা শান্ত কমিউনিটি বসার স্থান।",
+      },
+    ],
+    note: "যন্ত্রাংশের ব্র্যান্ড, ওয়ারেন্টি ও রক্ষণাবেক্ষণের পরিধি ইঞ্জিনিয়ারিং রিভিউতে নিশ্চিত হয় — এই চিত্র থেকে অনুমান করা হয় না।",
+  },
+  faq: {
+    eyebrow: "জিজ্ঞেস করার আগেই",
+    headline: "সরাসরি উত্তর, বিক্রির চাপ ছাড়া।",
+    body:
+      "ঢাকার প্রতিটি ছাদ-মালিক প্রথমে যা জিজ্ঞেস করেন। সাইট-নির্দিষ্ট বিষয় ইঞ্জিনিয়ারিং রিভিউতে নিশ্চিত হয়, এখানে অনুমান করা হয় না।",
+    items: [
+      {
+        question: "ইনস্টলেশনে কি ছাদ বা ওয়াটারপ্রুফিং নষ্ট হবে?",
+        answer:
+          "স্ট্রাকচারাল ও ওয়াটারপ্রুফিং সার্ভে ছাড়া কোনো ছিদ্র করা হয় না। মাউন্টে ব্যালাস্টেড বা কেমিক্যাল-অ্যাংকর করা ফুট ব্যবহার করা হয়, যা স্ল্যাবে সিল করা থাকে; প্রতিটি ছাদের আগে-পরের ছবি তোলা হয়। স্ল্যাব অনুপযুক্ত পাওয়া গেলে NETSO স্পষ্ট জানিয়ে থেমে যায়।",
+      },
+      {
+        question: "আমাদের অ্যাপার্টমেন্ট অ্যাসোসিয়েশন বা বিল্ডিং কমিটি কি এটা করতে পারে?",
+        answer:
+          "হ্যাঁ — লিফট, পাম্প ও সিঁড়ির আলোর কমন-সার্ভিস মিটার অন্যতম শক্তিশালী ব্যবহার। NETSO অ্যাসোসিয়েশনের সাথে একক চুক্তি করে এবং বিদ্যমান রক্ষণাবেক্ষণ চার্জ প্রক্রিয়ার মাধ্যমে বিল করে।",
+      },
+      {
+        question: "লোডশেডিংয়ের সময় কি সিস্টেম চলবে?",
+        answer:
+          "লাইনকর্মীদের নিরাপত্তার জন্য সাধারণ গ্রিড-টাইড পারগোলা বিদ্যুৎ-বিচ্ছিন্নতায় বন্ধ হয়ে যায়। বিচ্ছিন্নতার সময় ব্যাকআপের জন্য হাইব্রিড ইনভার্টার ও ব্যাটারি স্টোরেজ লাগে, যা আপনার গুরুত্বপূর্ণ লোড অনুযায়ী সাইজ করা হয়।",
+      },
+      {
+        question: "বর্ষাকালে সিস্টেমের কী রক্ষণাবেক্ষণ দরকার?",
+        answer:
+          "নির্দিষ্ট সময়সূচিতে প্যানেল ধোয়া হয় (শুষ্ক, ধুলোময় মাসে বেশি ঘন ঘন), প্রতিটি বর্ষার আগে ড্রেন ও মাউন্ট পরিদর্শন করা হয়, এবং প্রতিটি সিস্টেমে লাইফটাইম পারফরম্যান্স মনিটরিং থাকে।",
+      },
+      {
+        question: "ইনস্টলেশনে কত সময় লাগে?",
+        answer:
+          "সাধারণ আবাসিক পারগোলা চুক্তি স্বাক্ষরের পর ২–৪ সপ্তাহে ইনস্টল হয়: বিস্তারিত সার্ভে ও ডিজাইনে এক সপ্তাহ, ফ্যাব্রিকেশনে এক সপ্তাহ, এবং ছাদে অ্যাসেম্বলি ও কমিশনিংয়ে কয়েক দিন। বাণিজ্যিক সিস্টেম সাইট অনুযায়ী নির্ধারিত হয়।",
+      },
+      {
+        question: "দাম কীভাবে নির্ধারিত হয় — নির্দিষ্ট মূল্যতালিকা কি আছে?",
+        answer:
+          "কোনো নির্দিষ্ট মূল্যতালিকা নেই, কারণ ছাদের অবস্থা, স্ট্রাকচারের উচ্চতা, যন্ত্রাংশের পছন্দ ও ইন্টারকানেকশন কাজ সাইটভেদে ভিন্ন। ডেস্ক স্টাডির পর NETSO একটি নির্দেশক পরিসর দেয়; বাধ্যতামূলক উদ্ধৃতি শুধু ফিজিক্যাল সার্ভে ও ইউটিলিটি বিল অডিটের পর।",
+      },
+    ],
   },
   howItWorks: {
     eyebrow: "কীভাবে কাজ করে",

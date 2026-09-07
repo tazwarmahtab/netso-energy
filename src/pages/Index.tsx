@@ -29,6 +29,14 @@ const loadProductSection = () =>
   import("@/components/home/ProductSection").then((module) => ({
     default: module.ProductSection,
   }));
+const loadAnatomySection = () =>
+  import("@/components/home/PergolaAnatomySection").then((module) => ({
+    default: module.PergolaAnatomySection,
+  }));
+const loadFaqSection = () =>
+  import("@/components/home/HomeFaqSection").then((module) => ({
+    default: module.HomeFaqSection,
+  }));
 const loadTransformationSection = () =>
   import("@/components/home/TransformationReveal").then((module) => ({
     default: module.TransformationReveal,
@@ -52,6 +60,8 @@ const LazyValueStackSection = lazy(loadValueStackSection);
 const LazyConversionBandSection = lazy(loadConversionBandSection);
 const LazyCalculatorSection = lazy(loadCalculatorSection);
 const LazyProductSection = lazy(loadProductSection);
+const LazyAnatomySection = lazy(loadAnatomySection);
+const LazyFaqSection = lazy(loadFaqSection);
 const LazyTransformationSection = lazy(loadTransformationSection);
 const LazyMissionSection = lazy(loadMissionSection);
 const LazyTrustSection = lazy(loadTrustSection);
@@ -109,6 +119,12 @@ const Index = () => {
           component={LazyProductSection}
           minHeight={1180}
           mobileMinHeight={720}
+          preload={loadAnatomySection}
+        />
+        <LazySection
+          component={LazyAnatomySection}
+          minHeight={760}
+          mobileMinHeight={620}
           preload={loadTransformationSection}
         />
         <LazySection
@@ -128,6 +144,12 @@ const Index = () => {
           component={LazyTrustSection}
           minHeight={1280}
           mobileMinHeight={860}
+          preload={loadFaqSection}
+        />
+        <LazySection
+          component={LazyFaqSection}
+          minHeight={780}
+          mobileMinHeight={600}
           preload={loadFinalCta}
         />
         <SectionFadeTransition className="-mt-px" />
