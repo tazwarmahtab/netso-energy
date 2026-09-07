@@ -52,11 +52,14 @@ export const FinalCta = () => {
           <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto">
             {copy.finalCta.body}
           </p>
-          <StartAssessmentLink
-            source="final-cta"
-            label={copy.common.joinReviewQueue}
-            className="mt-10"
-          />
+          <div className="mt-10 flex flex-col items-center">
+            <StartAssessmentLink
+              source="final-cta"
+              label={copy.common.joinReviewQueue}
+              showHandoffNote
+              handoffNoteClassName="max-w-md text-center mt-3 text-muted-foreground/85"
+            />
+          </div>
         </motion.div>
 
         <div className="mt-10 rounded-3xl border border-border/70 bg-card/55 p-6 md:p-8">

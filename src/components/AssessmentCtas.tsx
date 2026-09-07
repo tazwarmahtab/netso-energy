@@ -13,6 +13,8 @@ type StartAssessmentLinkProps = {
   label?: string;
   sessionId?: string;
   calculatorSummary?: string;
+  showHandoffNote?: boolean;
+  handoffNoteClassName?: string;
 };
 
 export function StartAssessmentLink({
@@ -21,12 +23,14 @@ export function StartAssessmentLink({
   label,
   sessionId,
   calculatorSummary,
+  showHandoffNote = false,
+  handoffNoteClassName,
 }: StartAssessmentLinkProps) {
   const { language } = useLanguage();
   const copy = useSiteCopy();
   const href = buildWhatsAppStartUrl({ language, source, sessionId, calculatorSummary });
 
-  return (
+  const link = (
     <a
       href={href}
       onClick={() =>
@@ -46,6 +50,24 @@ export function StartAssessmentLink({
       {label ?? copy.common.startAssessment}
       <ArrowRight className="h-4 w-4" />
     </a>
+  );
+
+  if (!showHandoffNote) {
+    return link;
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {link}
+      <p
+        className={cn(
+          "text-xs leading-relaxed text-muted-foreground",
+          handoffNoteClassName,
+        )}
+      >
+        {copy.common.whatsappHandoffNote}
+      </p>
+    </div>
   );
 }
 

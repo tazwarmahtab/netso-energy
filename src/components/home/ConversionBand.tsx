@@ -17,10 +17,12 @@ export const ConversionBand = () => {
               {copy.conversionBand.body}
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8">
               <StartAssessmentLink
                 source="conversion-band"
                 label={copy.common.startOnWhatsApp}
+                showHandoffNote
+                handoffNoteClassName="max-w-md mt-1"
               />
             </div>
           </div>

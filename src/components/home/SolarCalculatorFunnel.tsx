@@ -754,6 +754,9 @@ export function SolarCalculatorFunnel() {
                   {submitting ? labels.sending : labels.continueWhatsApp}
                   <ArrowRight className="h-4 w-4" />
                 </button>
+                <p className="text-center text-[11px] leading-4 text-muted-foreground/85">
+                  {copy.common.whatsappHandoffNote}
+                </p>
               </form>
             </div>
           </motion.div>

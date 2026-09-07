@@ -112,17 +112,24 @@ const HeroOverlay = ({
                 className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
                 style={{ pointerEvents: introInteractive ? "auto" : "none" }}
               >
-                <StartAssessmentLink
-                  source="hero-first"
-                  label={copy.common.startOnWhatsApp}
-                  className="shadow-sun"
-                />
-                <a
-                  href="/#savings-estimate"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
-                >
-                  {copy.common.runEstimate}
-                </a>
+                <div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <StartAssessmentLink
+                      source="hero-first"
+                      label={copy.common.startOnWhatsApp}
+                      className="shadow-sun"
+                    />
+                    <a
+                      href="/#savings-estimate"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+                    >
+                      {copy.common.runEstimate}
+                    </a>
+                  </div>
+                  <p className="mt-3 max-w-[26rem] text-xs leading-5 text-white/55">
+                    {copy.common.whatsappHandoffNote}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -219,17 +226,24 @@ const HeroOverlay = ({
                   delay: prefersReducedMotion ? 0 : 0.26,
                 }}
               >
-                <StartAssessmentLink
-                  source="hero"
-                  label={copy.common.startOnWhatsApp}
-                  className="shadow-sun"
-                />
-                <a
-                  href="/#savings-estimate"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
-                >
-                  {copy.common.runEstimate}
-                </a>
+                <div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <StartAssessmentLink
+                      source="hero"
+                      label={copy.common.startOnWhatsApp}
+                      className="shadow-sun"
+                    />
+                    <a
+                      href="/#savings-estimate"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+                    >
+                      {copy.common.runEstimate}
+                    </a>
+                  </div>
+                  <p className="mt-3 max-w-[26rem] text-xs leading-5 text-white/55">
+                    {copy.common.whatsappHandoffNote}
+                  </p>
+                </div>
               </motion.div>
             </motion.div>
 
@@ -356,6 +370,8 @@ const MobileHero = ({
               source="hero-first-mobile"
               label={copy.common.startOnWhatsApp}
               className="shadow-sun px-6 py-3.5 text-[0.83rem]"
+              showHandoffNote
+              handoffNoteClassName="text-white/60 text-[11px] leading-tight"
             />
             <a
               href="/#savings-estimate"

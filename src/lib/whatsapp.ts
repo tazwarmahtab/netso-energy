@@ -56,7 +56,9 @@ export function buildWhatsAppStartUrl(options: WhatsAppStartOptions) {
   if (options.sessionId) refParts.push(`session ${options.sessionId}`);
   if (options.calculatorSummary) refParts.push(`estimate ${options.calculatorSummary}`);
 
-  const lines = [greeting, `[${refParts.join(" · ")}]`];
+  // Ref tail stays on the last line, after the greeting, so it reads as
+  // provenance metadata rather than a command a human has to decode.
+  const lines = [greeting, `Ref: ${refParts.join(" · ")}`];
   if (options.details?.length) {
     lines.push(...options.details.filter((detail) => detail.trim().length > 0));
   }

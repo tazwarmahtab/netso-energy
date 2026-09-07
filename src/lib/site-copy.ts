@@ -34,6 +34,7 @@ type SiteCopy = {
     continueWhatsApp: string;
     fallbackForm: string;
     referenceGallery: string;
+    whatsappHandoffNote: string;
   };
   nav: {
     items: NavItemCopy[];
@@ -170,6 +171,7 @@ const en: SiteCopy = {
     continueWhatsApp: "Continue on WhatsApp",
     fallbackForm: "Feasibility",
     referenceGallery: "Projects",
+    whatsappHandoffNote: "Our engineering team replies in English or বাংলা — usually within 2 hours. Have a recent bill photo ready.",
   },
   nav: {
     items: [
@@ -527,6 +529,7 @@ const bn: SiteCopy = {
     continueWhatsApp: "হোয়াটসঅ্যাপে চালিয়ে যান",
     fallbackForm: "ফিজিবিলিটি",
     referenceGallery: "প্রজেক্টস",
+    whatsappHandoffNote: "আমাদের ইঞ্জিনিয়ারিং টিম বাংলা বা ইংরেজিতে সাধারণত ২ ঘণ্টার মধ্যে উত্তর দেয় — সাম্প্রতিক একটি বিদ্যুৎ বিলের ছবি সাথে রাখুন।",
   },
   nav: {
     items: [

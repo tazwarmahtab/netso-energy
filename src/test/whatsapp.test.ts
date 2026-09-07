@@ -15,6 +15,6 @@ describe("whatsapp CTA configuration", () => {
     expect(url).toContain(
       encodeURIComponent("Hello NETSO! I want a rooftop review."),
     );
-    expect(url).toContain(encodeURIComponent("[EN · test]"));
+    expect(url).toContain(encodeURIComponent("Ref: EN · test"));
   });
 });
