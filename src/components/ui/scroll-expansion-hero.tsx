@@ -10,6 +10,7 @@ import {
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronDown } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 if (typeof window !== 'undefined') {
@@ -640,6 +641,41 @@ const ScrollExpandMedia = ({
                     "linear-gradient(to bottom, transparent 0%, rgba(10,9,6,0.55) 45%, var(--background) 100%)",
                 }}
               />
+
+              {/* First-viewport scroll invitation: visible only before the
+                  expansion begins, so users never meet a wordmark-only frame. */}
+              <motion.button
+                type="button"
+                aria-label={scrollToExpand || "Scroll to reveal"}
+                onClick={() => {
+                  const node = sectionRef.current;
+                  if (!node || typeof window === "undefined") return;
+                  const target = node.offsetTop + window.innerHeight * 0.6;
+                  window.scrollTo({
+                    top: target,
+                    behavior: prefersReducedMotion ? "auto" : "smooth",
+                  });
+                }}
+                className="absolute bottom-6 left-1/2 z-30 inline-flex -translate-x-1/2 flex-col items-center gap-2 text-white/70 transition-colors hover:text-white"
+                initial={false}
+                animate={{
+                  opacity: prefersReducedMotion ? 0 : 1 - clamp(scrollProgress / 0.12),
+                  y: prefersReducedMotion ? 8 : clamp(scrollProgress / 0.12) * 12,
+                }}
+                transition={{ duration: 0.2 }}
+                style={{ pointerEvents: scrollProgress > 0.12 ? "none" : "auto" }}
+              >
+                <span className="rounded-full border border-white/20 bg-black/30 px-4 py-2 text-[0.68rem] font-medium uppercase tracking-[0.22em] backdrop-blur-md">
+                  {scrollToExpand || "Scroll to reveal"}
+                </span>
+                <motion.span
+                  aria-hidden="true"
+                  animate={prefersReducedMotion ? undefined : { y: [0, 6, 0] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.span>
+              </motion.button>
             </div>
 
             {!renderOverlay ? (

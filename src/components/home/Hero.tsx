@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { StartAssessmentLink } from "@/components/AssessmentCtas";
 import { ResponsiveImage } from "@/components/ui/responsive-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
 import { DitheringShader } from "@/components/ui/dithering-shader";
@@ -76,11 +78,56 @@ const HeroOverlay = ({
   const ambientRightX = `${revealProgress * 2.4}vw`;
   const ambientRightScale = 1.03 + revealProgress * 0.1;
   const headlineSize = "clamp(3.2rem, 5.8vw, 5.4rem)";
+  const introSize = "clamp(2rem, 3.4vw, 3rem)";
+  // First-viewport invitation: visible at progress 0, hands off to the main
+  // overlay exactly when it appears at 0.38. Visual-only (aria-hidden) so
+  // the semantic h1 below stays singular for SR/SEO.
+  const introOpacity =
+    prefersReducedMotion || isMobile ? 0 : 1 - clamp((scrollProgress - 0.18) / 0.2);
+  const introY = `${clamp((scrollProgress - 0.18) / 0.2) * 3}vh`;
+  const introInteractive = introOpacity > 0.5;
   const revealDuration = prefersReducedMotion ? 0 : 0.85;
   const revealEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
   return (
     <div className="relative h-full w-full">
+      {!prefersReducedMotion && !isMobile && introOpacity > 0.01 ? (
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-20 flex items-end pb-28"
+          style={{ opacity: introOpacity, y: introY }}
+          aria-hidden="true"
+        >
+          <div className="mx-auto w-full max-w-[1280px] px-4 md:px-6">
+            <div className="max-w-[38rem]">
+              <p className="eyebrow mb-4 flex items-center gap-4 text-white/72">
+                <span className="h-px w-10 bg-primary/30" />
+                {copy.hero.eyebrow}
+              </p>
+              <p className="text-shadow-hero max-w-[12ch] font-sans font-extrabold leading-[0.94] tracking-[-0.04em] text-white"
+                style={{ fontSize: introSize }}
+              >
+                {renderHeadline(copy.hero.headline)}
+              </p>
+              <div
+                className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
+                style={{ pointerEvents: introInteractive ? "auto" : "none" }}
+              >
+                <StartAssessmentLink
+                  source="hero-first"
+                  label={copy.common.startOnWhatsApp}
+                  className="shadow-sun"
+                />
+                <a
+                  href="/#savings-estimate"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+                >
+                  {copy.common.runEstimate}
+                </a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      ) : null}
       <motion.div
         className="pointer-events-none absolute -left-[10vw] top-[12vh] h-[46vh] w-[46vh] rounded-full bg-white/6 blur-[100px]"
         style={{ x: ambientLeftX, scale: ambientLeftScale }}
@@ -158,6 +205,32 @@ const HeroOverlay = ({
               >
                 {copy.hero.body}
               </motion.p>
+
+              <motion.div
+                className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+                initial={false}
+                animate={{
+                  opacity: contentVisible ? 1 : 0,
+                  y: contentVisible ? 0 : 20,
+                }}
+                transition={{
+                  duration: revealDuration * 0.66,
+                  ease: revealEase,
+                  delay: prefersReducedMotion ? 0 : 0.26,
+                }}
+              >
+                <StartAssessmentLink
+                  source="hero"
+                  label={copy.common.startOnWhatsApp}
+                  className="shadow-sun"
+                />
+                <a
+                  href="/#savings-estimate"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+                >
+                  {copy.common.runEstimate}
+                </a>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -278,6 +351,19 @@ const MobileHero = ({
           <h1 className="max-w-[10ch] font-editorial text-[clamp(2.75rem,11vw,4.3rem)] leading-[0.92] tracking-[-0.04em] text-white text-shadow-hero">
             {renderHeadline(copy.hero.headline)}
           </h1>
+          <div className="mt-5 flex flex-col gap-2.5">
+            <StartAssessmentLink
+              source="hero-first-mobile"
+              label={copy.common.startOnWhatsApp}
+              className="shadow-sun px-6 py-3.5 text-[0.83rem]"
+            />
+            <a
+              href="/#savings-estimate"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-[0.83rem] font-medium text-white backdrop-blur-md transition-colors hover:border-white/35 hover:bg-white/15"
+            >
+              {copy.common.runEstimate}
+            </a>
+          </div>
         </div>
 
         <div className="w-full">
@@ -297,6 +383,7 @@ const MobileHero = ({
 };
 
 export const Hero = () => {
+  const copy = useSiteCopy();
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const saveData = useDataSaver();
@@ -406,6 +493,8 @@ export const Hero = () => {
         mediaOverlayOpacity={0.18}
         mediaObjectPosition="center 14%"
         desktopSectionHeight="320svh"
+        scrollToExpand={copy.scrollCue}
+        cuePosition="viewport-bottom"
         textBlend
         renderOverlay={({ scrollProgress, isMobile: desktopIsMobile, showContent }) => (
           <HeroOverlay
