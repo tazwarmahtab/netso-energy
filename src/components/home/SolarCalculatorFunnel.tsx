@@ -135,7 +135,12 @@ export function SolarCalculatorFunnel() {
       ? "প্রাথমিক সমীক্ষা মাত্র — মূল্য উদ্ধৃতি নয়। সাইট রিভিউর পর চূড়ান্ত হবে।"
       : "Indicative first pass only — not a quote. Final numbers follow a site review.",
     resetEstimates: isBn ? "ডিফল্টে ফিরুন" : "Reset to defaults",
-    resultsEyebrow: isBn ? "প্রাথমিক পরিকল্পনা-ভিত্তিক হিসাব" : "Indicative planning estimate",
+    largeRoofBypass: isBn
+      ? "বড় বাণিজ্যিক ছাদ? হোয়াটসঅ্যাপে সাইট-নির্দিষ্ট প্রস্তাব নিন"
+      : "Larger commercial roof? Get a site-specific proposal on WhatsApp",
+    editInputs: isBn ? "← ইনপুট পরিবর্তন করুন" : "← Edit inputs",
+    inputEchoPrefix: isBn ? "ভিত্তি:" : "Based on:",
+    resultsEyebrow: isBn ? "ধাপ ০২ — প্রাথমিক পরিকল্পনা-ভিত্তিক হিসাব" : "Step 02 — Indicative planning estimate",
     resultsHeadline: isBn
       ? "আপনার ছাদে উল্লেখযোগ্য এনার্জি ভ্যালু থাকতে পারে।"
       : "Your roof may have meaningful energy value.",
@@ -485,17 +490,29 @@ export function SolarCalculatorFunnel() {
                 <p className="text-center text-[11px] leading-4 text-muted-foreground/85">
                   {labels.ctaDisclaimer}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setBill(DEFAULT_BILL);
-                    setArea(DEFAULT_AREA);
-                    trackEvent("calculator_reset", { language });
-                  }}
-                  className="mx-auto block text-[11px] font-medium text-primary/80 underline-offset-4 hover:text-primary hover:underline"
-                >
-                  {labels.resetEstimates}
-                </button>
+                <div className="flex flex-col items-center gap-1.5 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBill(DEFAULT_BILL);
+                      setArea(DEFAULT_AREA);
+                      trackEvent("calculator_reset", { language });
+                    }}
+                    className="text-[11px] font-medium text-primary/80 underline-offset-4 hover:text-primary hover:underline"
+                  >
+                    {labels.resetEstimates}
+                  </button>
+                  <a
+                    href={buildWhatsAppStartUrl({
+                      language,
+                      source: "calculator_large_roof",
+                      details: [`type=${segment}`, "scope=commercial_large_roof"],
+                    })}
+                    className="text-center text-[11px] text-muted-foreground/75 underline-offset-4 hover:text-foreground hover:underline"
+                  >
+                    {labels.largeRoofBypass}
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -508,12 +525,30 @@ export function SolarCalculatorFunnel() {
             className="relative z-10 grid gap-10 p-8 sm:p-12 lg:grid-cols-[0.95fr_1.05fr]"
           >
             <div>
-              <span className="mb-4 block text-xs font-bold uppercase tracking-[0.2em] text-primary/78">
-                {labels.resultsEyebrow}
-              </span>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <span className="block text-xs font-bold uppercase tracking-[0.2em] text-primary/78">
+                  {labels.resultsEyebrow}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="text-xs font-medium text-primary hover:underline"
+                >
+                  {labels.editInputs}
+                </button>
+              </div>
               <h3 className="max-w-[12ch] font-display text-3xl leading-[0.95] tracking-[-0.04em] text-foreground sm:text-5xl">
                 {labels.resultsHeadline}
               </h3>
+              {/* Input echo pill: reminds user of their choices so they don't have to recall */}
+              <div className="mt-4 inline-flex flex-wrap items-center gap-2 rounded-full border border-border/70 bg-secondary/35 px-4 py-1.5 text-xs text-muted-foreground">
+                <span className="font-semibold text-foreground">{labels.inputEchoPrefix}</span>
+                <span>৳{bill.toLocaleString()}/mo</span>
+                <span>•</span>
+                <span>{area.toLocaleString()} {isBn ? "বর্গফুট" : "sqft"}</span>
+                <span>•</span>
+                <span className="capitalize">{region === "chattogram" ? labels.chattogram : region === "other" ? labels.otherRegion : labels.dhaka}</span>
+              </div>
               <p className="mt-4 max-w-md text-sm leading-7 text-muted-foreground">
                 {labels.resultsBody}
               </p>
@@ -659,7 +694,8 @@ export function SolarCalculatorFunnel() {
                         onChange={(e) => {
                           const val = e.target.value;
                           setBillDraft((d) => ({ ...d, billingDemandKva: val }));
-                          if (val && Number(val) > 0) setPeakDemandKva(Number(val));
+                          // The confirm-checkbox gate owns when kVA feeds the model:
+                          // typing here stages the value, confirming applies it.
                         }}
                         className="w-full rounded-xl border border-border/60 bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary"
                       />

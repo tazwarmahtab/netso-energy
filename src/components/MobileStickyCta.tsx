@@ -26,6 +26,7 @@ export const MobileStickyCta = () => {
   const isMobile = useIsMobile();
   const [heroRevealed, setHeroRevealed] = useState(false);
   const [dismissed, setDismissed] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -34,11 +35,15 @@ export const MobileStickyCta = () => {
 
     const handleReveal = () => setHeroRevealed(true);
     const handleCollapse = () => setHeroRevealed(false);
+    const handleScroll = () => setScrolled(window.scrollY > 600);
 
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("netso:hero-revealed", handleReveal);
     window.addEventListener("netso:hero-collapsed", handleCollapse);
 
     return () => {
+      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("netso:hero-revealed", handleReveal);
       window.removeEventListener("netso:hero-collapsed", handleCollapse);
     };
@@ -58,8 +63,8 @@ export const MobileStickyCta = () => {
   // Non-home routes have no pinned hero, so the bar may show once scrolled.
   const isHomePage = location.pathname === "/";
   const scrolledEnough = isHomePage
-    ? heroRevealed || window.scrollY > 600
-    : window.scrollY > 600;
+    ? heroRevealed || scrolled
+    : scrolled;
 
   const visible = isMobile && !dismissed && scrolledEnough && isWhatsAppConfigured();
 

@@ -184,7 +184,7 @@ const en: SiteCopy = {
     runEstimate: "Calculate my savings",
     continueWhatsApp: "Continue on WhatsApp",
     fallbackForm: "Feasibility",
-    referenceGallery: "Projects",
+    referenceGallery: "Reference rooftops",
     whatsappHandoffNote: "Our engineering team replies in English or বাংলা — usually within 2 hours. Have a recent bill photo ready.",
   },
   nav: {
@@ -607,7 +607,7 @@ const bn: SiteCopy = {
     runEstimate: "সেভিংস হিসাব করুন",
     continueWhatsApp: "হোয়াটসঅ্যাপে চালিয়ে যান",
     fallbackForm: "ফিজিবিলিটি",
-    referenceGallery: "প্রজেক্টস",
+    referenceGallery: "রেফারেন্স ছাদ",
     whatsappHandoffNote: "আমাদের ইঞ্জিনিয়ারিং টিম বাংলা বা ইংরেজিতে সাধারণত ২ ঘণ্টার মধ্যে উত্তর দেয় — সাম্প্রতিক একটি বিদ্যুৎ বিলের ছবি সাথে রাখুন।",
   },
   nav: {
