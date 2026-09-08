@@ -7,7 +7,12 @@ import { useLanguage } from "@/lib/i18n";
 import { trackEvent } from "@/lib/analytics";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSiteCopy } from "@/lib/site-copy";
-import { buildWhatsAppStartUrl, isWhatsAppConfigured } from "@/lib/whatsapp";
+import {
+  CALCULATOR_SUMMARY_EVENT,
+  buildWhatsAppStartUrl,
+  isWhatsAppConfigured,
+  readCalculatorSummary,
+} from "@/lib/whatsapp";
 
 const DISMISS_KEY = "netso:sticky-cta-dismissed";
 
@@ -27,25 +32,34 @@ export const MobileStickyCta = () => {
   const [heroRevealed, setHeroRevealed] = useState(false);
   const [dismissed, setDismissed] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const [calculatorSummary, setCalculatorSummary] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     setDismissed(window.sessionStorage.getItem(DISMISS_KEY) === "1");
+    const initialSummary = readCalculatorSummary();
+    if (initialSummary) setCalculatorSummary(initialSummary);
 
     const handleReveal = () => setHeroRevealed(true);
     const handleCollapse = () => setHeroRevealed(false);
     const handleScroll = () => setScrolled(window.scrollY > 600);
+    const handleSummary = (event: Event) => {
+      const custom = event as CustomEvent<string>;
+      if (custom.detail) setCalculatorSummary(custom.detail);
+    };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("netso:hero-revealed", handleReveal);
     window.addEventListener("netso:hero-collapsed", handleCollapse);
+    window.addEventListener(CALCULATOR_SUMMARY_EVENT, handleSummary);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("netso:hero-revealed", handleReveal);
       window.removeEventListener("netso:hero-collapsed", handleCollapse);
+      window.removeEventListener(CALCULATOR_SUMMARY_EVENT, handleSummary);
     };
   }, []);
 
@@ -67,6 +81,7 @@ export const MobileStickyCta = () => {
     : scrolled;
 
   const visible = isMobile && !dismissed && scrolledEnough && isWhatsAppConfigured();
+  const stickySource = calculatorSummary ? "sticky-mobile-estimate" : "sticky-mobile";
 
   if (!visible) return null;
 
@@ -82,9 +97,13 @@ export const MobileStickyCta = () => {
       >
         <div className="mx-4 mb-4 flex items-center gap-2 rounded-2xl border border-white/12 bg-[#0d0d0d]/95 p-2 pl-3 shadow-[0_24px_60px_-18px_rgba(0,0,0,0.85)] backdrop-blur-md">
           <a
-            href={buildWhatsAppStartUrl({ language, source: "sticky-mobile" })}
+            href={buildWhatsAppStartUrl({ language, source: stickySource, calculatorSummary })}
             onClick={() =>
-              trackEvent("cta_start_assessment", { source: "sticky-mobile", language })
+              trackEvent("cta_start_assessment", {
+                source: stickySource,
+                language,
+                calculatorSummary: calculatorSummary ?? null,
+              })
             }
             rel="noopener noreferrer"
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-[0.9rem] font-semibold text-primary-foreground active:scale-[0.98]"

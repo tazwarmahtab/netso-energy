@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, FormEvent, useMemo, useState } from "react";
+import { CSSProperties, FormEvent, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Calculator, CheckCircle, ChevronRight, Info, MapPin } from "lucide-react";
 import { toast } from "sonner";
@@ -30,7 +30,11 @@ import {
 } from "@/lib/solar-engine";
 import { useSiteCopy } from "@/lib/site-copy";
 import { cn } from "@/lib/utils";
-import { buildWhatsAppStartUrl, isWhatsAppConfigured } from "@/lib/whatsapp";
+import {
+  buildWhatsAppStartUrl,
+  isWhatsAppConfigured,
+  publishCalculatorSummary,
+} from "@/lib/whatsapp";
 
 type CalculatorFormState = {
   name: string;
@@ -214,6 +218,21 @@ export function SolarCalculatorFunnel() {
     );
   }, [area, confirmedBillDraft, estimatedMonthlyKwh, peakDemandKva, region, segment]);
 
+  const activeCalculatorSummary = useMemo(() => {
+    return [
+      `type=${segment}`,
+      `region=${region}`,
+      `bill=${bill}`,
+      `roof=${area}`,
+      `kwp=${model.systemKwp}`,
+      `savings=${model.monthlySavingsBdtRange.low}-${model.monthlySavingsBdtRange.high}`,
+    ].join(",");
+  }, [area, bill, model.monthlySavingsBdtRange.high, model.monthlySavingsBdtRange.low, model.systemKwp, region, segment]);
+
+  useEffect(() => {
+    publishCalculatorSummary(activeCalculatorSummary);
+  }, [activeCalculatorSummary]);
+
   const manualWhatsAppDetails = useMemo(() => {
     const segmentLabel =
       segment === "residential_common_service"
@@ -254,14 +273,7 @@ export function SolarCalculatorFunnel() {
     setSubmitting(true);
 
     try {
-      const calculatorSummary = [
-        `type=${segment}`,
-        `region=${region}`,
-        `bill=${bill}`,
-        `roof=${area}`,
-        `kwp=${model.systemKwp}`,
-        `savings=${model.monthlySavingsBdtRange.low}-${model.monthlySavingsBdtRange.high}`,
-      ].join(",");
+      const calculatorSummary = activeCalculatorSummary;
 
       if (!isSupabaseBrowserConfigured()) {
         if (isWhatsAppConfigured() && typeof window !== "undefined") {

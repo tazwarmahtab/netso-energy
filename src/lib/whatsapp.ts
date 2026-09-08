@@ -6,6 +6,40 @@ import {
 
 const DEFAULT_ASSESSMENT_PATH = "/feasibility";
 
+/**
+ * Session-scoped channel for the live calculator summary.
+ *
+ * The funnel publishes a PII-free summary string (segment/region/bill/roof/
+ * kwp/savings — never name/phone/address) so the mobile sticky CTA can attach
+ * it to its WhatsApp handoff instead of opening a contextless chat. Transport
+ * is sessionStorage (survives route changes within the tab) plus a CustomEvent
+ * for same-page live updates.
+ */
+export const CALCULATOR_SUMMARY_KEY = "netso:calculator-summary";
+export const CALCULATOR_SUMMARY_EVENT = "netso:calculator-summary";
+
+export function publishCalculatorSummary(summary: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(CALCULATOR_SUMMARY_KEY, summary);
+  } catch {
+    // Private-browsing sessions may block storage; the live event below
+    // still delivers the summary for the current page lifetime.
+  }
+  window.dispatchEvent(
+    new CustomEvent<string>(CALCULATOR_SUMMARY_EVENT, { detail: summary }),
+  );
+}
+
+export function readCalculatorSummary(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.sessionStorage.getItem(CALCULATOR_SUMMARY_KEY);
+  } catch {
+    return null;
+  }
+}
+
 type WhatsAppStartOptions = {
   language: Language;
   source: string;
