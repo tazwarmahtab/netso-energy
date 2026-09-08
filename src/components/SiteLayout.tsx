@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { MobileStickyCta } from "./MobileStickyCta";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { trackEvent } from "@/lib/analytics";
@@ -100,6 +101,7 @@ const SiteLayoutFrame = () => {
         <Outlet />
       </main>
       <SiteFooter />
+      <MobileStickyCta />
     </div>
   );
 };
