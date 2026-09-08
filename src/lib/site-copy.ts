@@ -74,6 +74,7 @@ type SiteCopy = {
   value: {
     eyebrow: string;
     headline: string;
+    modelLine: string;
     cards: CardCopy[];
   };
   conversionBand: {
@@ -259,6 +260,8 @@ const en: SiteCopy = {
   value: {
     eyebrow: "The value stack",
     headline: "Three practical returns. One install.",
+    modelLine:
+      "No upfront cost. NETSO finances and builds the pergola — you pay only for the power it delivers, below your grid rate.",
     cards: [
       {
         title: "Lower bills",
@@ -680,6 +683,8 @@ const bn: SiteCopy = {
   value: {
     eyebrow: "ভ্যালু স্ট্যাক",
     headline: "তিনটি বাস্তব রিটার্ন। এক ইনস্টল।",
+    modelLine:
+      "কোনো আপফ্রন্ট খরচ নেই। NETSO পারগোলার অর্থায়ন ও নির্মাণ করে — আপনি শুধু এটির উৎপাদিত বিদ্যুতের জন্য অর্থ দেন, আপনার গ্রিড রেটের নিচে।",
     cards: [
       {
         title: "কম বিল",

@@ -149,6 +149,9 @@ export function SolarCalculatorFunnel() {
     monthlySavings: isBn ? "মাসিক সেভিংস" : "Monthly Savings",
     systemSize: isBn ? "সিস্টেম সাইজ" : "System Size",
     twentyYearValue: isBn ? "২০ বছরের পরিকল্পিত ভ্যালু" : "20-Year PPA Savings",
+    ppaGloss: isBn
+      ? "PPA (পাওয়ার পারচেজ অ্যাগ্রিমেন্ট): NETSO পারগোলার অর্থায়ন ও নির্মাণ করে; আপনি শুধু উৎপাদিত বিদ্যুতের জন্য অর্থ দেন, আপনার গ্রিড রেটের নিচে।"
+      : "PPA (power purchase agreement): NETSO finances and builds the pergola — you pay only for the power it delivers, below your grid rate.",
     annualGeneration: isBn ? "বার্ষিক উৎপাদন" : "Annual Generation",
     co2Saved: isBn ? "CO₂ সাশ্রয়" : "CO₂ Offset",
     demandSavings: isBn ? "ডিমান্ড সাশ্রয় (ইলাস্ট্রেটিভ)" : "Demand savings (illustrative)",
@@ -573,10 +576,15 @@ export function SolarCalculatorFunnel() {
                     value={`${model.annualGenerationKwh.toLocaleString()} kWh`}
                   />
                 </div>
-                <ResultCard
-                  label={labels.twentyYearValue}
-                  value={`৳${model.ppaTermSavingsBdtRange.low.toLocaleString()} - ৳${model.ppaTermSavingsBdtRange.high.toLocaleString()}`}
-                />
+                <div>
+                  <ResultCard
+                    label={labels.twentyYearValue}
+                    value={`৳${model.ppaTermSavingsBdtRange.low.toLocaleString()} - ৳${model.ppaTermSavingsBdtRange.high.toLocaleString()}`}
+                  />
+                  <p className="mt-2 px-1 text-[11px] leading-4 text-muted-foreground/85">
+                    {labels.ppaGloss}
+                  </p>
+                </div>
                  <ResultCard
                   label={labels.co2Saved}
                   value={`${model.co2SavedTonnes.toLocaleString()} ${isBn ? "টন" : "tonnes"}`}

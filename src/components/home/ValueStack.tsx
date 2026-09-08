@@ -18,6 +18,9 @@ export const ValueStack = () => {
           <h2 className="display-text text-4xl text-balance text-foreground md:text-6xl">
             {copy.value.headline}
           </h2>
+          <p className="mt-5 max-w-2xl rounded-2xl border border-primary/25 bg-primary/[0.06] px-5 py-4 text-[0.95rem] font-medium leading-6 text-foreground md:text-base md:leading-7">
+            {copy.value.modelLine}
+          </p>
         </div>
 
         <dl className="mt-12 divide-y divide-border/70 border-y border-border/70 md:mt-16">
