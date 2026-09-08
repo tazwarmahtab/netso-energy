@@ -18,6 +18,8 @@ import {
   heroPosterJpegSources,
   heroPosterMobileFallback,
 } from "@/lib/homepage-media";
+import { trackEvent } from "@/lib/analytics";
+import { useLanguage } from "@/lib/i18n";
 import { useSiteCopy } from "@/lib/site-copy";
 import heroVideo from "@/assets/new/hero-loop-optimized.mp4";
 
@@ -63,6 +65,7 @@ const HeroOverlay = ({
   prefersReducedMotion,
 }: HeroOverlayProps) => {
   const copy = useSiteCopy();
+  const { language } = useLanguage();
   // Text choreographs with the video expansion: begins as the viewport
   // completes its growth, settles fully before the scroll pin releases.
   // Final alignment target: scrollProgress >= 0.82 (well before 1.0).
@@ -122,6 +125,9 @@ const HeroOverlay = ({
                     />
                     <a
                       href="/#savings-estimate"
+                      onClick={() => {
+                        trackEvent("cta_run_estimate", { source: "hero-first", language });
+                      }}
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       {copy.common.runEstimate}
@@ -236,6 +242,9 @@ const HeroOverlay = ({
                     />
                     <a
                       href="/#savings-estimate"
+                      onClick={() => {
+                        trackEvent("cta_run_estimate", { source: "hero", language });
+                      }}
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     >
                       {copy.common.runEstimate}
@@ -290,6 +299,7 @@ const MobileHero = ({
   prefersReducedMotion: boolean;
 }) => {
   const copy = useSiteCopy();
+  const { language } = useLanguage();
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
@@ -376,6 +386,9 @@ const MobileHero = ({
             />
             <a
               href="/#savings-estimate"
+              onClick={() => {
+                trackEvent("cta_run_estimate", { source: "hero-first-mobile", language });
+              }}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-[0.83rem] font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               {copy.common.runEstimate}

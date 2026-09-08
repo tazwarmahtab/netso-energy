@@ -54,6 +54,8 @@ const initialFormState: CalculatorFormState = {
 
 const DEFAULT_BILL = 12000;
 const DEFAULT_AREA = 1200;
+/** Fallback billed demand for the demand-charge breakdown when no bill-draft kVA is confirmed. */
+const DEFAULT_DEMAND_KVA = 15;
 
 type BillDraftState = {
   /** Raw bill document reference (e.g. file name); row/column data live in storage, UI holds none of PII beyond confirmation. */
@@ -101,7 +103,7 @@ export function SolarCalculatorFunnel() {
   const [region, setRegion] = useState<RegionCode>("dhaka");
   const [bill, setBill] = useState(12000);
   const [area, setArea] = useState(1200);
-  const [peakDemandKva, setPeakDemandKva] = useState(15);
+  const [calculatorTouched, setCalculatorTouched] = useState(false);
   const [showDemandDetail, setShowDemandDetail] = useState(false);
   const [billDraft, setBillDraft] = useState<BillDraftState>(initialBillDraftState);
   const [formState, setFormState] = useState<CalculatorFormState>(initialFormState);
@@ -109,6 +111,24 @@ export function SolarCalculatorFunnel() {
   const [submitting, setSubmitting] = useState(false);
   const [submittedSession, setSubmittedSession] =
     useState<StartAssessmentSessionResponse["session"] | null>(null);
+
+  const confirmedBillDraft = useMemo(() => {
+    if (!billDraft.confirmedByUser) return undefined;
+
+    const parsed = billExtractionDraftSchema.safeParse({
+      publicId: billDraft.publicId.trim() || `manual-${Date.now()}`,
+      billingPeriod: billDraft.billingPeriod.trim() || undefined,
+      billingDemandKva: billDraft.billingDemandKva ? Number(billDraft.billingDemandKva) : undefined,
+      monthlyConsumptionKwh: billDraft.monthlyConsumptionKwh ? Number(billDraft.monthlyConsumptionKwh) : undefined,
+      exportedEnergyKwh: billDraft.exportedEnergyKwh ? Number(billDraft.exportedEnergyKwh) : undefined,
+      netMeteringObserved: billDraft.netMeteringObserved,
+      confirmedByUser: true,
+    });
+
+    return parsed.success ? parsed.data : undefined;
+  }, [billDraft]);
+
+  const demandBasisKva = confirmedBillDraft?.billingDemandKva ?? DEFAULT_DEMAND_KVA;
 
   const labels = {
     eyebrow: isBn ? "ধাপ ০১ — প্রাথমিক ছাদ সমীক্ষা" : "Step 01 — Preliminary roof study",
@@ -124,7 +144,6 @@ export function SolarCalculatorFunnel() {
     dhaka: isBn ? "ঢাকা" : "Dhaka",
     chattogram: isBn ? "চট্টগ্রাম / উপকূল" : "Chattogram / Coastal",
     otherRegion: isBn ? "অন্যান্য জেলা" : "Other district",
-    demandLabel: isBn ? "বিলড ডিমান্ড (kVA, ঐচ্ছিক)" : "Billed demand (kVA, optional)",
     demandDetailToggle: isBn ? "ডিমান্ড-চার্জ ব্রেকডাউন দেখুন" : "View demand-charge breakdown",
     billDraftTitle: isBn ? "বিল ড্রাফট (ঐচ্ছিক)" : "Bill draft (optional)",
     billDraftBody: isBn
@@ -177,7 +196,7 @@ export function SolarCalculatorFunnel() {
     doneBody: isBn
       ? "আপনার হিসাবটি অ্যাসেসমেন্টের সাথে যুক্ত হয়েছে। NETSO আপনার দেওয়া তথ্য রিভিউ করে পরের ধাপ জানাবে।"
       : "Your estimate has been attached to the assessment. NETSO will review the details you shared and follow up with the next step.",
-    startOver: isBn ? "আবার শুরু করুন" : "Start over",
+    startOver: isBn ? "আরেকটি হিসাব চালান" : "Run another estimate",
     error: isBn ? "দয়া করে হাইলাইট করা ফিল্ডগুলো ঠিক করুন।" : "Please fix the highlighted fields.",
     phoneError: isBn ? "একটি বৈধ বাংলাদেশি নম্বর দিন।" : "Enter a valid Bangladesh number.",
     nameError: isBn ? "আপনার পূর্ণ নাম লিখুন।" : "Enter your full name.",
@@ -185,6 +204,14 @@ export function SolarCalculatorFunnel() {
     segmentCnI: isBn ? "বাণিজ্যিক/শিল্প" : "Commercial/Factory",
     segmentCommonService: isBn ? "কমন সার্ভিস (পাম্প/লিফট)" : "Common Services",
     segmentResidential: isBn ? "আবাসিক ফ্ল্যাট" : "Residential Flat",
+    demandAssumptionNote: isBn
+      ? `${DEFAULT_DEMAND_KVA} kVA বিলড ডিমান্ড ধরে হিসাব — সঠিক মানের জন্য উপরে আপনার বিলের kVA দিন।`
+      : `Assumes ${DEFAULT_DEMAND_KVA} kVA billed demand — add your bill's kVA above for an accurate figure.`,
+    demandConfirmedNote: confirmedBillDraft?.billingDemandKva
+      ? isBn
+        ? `আপনার কনফার্ম করা ${confirmedBillDraft.billingDemandKva} kVA বিলড ডিমান্ড ব্যবহার করা হয়েছে।`
+        : `Using your confirmed ${confirmedBillDraft.billingDemandKva} kVA billed demand.`
+      : "",
   };
 
   const estimatedMonthlyKwh = useMemo(
@@ -192,31 +219,15 @@ export function SolarCalculatorFunnel() {
     [bill, segment],
   );
 
-  const confirmedBillDraft = useMemo(() => {
-    if (!billDraft.confirmedByUser) return undefined;
-
-    const parsed = billExtractionDraftSchema.safeParse({
-      publicId: billDraft.publicId.trim() || `manual-${Date.now()}`,
-      billingPeriod: billDraft.billingPeriod.trim() || undefined,
-      billingDemandKva: billDraft.billingDemandKva ? Number(billDraft.billingDemandKva) : undefined,
-      monthlyConsumptionKwh: billDraft.monthlyConsumptionKwh ? Number(billDraft.monthlyConsumptionKwh) : undefined,
-      exportedEnergyKwh: billDraft.exportedEnergyKwh ? Number(billDraft.exportedEnergyKwh) : undefined,
-      netMeteringObserved: billDraft.netMeteringObserved,
-      confirmedByUser: true,
-    });
-
-    return parsed.success ? parsed.data : undefined;
-  }, [billDraft]);
-
   const model = useMemo(() => {
     return getSavingsModel(
       confirmedBillDraft?.monthlyConsumptionKwh ?? estimatedMonthlyKwh,
       area,
       segment,
       region,
-      confirmedBillDraft?.billingDemandKva ?? peakDemandKva,
+      demandBasisKva,
     );
-  }, [area, confirmedBillDraft, estimatedMonthlyKwh, peakDemandKva, region, segment]);
+  }, [area, confirmedBillDraft, demandBasisKva, estimatedMonthlyKwh, region, segment]);
 
   const activeCalculatorSummary = useMemo(() => {
     return [
@@ -230,8 +241,8 @@ export function SolarCalculatorFunnel() {
   }, [area, bill, model.monthlySavingsBdtRange.high, model.monthlySavingsBdtRange.low, model.systemKwp, region, segment]);
 
   useEffect(() => {
-    publishCalculatorSummary(activeCalculatorSummary);
-  }, [activeCalculatorSummary]);
+    if (calculatorTouched) publishCalculatorSummary(activeCalculatorSummary);
+  }, [calculatorTouched, activeCalculatorSummary]);
 
   const manualWhatsAppDetails = useMemo(() => {
     const segmentLabel =
@@ -389,7 +400,10 @@ export function SolarCalculatorFunnel() {
                       <button
                         key={item.id}
                         type="button"
-                        onClick={() => setSegment(item.id as PropertySegment)}
+                        onClick={() => {
+                          setCalculatorTouched(true);
+                          setSegment(item.id as PropertySegment);
+                        }}
                         className={cn(
                           "rounded-xl border px-3 py-2 text-center text-xs font-medium transition-all",
                           segment === item.id
@@ -426,7 +440,10 @@ export function SolarCalculatorFunnel() {
                       <button
                         key={item.id}
                         type="button"
-                        onClick={() => setRegion(item.id as RegionCode)}
+                        onClick={() => {
+                          setCalculatorTouched(true);
+                          setRegion(item.id as RegionCode);
+                        }}
                         className={cn(
                           "rounded-xl border px-3 py-2 text-center text-xs font-medium transition-all",
                           region === item.id
@@ -454,7 +471,10 @@ export function SolarCalculatorFunnel() {
                     max={billRange.max}
                     step={billRange.step}
                     value={bill}
-                    onChange={(event) => setBill(Number(event.target.value))}
+                    onChange={(event) => {
+                      setCalculatorTouched(true);
+                      setBill(Number(event.target.value));
+                    }}
                     className="calc-range w-full cursor-pointer appearance-none rounded-full bg-border/70 accent-primary"
                     style={buildRangeStyle(bill, billRange.min, billRange.max)}
                   />
@@ -476,7 +496,10 @@ export function SolarCalculatorFunnel() {
                     max={areaRange.max}
                     step={areaRange.step}
                     value={area}
-                    onChange={(event) => setArea(Number(event.target.value))}
+                    onChange={(event) => {
+                      setCalculatorTouched(true);
+                      setArea(Number(event.target.value));
+                    }}
                     className="calc-range w-full cursor-pointer appearance-none rounded-full bg-border/70 accent-primary"
                     style={buildRangeStyle(area, areaRange.min, areaRange.max)}
                   />
@@ -606,6 +629,11 @@ export function SolarCalculatorFunnel() {
                         <span>{labels.totalValue}:</span>
                         <span className="font-mono text-primary">৳{model.totalEstimatedMonthlyValueBdt.toLocaleString()} / mo</span>
                       </div>
+                      <p className="text-[10px] text-muted-foreground/80">
+                        {confirmedBillDraft?.billingDemandKva
+                          ? labels.demandConfirmedNote
+                          : labels.demandAssumptionNote}
+                      </p>
                       <p className="pt-2 text-[10px] leading-relaxed text-muted-foreground/80">
                         {model.netMeteringExportNotice}
                       </p>
@@ -705,6 +733,7 @@ export function SolarCalculatorFunnel() {
                         value={billDraft.billingDemandKva}
                         onChange={(e) => {
                           const val = e.target.value;
+                          setCalculatorTouched(true);
                           setBillDraft((d) => ({ ...d, billingDemandKva: val }));
                           // The confirm-checkbox gate owns when kVA feeds the model:
                           // typing here stages the value, confirming applies it.
