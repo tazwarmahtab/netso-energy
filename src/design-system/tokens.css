@@ -1,0 +1,66 @@
+:root {
+  /* NETSO // ENERGY SIGNAL v1.1 */
+  --netso-black: #050505;
+  --netso-yellow: #f5c400;
+  --netso-off-white: #f2f1ec;
+  --netso-industrial-900: #111111;
+  --netso-industrial-700: #2a2a28;
+  --netso-industrial-500: #666660;
+  --netso-industrial-300: #a8a8a1;
+  --netso-industrial-100: #deddd7;
+
+  /* Semantic layers */
+  --netso-void: var(--netso-black);
+  --netso-field: var(--netso-industrial-900);
+  --netso-material: var(--netso-industrial-700);
+  --netso-information: var(--netso-industrial-500);
+  --netso-energy: var(--netso-yellow);
+  --netso-interface: var(--netso-off-white);
+
+  /* Layout */
+  --netso-content-max: 1440px;
+  --netso-gutter: clamp(1.25rem, 4vw, 4rem);
+  --netso-grid-unit: 8px;
+
+  /* Motion */
+  --netso-ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
+  --netso-ease-linear: linear;
+  --netso-duration-fast: 180ms;
+  --netso-duration-base: 500ms;
+  --netso-duration-slow: 900ms;
+
+  /* Signal opacity */
+  --netso-signal-10: color-mix(in srgb, var(--netso-yellow) 10%, transparent);
+  --netso-signal-25: color-mix(in srgb, var(--netso-yellow) 25%, transparent);
+  --netso-signal-50: color-mix(in srgb, var(--netso-yellow) 50%, transparent);
+  --netso-signal-80: color-mix(in srgb, var(--netso-yellow) 80%, transparent);
+}
+
+/* ENERGY SIGNAL primitives */
+.netso-void { background: var(--netso-void); color: var(--netso-interface); }
+.netso-field { background: var(--netso-field); }
+.netso-signal { color: var(--netso-energy); }
+
+.netso-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--netso-interface) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--netso-interface) 8%, transparent) 1px, transparent 1px);
+  background-size: calc(var(--netso-grid-unit) * 8) calc(var(--netso-grid-unit) * 8);
+}
+
+.netso-dither {
+  background-image: radial-gradient(circle, currentColor 0.7px, transparent 0.8px);
+  background-size: 4px 4px;
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
