@@ -65,3 +65,22 @@ Build settings:
 After deploy, attach the custom domain `netsoenergy.com` in Vercel project settings and point the registrar DNS records to the values Vercel provides.
 
 Vercel is the authoritative deployment target for this repo. Any legacy Netlify-specific configuration should be considered removed or obsolete.
+
+## Supabase WhatsApp Webhook Signature Verification
+
+The `supabase/functions/whatsapp-intake-webhook` endpoint now requires Meta's request signature for all `POST` webhook events.
+
+Set these function environment variables for local and deployed environments:
+
+- `WHATSAPP_VERIFY_TOKEN` (used by GET setup verification challenge)
+- `WHATSAPP_APP_SECRET` (used to verify `X-Hub-Signature-256` for POST events)
+
+Expected signature header format:
+
+- `X-Hub-Signature-256: sha256=<64-char lowercase or uppercase hex digest>`
+
+Digest calculation:
+
+- HMAC-SHA256 over the raw request body bytes using `WHATSAPP_APP_SECRET` as the key.
+
+A missing/invalid signature (or missing secret) returns `403` and no events are processed.
