@@ -8,12 +8,14 @@ describe("analytics", () => {
   beforeEach(() => {
     window.netsoAnalyticsQueue = [];
     window.dataLayer = [];
+    vi.stubEnv("VITE_ANALYTICS_ENDPOINT", "https://collector.example.com/track");
   });
 
   afterEach(() => {
     navigator.sendBeacon = originalSendBeacon;
     window.fetch = originalFetch;
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   it("sends events through Beacon when available", () => {
@@ -25,7 +27,7 @@ describe("analytics", () => {
     expect(window.netsoAnalyticsQueue).toHaveLength(1);
     expect(window.dataLayer).toHaveLength(1);
     expect(sendBeacon).toHaveBeenCalledTimes(1);
-    expect(sendBeacon.mock.calls[0]?.[0]).toBe("/api/track");
+    expect(sendBeacon.mock.calls[0]?.[0]).toBe("https://collector.example.com/track");
   });
 
   it("falls back to fetch keepalive when Beacon is unavailable", async () => {
@@ -41,11 +43,23 @@ describe("analytics", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/track",
+      "https://collector.example.com/track",
       expect.objectContaining({
         keepalive: true,
         method: "POST",
       }),
     );
+  });
+
+  it("queues locally without network when no endpoint is configured", () => {
+    vi.stubEnv("VITE_ANALYTICS_ENDPOINT", "");
+    const sendBeacon = vi.fn(() => true);
+    navigator.sendBeacon = sendBeacon;
+
+    trackEvent("cta_start_assessment", { source: "hero" });
+
+    expect(window.netsoAnalyticsQueue).toHaveLength(1);
+    expect(window.dataLayer).toHaveLength(1);
+    expect(sendBeacon).not.toHaveBeenCalled();
   });
 });

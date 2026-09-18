@@ -226,7 +226,7 @@ const Feasibility = () => {
             success: copy.feasibility.successTitle,
             submittedNote: copy.feasibility.successBody,
           },
-    [isBn],
+    [isBn, copy],
   );
 
   const update = (key: keyof FallbackFormState, value: string) => {

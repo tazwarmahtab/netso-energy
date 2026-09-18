@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { StartAssessmentLink } from "@/components/AssessmentCtas";
+import { MagneticButton } from "@/components/curated/magnetic-button";
 import { ResponsiveImage } from "@/components/ui/responsive-image";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
 import { DitheringShader } from "@/components/ui/dithering-shader";
@@ -118,12 +119,15 @@ const HeroOverlay = ({
               >
                 <div>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <StartAssessmentLink
-                      source="hero-first"
-                      label={copy.common.startOnWhatsApp}
-                      className="shadow-sun"
-                    />
-                    <a
+                    <MagneticButton distance={prefersReducedMotion ? 0 : 0.35}>
+                      <StartAssessmentLink
+                        source="hero-first"
+                        label={copy.common.startOnWhatsApp}
+                        className="shadow-sun"
+                      />
+                    </MagneticButton>
+                    <MagneticButton distance={prefersReducedMotion ? 0 : 0.35}>
+                      <a
                       href="/#savings-estimate"
                       onClick={() => {
                         trackEvent("cta_run_estimate", { source: "hero-first", language });
@@ -132,6 +136,7 @@ const HeroOverlay = ({
                     >
                       {copy.common.runEstimate}
                     </a>
+                    </MagneticButton>
                   </div>
                   <p className="mt-3 max-w-[26rem] text-xs leading-5 text-white/55">
                     {copy.common.whatsappHandoffNote}
@@ -373,7 +378,7 @@ const MobileHero = ({
       <div className="container-tight relative z-10 flex h-full flex-col justify-between pb-8 pt-4">
         <div className="max-w-[21rem]">
           <p className="eyebrow mb-4 text-white/80">{copy.hero.eyebrow}</p>
-          <h1 className="max-w-[10ch] font-editorial text-[clamp(2.75rem,11vw,4.3rem)] leading-[0.92] tracking-[-0.04em] text-white text-shadow-hero">
+          <h1 className="max-w-[10ch] font-editorial text-[clamp(2.5rem,11vw,4.3rem)] leading-[0.92] tracking-[-0.04em] text-white text-shadow-hero">
             {renderHeadline(copy.hero.headline)}
           </h1>
           <div className="mt-5 flex flex-col gap-2.5">
@@ -391,9 +396,9 @@ const MobileHero = ({
               }}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-[0.83rem] font-medium text-white backdrop-blur-md transition-all duration-200 hover:border-white/35 hover:bg-white/15 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              {copy.common.runEstimate}
-            </a>
-          </div>
+                      {copy.common.runEstimate}
+                    </a>
+                  </div>
         </div>
 
         <div className="w-full">

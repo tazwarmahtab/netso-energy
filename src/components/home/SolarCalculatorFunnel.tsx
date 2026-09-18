@@ -2,7 +2,7 @@
 
 import { CSSProperties, FormEvent, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Calculator, CheckCircle, ChevronRight, Info, MapPin } from "lucide-react";
+import { ArrowRight, Calculator, CheckCircle, ChevronRight, History, Info, MapPin } from "lucide-react";
 import { toast } from "sonner";
 
 import { StartAssessmentLink } from "@/components/AssessmentCtas";
@@ -68,6 +68,60 @@ type BillDraftState = {
   confirmedByUser: boolean;
 };
 
+const CALC_STORAGE_KEY = "netso-calc-v1";
+
+type SavedEstimate = {
+  bill: number;
+  area: number;
+  region: RegionCode;
+  segment: PropertySegment;
+  savedAt: number;
+};
+
+export function loadSavedEstimate(): SavedEstimate | null {
+  try {
+    const raw = localStorage.getItem(CALC_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<SavedEstimate>;
+    if (
+      typeof parsed.bill !== "number" ||
+      typeof parsed.area !== "number" ||
+      typeof parsed.savedAt !== "number"
+    ) {
+      return null;
+    }
+    return {
+      bill: parsed.bill,
+      area: parsed.area,
+      region: parsed.region === "chattogram" || parsed.region === "other" ? parsed.region : "dhaka",
+      segment:
+        parsed.segment === "residential_common_service" ||
+        parsed.segment === "residential_multi_story"
+          ? parsed.segment
+          : "c_and_i",
+      savedAt: parsed.savedAt,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function persistEstimate(input: Omit<SavedEstimate, "savedAt">): void {
+  try {
+    localStorage.setItem(CALC_STORAGE_KEY, JSON.stringify({ ...input, savedAt: Date.now() }));
+  } catch {
+    // Private mode / disabled storage — calculator still works, memory just doesn't stick.
+  }
+}
+
+export function clearSavedEstimate(): void {
+  try {
+    localStorage.removeItem(CALC_STORAGE_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
 const initialBillDraftState: BillDraftState = {
   publicId: "",
   billingPeriod: "",
@@ -111,6 +165,9 @@ export function SolarCalculatorFunnel() {
   const [submitting, setSubmitting] = useState(false);
   const [submittedSession, setSubmittedSession] =
     useState<StartAssessmentSessionResponse["session"] | null>(null);
+  const [savedEstimate, setSavedEstimate] = useState<SavedEstimate | null>(() =>
+    typeof window === "undefined" ? null : loadSavedEstimate(),
+  );
 
   const confirmedBillDraft = useMemo(() => {
     if (!billDraft.confirmedByUser) return undefined;
@@ -376,6 +433,42 @@ export function SolarCalculatorFunnel() {
               <span className="text-xs font-bold uppercase tracking-[0.2em]">{labels.eyebrow}</span>
             </div>
 
+            {savedEstimate && step === 1 && (
+              <div className="mb-6 flex flex-wrap items-center gap-3 rounded-[18px] border border-primary/30 bg-primary/10 p-4 text-sm">
+                <History className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                <p className="min-w-0 flex-1 text-foreground">
+                  {isBn
+                    ? `স্বাগতম! ${new Date(savedEstimate.savedAt).toLocaleDateString("bn-BD", { day: "numeric", month: "short" })}-এর হিসাব (৳${savedEstimate.bill.toLocaleString()} বিল, ${savedEstimate.area.toLocaleString()} বর্গফুট) সংরক্ষিত আছে।`
+                    : `Welcome back — your estimate from ${new Date(savedEstimate.savedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })} (৳${savedEstimate.bill.toLocaleString()} bill, ${savedEstimate.area.toLocaleString()} sqft) is saved.`}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBill(savedEstimate.bill);
+                    setArea(savedEstimate.area);
+                    setRegion(savedEstimate.region);
+                    setSegment(savedEstimate.segment);
+                    setCalculatorTouched(true);
+                    trackEvent("calculator_resume", { language });
+                    setStep(2);
+                  }}
+                  className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-all hover:brightness-110"
+                >
+                  {isBn ? "হিসাব দেখুন" : "Resume estimate"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearSavedEstimate();
+                    setSavedEstimate(null);
+                  }}
+                  className="rounded-full border border-border/70 px-4 py-2 text-xs font-medium text-muted-foreground transition-all hover:border-primary/40 hover:text-foreground"
+                >
+                  {isBn ? "নতুন করে শুরু" : "Start fresh"}
+                </button>
+              </div>
+            )}
+
             <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
               <div>
                 <h2 className="max-w-[12ch] font-display text-3xl leading-[0.92] tracking-[-0.04em] text-foreground sm:text-5xl">
@@ -515,6 +608,8 @@ export function SolarCalculatorFunnel() {
                   type="button"
                   onClick={() => {
                     trackEvent("calculator_start", { language, bill, area });
+                    persistEstimate({ bill, area, region, segment });
+                    setSavedEstimate(null);
                     setStep(2);
                   }}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-medium text-primary-foreground transition-all duration-200 hover:brightness-110 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"

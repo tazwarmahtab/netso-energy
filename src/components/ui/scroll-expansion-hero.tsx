@@ -183,7 +183,7 @@ const ScrollExpandMedia = ({
     if (scrollProgress >= expandEnd) return 'settle';
     if (scrollProgress >= introEnd) return 'expand';
     return 'intro';
-  }, [expandEnd, introEnd, prefersReducedMotion]);
+  }, [expandEnd, introEnd, prefersReducedMotion, scrollProgress]);
 
   const expandProgress = easeOutCubic(clamp(scrollProgress / actBreak1));
   const scrubProgress = easeOutCubic(clamp((scrollProgress - 0.35) / (actScrubEnd - 0.35)));

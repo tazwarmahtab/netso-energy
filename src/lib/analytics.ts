@@ -17,13 +17,8 @@ function getAnalyticsEndpoint() {
     return import.meta.env.VITE_ANALYTICS_ENDPOINT;
   }
 
-  if (
-    typeof window !== "undefined" &&
-    /^(localhost|127\.0\.0\.1)$/u.test(window.location.hostname)
-  ) {
-    return DEFAULT_ANALYTICS_ENDPOINT;
-  }
-
+  // No implicit endpoint: /api/track has no server implementation.
+  // Set VITE_ANALYTICS_ENDPOINT explicitly when a collector exists.
   return "";
 }
 
