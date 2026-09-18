@@ -1,0 +1,862 @@
+[
+  {
+    "tag": "div",
+    "text": "NETSO ENERGY",
+    "color": "rgb(0, 0, 0)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "y": 0
+  },
+  {
+    "tag": "a",
+    "text": "Products",
+    "color": "rgba(245, 242, 236, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 43
+  },
+  {
+    "tag": "a",
+    "text": "About",
+    "color": "rgba(245, 242, 236, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 43
+  },
+  {
+    "tag": "span",
+    "text": "ENERGY",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "300",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 44
+  },
+  {
+    "tag": "p",
+    "text": "Claim early access",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 44
+  },
+  {
+    "tag": "p",
+    "text": "NETSO ENERGY",
+    "color": "rgb(255, 122, 0)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "700",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 412
+  },
+  {
+    "tag": "h1",
+    "text": "Infrastructure for a solar future.",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "88px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 449
+  },
+  {
+    "tag": "p",
+    "text": "Rooftop solar pergolas, storage, and clean-energy infrastructure built for Bangladesh’s homes and commercial buildings.",
+    "color": "rgba(255, 247, 233, 0.76)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 632
+  },
+  {
+    "tag": "p",
+    "text": "Get rooftop review",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "600",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 720
+  },
+  {
+    "tag": "p",
+    "text": "PROBLEM",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 900
+  },
+  {
+    "tag": "h2",
+    "text": "Dhaka has millions of rooftops. Almost none of them generate value.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "64px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 927
+  },
+  {
+    "tag": "p",
+    "text": "Bangladesh has over 10 million rooftops. Most sit empty — baking in the sun, generating nothing. Meanwhile, power cuts disrupt homes and businesses daily. The infrastructure problem is real. But so is the opportunity.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 940
+  },
+  {
+    "tag": "p",
+    "text": "18+ months",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "32px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 1589
+  },
+  {
+    "tag": "p",
+    "text": "Cost premium",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "32px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 1589
+  },
+  {
+    "tag": "p",
+    "text": "Higher risks",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "32px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 1589
+  },
+  {
+    "tag": "p",
+    "text": "AVERAGE INSTALL DELAY",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 1629
+  },
+  {
+    "tag": "p",
+    "text": "ON FRAGMENTED SOLUTIONS",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 1629
+  },
+  {
+    "tag": "p",
+    "text": "WITHOUT A UNIFIED SYSTEM",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 1629
+  },
+  {
+    "tag": "h2",
+    "text": "A rooftop energy collection, built like infrastructure.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "48px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 1760
+  },
+  {
+    "tag": "p",
+    "text": "COLLECTION",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 1845
+  },
+  {
+    "tag": "p",
+    "text": "Solar Pergola",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "28px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2162
+  },
+  {
+    "tag": "p",
+    "text": "Battery Backup",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "28px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2162
+  },
+  {
+    "tag": "p",
+    "text": "Energy Monitoring",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "28px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2162
+  },
+  {
+    "tag": "p",
+    "text": "Commercial Rooftop",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "28px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2172
+  },
+  {
+    "tag": "p",
+    "text": "A shade structure that turns usable rooftop space into clean generation without losing lifestyle value.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2208
+  },
+  {
+    "tag": "p",
+    "text": "Storage-ready architecture for outage protection, peak support, and future grid participation.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2208
+  },
+  {
+    "tag": "p",
+    "text": "Live generation, consumption, savings, and system health surfaced in one operational layer.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2208
+  },
+  {
+    "tag": "p",
+    "text": "Larger roof assets designed for measurable output, tenant value, and lower operating costs.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2244
+  },
+  {
+    "tag": "h2",
+    "text": "Three practical returns. One install.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "48px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2528
+  },
+  {
+    "tag": "p",
+    "text": "RETURNS",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2613
+  },
+  {
+    "tag": "p",
+    "text": "Loss fill",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "22px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2720
+  },
+  {
+    "tag": "p",
+    "text": "Resilience",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "22px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2720
+  },
+  {
+    "tag": "p",
+    "text": "Extra income",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "22px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 2720
+  },
+  {
+    "tag": "p",
+    "text": "Replace grid power during outages. Homeowners and businesses get uninterrupted electricity when the city grid fails — which it does, often.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2754
+  },
+  {
+    "tag": "p",
+    "text": "A rooftop solar pergola doubles as shade structure. It protects the roof from heat damage, reduces indoor cooling load, and extends building lifespan.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2754
+  },
+  {
+    "tag": "p",
+    "text": "Export excess generation to the grid or sell power to neighbours. Turn a dormant rooftop into a monthly income-generating asset.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 2754
+  },
+  {
+    "tag": "p",
+    "text": "GET STARTED",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3050
+  },
+  {
+    "tag": "p",
+    "text": "Rooftop Assessment",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3070
+  },
+  {
+    "tag": "p",
+    "text": "Step 1 of 4",
+    "color": "rgba(26, 26, 26, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3071
+  },
+  {
+    "tag": "h2",
+    "text": "Start your rooftop review in about 60 seconds.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "48px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 3093
+  },
+  {
+    "tag": "p",
+    "text": "Rooftop type and area",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3123
+  },
+  {
+    "tag": "p",
+    "text": "Current electricity usage",
+    "color": "rgba(26, 26, 26, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3175
+  },
+  {
+    "tag": "p",
+    "text": "Tell us your rooftop size and type. We’ll assess the solar potential, estimate output, and give you a clear picture of what a NETSO install could deliver.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3221
+  },
+  {
+    "tag": "p",
+    "text": "Location and grid access",
+    "color": "rgba(26, 26, 26, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3227
+  },
+  {
+    "tag": "p",
+    "text": "Your goals (savings / income / resilience)",
+    "color": "rgba(26, 26, 26, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3279
+  },
+  {
+    "tag": "p",
+    "text": "Start review",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3337
+  },
+  {
+    "tag": "p",
+    "text": "ESTIMATOR",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3581
+  },
+  {
+    "tag": "p",
+    "text": "1,200 sqft",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "48px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 3581
+  },
+  {
+    "tag": "h2",
+    "text": "Calculate your rooftop potential in 3 seconds.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "40px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 3624
+  },
+  {
+    "tag": "p",
+    "text": "ROOFTOP AREA ENTERED",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3635
+  },
+  {
+    "tag": "p",
+    "text": "~510 kWh / month",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "32px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 3694
+  },
+  {
+    "tag": "p",
+    "text": "ESTIMATED GENERATION",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3732
+  },
+  {
+    "tag": "p",
+    "text": "Enter rooftop area to see a planning estimate. Final output should be validated against SREDA’s official calculator and site-specific irradiance, shading, and tariff data.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3736
+  },
+  {
+    "tag": "p",
+    "text": "৳5,600 / month",
+    "color": "rgb(255, 122, 0)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "32px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 3791
+  },
+  {
+    "tag": "p",
+    "text": "ESTIMATED MONTHLY SAVINGS",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3829
+  },
+  {
+    "tag": "p",
+    "text": "Enter rooftop area (sqft)",
+    "color": "rgba(26, 26, 26, 0.35)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3855
+  },
+  {
+    "tag": "p",
+    "text": "Calculate",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 3856
+  },
+  {
+    "tag": "p",
+    "text": "Assumption shown: 1,200 sqft usable roof, ~12 kW system, 4.2 peak sun hours/day, 85% performance ratio.",
+    "color": "rgba(26, 26, 26, 0.56)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 3878
+  },
+  {
+    "tag": "p",
+    "text": "ONE PRODUCT",
+    "color": "rgba(245, 242, 236, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 4167
+  },
+  {
+    "tag": "h2",
+    "text": "One product. Three essential jobs.",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "64px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 4210
+  },
+  {
+    "tag": "p",
+    "text": "Shade. Power. Income. The NETSO solar pergola delivers all three simultaneously from a single clean installation.",
+    "color": "rgba(245, 242, 236, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 4366
+  },
+  {
+    "tag": "p",
+    "text": "Explore the product",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 4458
+  },
+  {
+    "tag": "p",
+    "text": "Built roof by roof.",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "56px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 4702
+  },
+  {
+    "tag": "p",
+    "text": "Project index",
+    "color": "rgba(255, 247, 233, 0.44)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "600",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 4741
+  },
+  {
+    "tag": "p",
+    "text": "Banani Residence — Solar Pergola / Storage Ready / Dhaka",
+    "color": "rgba(245, 242, 236, 0.8)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5248
+  },
+  {
+    "tag": "p",
+    "text": "Commercial Pergola Pilot — Tenant Value / Shared Roof / Dhaka",
+    "color": "rgba(245, 242, 236, 0.8)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5248
+  },
+  {
+    "tag": "p",
+    "text": "System Commissioning — Quality Check / Handover / Support",
+    "color": "rgba(245, 242, 236, 0.8)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5248
+  },
+  {
+    "tag": "p",
+    "text": "Gulshan Rooftop — Grid Offset / Monitoring / Dhaka",
+    "color": "rgba(245, 242, 236, 0.8)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5267
+  },
+  {
+    "tag": "p",
+    "text": "Installation Crew — Design Survey / Safety / Install",
+    "color": "rgba(245, 242, 236, 0.8)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "13px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5267
+  },
+  {
+    "tag": "h2",
+    "text": "Bangladesh doesn’t have a land problem. It has a rooftop opportunity.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "68px",
+    "fontWeight": "500",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 5453
+  },
+  {
+    "tag": "p",
+    "text": "PROGRESS",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5789
+  },
+  {
+    "tag": "p",
+    "text": "3",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "96px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 5793
+  },
+  {
+    "tag": "h2",
+    "text": "Quietly building a city that powers itself.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "48px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 5812
+  },
+  {
+    "tag": "p",
+    "text": "ROOFTOPS IN PROGRESS",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 5893
+  },
+  {
+    "tag": "p",
+    "text": "NETSO ENERGY",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "16px",
+    "fontWeight": "700",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 6404
+  },
+  {
+    "tag": "p",
+    "text": "ROOFTOP INFRASTRUCTURE",
+    "color": "rgba(255, 247, 233, 0.42)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "600",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 6600
+  },
+  {
+    "tag": "p",
+    "text": "BANGLADESH / 2026",
+    "color": "rgb(255, 122, 0)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "600",
+    "fontFamily": "Inter, \"Inter Placeholder\", sans-serif",
+    "y": 6600
+  },
+  {
+    "tag": "p",
+    "text": "EARLY ACCESS",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "11px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 6853
+  },
+  {
+    "tag": "h2",
+    "text": "Claim early access for your rooftop review.",
+    "color": "rgb(32, 23, 19)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "64px",
+    "fontWeight": "600",
+    "fontFamily": "Cormorant, \"Cormorant Placeholder\", serif",
+    "y": 6896
+  },
+  {
+    "tag": "p",
+    "text": "We’re accepting a limited number of rooftops for our first cohort. Get assessed early — and be among the first to generate from your roof.",
+    "color": "rgba(26, 26, 26, 0.55)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "15px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7056
+  },
+  {
+    "tag": "p",
+    "text": "Claim early access",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7174
+  },
+  {
+    "tag": "p",
+    "text": "NETSO ENERGY",
+    "color": "rgba(245, 242, 236, 0.6)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7357
+  },
+  {
+    "tag": "p",
+    "text": "Products",
+    "color": "rgba(245, 242, 236, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7366
+  },
+  {
+    "tag": "p",
+    "text": "About",
+    "color": "rgba(245, 242, 236, 0.4)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7366
+  },
+  {
+    "tag": "p",
+    "text": "Get started",
+    "color": "rgb(255, 247, 233)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7366
+  },
+  {
+    "tag": "p",
+    "text": "Infrastructure for a Solar Future in Bangladesh",
+    "color": "rgba(245, 242, 236, 0.35)",
+    "bgColor": "rgba(0, 0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Inter Variable\", \"Inter Variable Placeholder\", sans-serif",
+    "y": 7375
+  }
+]
