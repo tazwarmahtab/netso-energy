@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1102341,
+    "module": "esbuild",
+    "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+    "reason": "Dev-server-only request-forwarding issue (esbuild <=0.24.2 via vite 6). Not reachable in production builds; resolved by the planned vite 8 major migration."
+  },
+  {
+    "id": 1116229,
+    "module": "vite",
+    "url": "https://github.com/advisories/GHSA-4w7w-66w2-5vf9",
+    "reason": "Accepted pending vite 8 major migration; dev/build tooling, not shipped to production."
+  },
+  {
+    "id": 1120784,
+    "module": "vite",
+    "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3",
+    "reason": "Accepted pending vite 8 major migration; dev/build tooling, not shipped to production."
+  },
+  {
+    "id": 1123525,
+    "module": "vite",
+    "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+    "reason": "Accepted pending vite 8 major migration; dev/build tooling, not shipped to production."
+  },
+  {
+    "id": 1193683,
+    "module": "vitest",
+    "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+    "reason": "Test-runner-only path traversal via @vitest/mocker. Never deployed; resolved by the planned vitest 5 major migration."
+  },
+  {
+    "id": 1193684,
+    "module": "@vitest/mocker",
+    "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+    "reason": "Same advisory as vitest entry; test-only package, never deployed."
+  },
+  {
+    "id": 1124268,
+    "module": "react-router",
+    "url": "https://github.com/advisories/GHSA-wrjc-x8rr-h8h6",
+    "reason": "Open-redirect bypass in SPA navigation; static Vite build without SSR data APIs. Resolved by the planned react-router-dom 7 migration."
+  },
+  {
+    "id": 1124272,
+    "module": "react-router",
+    "url": "https://github.com/advisories/GHSA-337j-9hxr-rhxg",
+    "reason": "deserializeErrors() constructor injection affects SSR hydration only; unused in this static build. Resolved by the planned react-router-dom 7 migration."
+  }
+]

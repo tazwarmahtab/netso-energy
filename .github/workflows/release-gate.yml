@@ -43,6 +43,9 @@ jobs:
       - name: SEO build verification
         run: npm run verify:seo
 
+      - name: Dependency audit gate
+        run: node scripts/audit-gate.mjs --level=high
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
