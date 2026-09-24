@@ -1,0 +1,58 @@
+name: Release Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: release-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Config verification
+        run: npm run verify:config
+
+      - name: Production build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: SEO build verification
+        run: npm run verify:seo
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E tests
+        run: PORT=4173 npm run test:e2e
+
+      - name: Deno type check (Supabase edge functions)
+        run: >-
+          deno check
+          supabase/functions/_shared/assessment-session.ts
+          supabase/functions/start-assessment-session/index.ts
+          supabase/functions/submit-lead/index.ts
+          supabase/functions/whatsapp-intake-webhook/index.ts
