@@ -20,7 +20,7 @@ import {
   heroPosterMobileFallback,
 } from "@/lib/homepage-media";
 import { trackEvent } from "@/lib/analytics";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import { useSiteCopy } from "@/lib/site-copy";
 import heroVideo from "@/assets/new/hero-loop-optimized.mp4";
 

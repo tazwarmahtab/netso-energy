@@ -1,4 +1,4 @@
-import { Language } from "@/lib/i18n";
+import type { Language } from "@/lib/i18n";
 import {
   DEFAULT_WHATSAPP_NUMBER,
   sanitizePhoneNumber,

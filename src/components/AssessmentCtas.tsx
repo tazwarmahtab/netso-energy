@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import { useSiteCopy } from "@/lib/site-copy";
 import { trackEvent } from "@/lib/analytics";
 import { buildWhatsAppStartUrl } from "@/lib/whatsapp";

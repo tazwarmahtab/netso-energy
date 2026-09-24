@@ -3,7 +3,7 @@ import { MessageCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import { trackEvent } from "@/lib/analytics";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSiteCopy } from "@/lib/site-copy";

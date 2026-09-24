@@ -1,4 +1,4 @@
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import { useSiteCopy } from "@/lib/site-copy";
 import { cn } from "@/lib/utils";
 

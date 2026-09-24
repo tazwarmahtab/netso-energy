@@ -6,7 +6,8 @@ import { MobileStickyCta } from "./MobileStickyCta";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { trackEvent } from "@/lib/analytics";
-import { LanguageProvider, useLanguage } from "@/lib/i18n";
+import { LanguageProvider } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const getHeaderOffset = () => {

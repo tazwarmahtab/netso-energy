@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 import { StartAssessmentLink } from "@/components/AssessmentCtas";
 import { SEO } from "@/components/SEO";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import {
   createAssessmentSessionPayload,
   type AssessmentEvidence,

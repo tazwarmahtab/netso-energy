@@ -17,7 +17,7 @@ import { trackEvent } from "@/lib/analytics";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { headerLogoAvif, headerLogoPng, mobileHeaderLogoAvif } from "@/lib/homepage-media";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 import { useSiteCopy } from "@/lib/site-copy";
 import { buildWhatsAppStartUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";

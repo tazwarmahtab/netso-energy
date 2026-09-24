@@ -1,4 +1,5 @@
-import { useLanguage, type Language } from "@/lib/i18n";
+import type { Language } from "@/lib/i18n";
+import { useLanguage } from "@/lib/use-language";
 
 type NavItemCopy = {
   label: string;

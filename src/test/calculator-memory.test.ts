@@ -4,7 +4,7 @@ import {
   clearSavedEstimate,
   loadSavedEstimate,
   persistEstimate,
-} from "@/components/home/SolarCalculatorFunnel";
+} from "@/lib/calculator-memory";
 
 describe("calculator memory (localStorage)", () => {
   beforeEach(() => {

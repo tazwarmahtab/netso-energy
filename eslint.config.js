@@ -23,4 +23,13 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    // Vendored shadcn/ui primitives follow upstream shadcn conventions (mixed
+    // component + helper exports) and are managed by the shadcn CLI, so the
+    // Fast Refresh export rule does not apply to them.
+    files: ["src/components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
 );
