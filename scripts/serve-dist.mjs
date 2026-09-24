@@ -5,7 +5,9 @@ import path from "node:path";
 
 const distDir = path.join(process.cwd(), "dist");
 const host = process.env.HOST || "127.0.0.1";
-const port = Number(process.env.PORT || 4173);
+// Treat PORT=0 (injected placeholder in some shell environments) as unset so the
+// Playwright webServer health check against the configured port keeps working.
+const port = Number(process.env.PORT) || 4173;
 
 const mimeTypes = new Map([
   [".html", "text/html; charset=utf-8"],
