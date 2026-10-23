@@ -41,3 +41,6 @@ This document supersedes conceptual skyline hero treatments in Figma and code. I
 - Figma's current editable conceptual hero is not photo-faithful; must be replaced with a properly layered photographic composition.
 - GitHub-to-Vercel login connection for this repo was previously unavailable; deployment not confirmed.
 - Figma and code have not yet passed visual regression or production tests.
+
+## Responsive parity — explicit user approval (2026-10-24)
+Desktop and mobile MUST be the same visual experience, not separate creative concepts. Reuse the identical hero asset/art direction, Netso brand marks, POWER / forward typographic identity, warm solar-canopy lighting, accent colors, CTAs, benefit-card visual language, and motion grammar. Only adapt scale, cropping/focal point, grid-to-stack order, navigation affordance and touch targets. Do not substitute mobile-only generic stock imagery or a different headline design. Compare 390px and 1440px screenshots side by side and reject stylistic divergence. Maintain equivalent content and functionality, including commercial qualifiers and WhatsApp/proposal actions.
