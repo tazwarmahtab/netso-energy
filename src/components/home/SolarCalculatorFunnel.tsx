@@ -635,6 +635,21 @@ export function SolarCalculatorFunnel() {
                 {labels.resultsBody}
               </p>
 
+              <div
+                role="note"
+                data-testid="commercial-assumptions-notice"
+                className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-50/70 p-4 text-sm leading-6 text-foreground"
+              >
+                <strong className="block font-semibold">
+                  {isBn ? "প্রাথমিক হিসাব — অনুমোদিত বাণিজ্যিক প্রস্তাব নয়" : "Illustrative estimate — not an approved commercial offer"}
+                </strong>
+                <p className="mt-1">
+                  {isBn
+                    ? "এই হিসাবের ট্যারিফ, সৌর উৎপাদন, সাশ্রয় ও দীর্ঘমেয়াদি অনুমান প্রকল্পভিত্তিক যাচাই ও লিখিত বাণিজ্যিক অনুমোদনের অপেক্ষায়। এগুলো নিশ্চিত সাশ্রয় বা চূড়ান্ত PPA শর্ত নয়।"
+                    : "Tariff benchmarks, generation, savings and long-term projections are preliminary model assumptions. They require site-specific validation and written commercial approval; they are not guaranteed savings or final PPA terms."}
+                </p>
+              </div>
+
               <div className="mt-8 space-y-4">
                 <ResultCard
                   label={labels.monthlySavings}
